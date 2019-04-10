@@ -1,12 +1,25 @@
 #include <stdio.h>
+#include <curses.h>
 
 #define PROJECT_NAME "linux-game-jam-2019-game"
 
 int main(int argc, char **argv) {
-    if(argc != 1) {
-        printf("%s takes no arguments.\n", argv[0]);
-        return 1;
+    initscr();
+    nodelay(stdscr, TRUE);
+    
+    char* msg = "Hello, World";
+
+    while(true) {
+        printw("%s", msg);
+        refresh();
+        char c = getch();
+
+        if (c == 'y')
+            msg = "Hello, you!";
+        
+        clear();
     }
-    printf("This is project %s.\n", PROJECT_NAME);
+    endwin();
+
     return 0;
 }
