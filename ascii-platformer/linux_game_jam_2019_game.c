@@ -10,7 +10,7 @@
 #define WALKING 0
 #define JUMPING 1
 
-bool level[80][40];
+bool level[30][80];
 
 struct entity {
     float x, y;
@@ -24,7 +24,7 @@ void process(float delta, chtype input);
 void generate_level() {
     srand(time(NULL));
     
-    int y = 39;
+    int y = 29;
 
     for (int x = 0; x < 80; x++) {
         level[y][x] = true;
@@ -35,6 +35,7 @@ int main(int argc, char **argv) {
     generate_level();
 
     initscr();
+    resize_term(40, 80);
     nodelay(stdscr, TRUE);
     noecho();
     cbreak(); 
@@ -69,15 +70,23 @@ int main(int argc, char **argv) {
             addch('@');
         else
             addch('^');
+        
+        move(0,0);
+
+        clock_t now = clock();
+        float delta = ((float) (now - last) / CLOCKS_PER_SEC);
+        
+        printw("FPS: %f X: %f Y: %f", delta, player.x, player.y);
 
         refresh();
         
-        clock_t now = clock();
+        now = clock();
 
-        float delta = ((float) (now - last) / CLOCKS_PER_SEC);
+        delta = ((float) (now - last) / CLOCKS_PER_SEC);
+        
+        last = now;
 
         process(delta, input);
-        usleep(60000);
     }
 
     endwin();
@@ -88,7 +97,6 @@ int main(int argc, char **argv) {
 void process(float delta, chtype input) {
     switch(input) {
         case ERR:
-            player.x_vel = 0;
             break;
         case KEY_SPACEBAR:
             if (player.state != JUMPING) {
@@ -97,10 +105,10 @@ void process(float delta, chtype input) {
             }
             break;
         case KEY_LEFT:
-            player.x_vel = -3;
+            player.x_vel = -10;
             break;
         case KEY_RIGHT:
-            player.x_vel = 3;
+            player.x_vel = 10;
     }
     
     int old_x = (int) player.x;
