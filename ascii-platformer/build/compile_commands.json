@@ -1,8 +1,0 @@
-[
-  {
-    "directory": "/home/sami/Ohjelmointi/Projektit/linux-game-jam2019/ascii-platformer/build",
-    "command": "cc -Ilinux_game_jam_2019_game@exe -I. -I.. -fdiagnostics-color=always -pipe -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -Wextra -Wpedantic -g  -MD -MQ 'linux_game_jam_2019_game@exe/linux_game_jam_2019_game.c.o' -MF 'linux_game_jam_2019_game@exe/linux_game_jam_2019_game.c.o.d' -o 'linux_game_jam_2019_game@exe/linux_game_jam_2019_game.c.o' -c ../linux_game_jam_2019_game.c",
-    "file": "../linux_game_jam_2019_game.c",
-    "output": "linux_game_jam_2019_game@exe/linux_game_jam_2019_game.c.o"
-  }
-]
