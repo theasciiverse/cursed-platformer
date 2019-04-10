@@ -42,6 +42,7 @@ int main(int argc, char **argv) {
     noecho();
     cbreak(); 
     keypad(stdscr, TRUE);
+    curs_set(0);
 
     player.x = 1;
     player.y = 1;
@@ -73,7 +74,7 @@ int main(int argc, char **argv) {
         refresh();
 
         process(input);
-        sleep(1);
+        usleep(60000);
     }
 
     endwin();
