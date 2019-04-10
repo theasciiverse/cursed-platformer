@@ -1,0 +1,3 @@
+[submodule "ascii-platformer/PDCurses"]
+	path = ascii-platformer/subprojects/PDCurses
+	url = https://github.com/wmcbrine/PDCurses.git

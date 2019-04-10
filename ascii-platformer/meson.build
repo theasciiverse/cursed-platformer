@@ -3,9 +3,10 @@ project('linux-game-jam-2019-game', 'c',
   default_options : ['warning_level=3'])
 
 if get_option('use_pdcurses')
-  curses_compile_flags = run_command('xcurses-config', '--cflags').stdout().strip().split()
-  curses_link_flags = run_command('xcurses-config', '--libs').stdout().strip().split()
-  curses = declare_dependency(link_args : curses_link_flags, compile_args : curses_compile_flags)
+  #todo : check if this actually worked
+  run_command('cp', 'we_like_to_party/pdcurses/meson.build', 'subprojects/PDCurses')
+  pdcurses = subproject('PDCurses')
+  curses = pdcurses.get_variable('pdcurses')
 else
   curses = dependency('ncurses')
 endif
