@@ -3,6 +3,12 @@
 This is an entry for the Linux Game Jam 2019. Further details will be added as the project reaches
 completion.
 
+## Fetching from gitlab
+
+```sh
+git clone --recursive https://gitlab.com/Samsai/linux-game-jam-2019-game.git
+```
+
 ## Building
 
 The game uses the Meson build system.
