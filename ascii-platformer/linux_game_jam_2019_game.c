@@ -127,6 +127,8 @@ void process(float delta, chtype input) {
     int new_y = (int) player.y;
     if (level[new_y][new_x]) {
         player.y = (float) old_y;
+        
+        // Friction? Totes a bug but does what we want.
         player.x_vel = 0.0;
         player.state = WALKING;
         new_y = old_y;
