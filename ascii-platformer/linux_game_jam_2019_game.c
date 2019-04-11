@@ -4,13 +4,13 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#include <level.h>
+
 #define PROJECT_NAME "linux-game-jam-2019-game"
 #define KEY_SPACEBAR ' '
 
 #define WALKING 0
 #define JUMPING 1
-
-bool level[30][80];
 
 struct entity {
     float x, y;
@@ -19,31 +19,23 @@ struct entity {
     char state;
 } player;
 
+struct Level* level;
+
 void process(float delta, chtype input);
 
-void generate_level() {
-    srand(time(NULL));
-    
-    int y = 29;
-
-    for (int x = 0; x < 80; x++) {
-        level[y][x] = true;
-    }
-}
-
 int main(int argc, char **argv) {
-    generate_level();
-
+    level = load("level1.txt");
+    
     initscr();
-    resize_term(40, 80);
+    resize_term(30, 80);
     nodelay(stdscr, TRUE);
     noecho();
     cbreak(); 
     keypad(stdscr, TRUE);
     curs_set(0);
 
-    player.x = 1;
-    player.y = 1;
+    player.x = 2;
+    player.y = 2;
 
     chtype input;
     
@@ -56,11 +48,7 @@ int main(int argc, char **argv) {
             for (int x = 0; x < 80; x++) {
                 move(y, x);
 
-                if (level[y][x]) {
-                    addch('#');
-                } else {
-                    addch(' ');
-                }
+                addch(level->data[y][x]); 
             }
         }
         
@@ -118,14 +106,14 @@ void process(float delta, chtype input) {
     player.y += player.y_vel * delta;
 
     int new_x = (int) player.x;
-    if (level[old_y][new_x]) {
+    if (level->data[old_y][new_x] == '#') {
         player.x = (float) old_x;
         player.x_vel = 0.0;
         new_x = old_x;
     }
 
     int new_y = (int) player.y;
-    if (level[new_y][new_x]) {
+    if (level->data[new_y][new_x] == '#') {
         player.y = (float) old_y;
         
         // Friction? Totes a bug but does what we want.
@@ -134,7 +122,7 @@ void process(float delta, chtype input) {
         new_y = old_y;
     }
 
-    if (!level[new_y + 1][new_x]) {
+    if (level->data[new_y + 1][new_x] != '#') {
         player.y_vel += 3 * delta;
     }
 }
