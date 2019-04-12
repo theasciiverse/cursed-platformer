@@ -75,7 +75,7 @@ int main(int argc, char **argv) {
         double delta = ((double) (now - last) / CLOCKS_PER_SEC);
         
         char* statestr = (player.state == WALKING) ? "WALKING" : (player.state == AIRBORNE) ? "AIRBORNE" : "DEAD";
-        printw("FPS: %f X: %f Y: %f ST: %s     ", delta, player.x, player.y, statestr);
+        printw("FPS: %f X: %f Y: %f X_VEL: %f ST: %s     ", delta, player.x, player.y, player.x_vel, statestr);
 
         refresh();
         
@@ -111,17 +111,28 @@ void process(double delta, chtype input) {
             }
             break;
         case KEY_LEFT:
-            if (level->data[old_y][old_x - 1] != '#' && level->data[old_y][old_x - 1] != '^') {
-				player.x -= -1;
-			}
+            if (player.x_vel < 0)
+                player.x_vel = 0;
+			else
+                player.x_vel = -8;
             break;
         case KEY_RIGHT:
-			if (level->data[old_y][old_x + 1] != '#' && level->data[old_y][old_x + 1] != '^') {
-				player.x += 1;
-			}
+            if (player.x_vel > 0)
+                player.x_vel = 0;
+			else
+                player.x_vel = 8;
+    }
+    
+    if (level->data[old_y][old_x - 1] == '#' && level->data[old_y][old_x - 1] == '^') {
+        player.x_vel = 0;
+    }
+    
+    if (level->data[old_y][old_x + 1] == '#' && level->data[old_y][old_x + 1] == '^') {
+        player.x_vel = 0;
     }
 
     player.y += player.y_vel * delta;
+    player.x += player.x_vel * delta;
 
     int new_x = (int) player.x;
     int new_y = (int) player.y;
