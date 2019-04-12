@@ -106,7 +106,6 @@ void process(double delta, chtype input) {
 			}
             break;
         case KEY_RIGHT:
-
 			if (level->data[old_y][old_x + 1] != '#' && level->data[old_y][old_x + 1] != '^') {
 				player.x += 1;
 			}
@@ -115,7 +114,6 @@ void process(double delta, chtype input) {
     player.y += player.y_vel * delta;
 
     int new_x = (int) player.x;
-
     int new_y = (int) player.y;
 
     if (level->data[new_y][new_x] == '#' || level->data[new_y][new_x] == '^') {
