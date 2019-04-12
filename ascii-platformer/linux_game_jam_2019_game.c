@@ -135,6 +135,12 @@ void process(double delta, chtype input) {
     player.x += player.x_vel * delta;
 
     int new_x = (int) player.x;
+    
+    if (level->data[old_y][new_x] == '#' || level->data[old_y][new_x] == '^') {
+        player.x = (float) old_x;
+        new_x = old_x;
+    }
+
     int new_y = (int) player.y;
 
     if (level->data[new_y][new_x] == '#' || level->data[new_y][new_x] == '^') {
