@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#include <level.h>
+#include "level.h"
 
 #define PROJECT_NAME "linux-game-jam-2019-game"
 #define KEY_SPACEBAR ' '
@@ -13,21 +13,21 @@
 #define JUMPING 1
 
 struct entity {
-    float x, y;
-    float x_vel;
-    float y_vel;
+    double x, y;
+    double x_vel;
+    double y_vel;
     char state;
 } player;
 
 struct Level* level;
 
-void process(float delta, chtype input);
+void process(double delta, chtype input);
 
 int main(int argc, char **argv) {
     level = load("level1.txt");
     
     initscr();
-    resize_term(30, 80);
+    resize_term(31, 80);
     nodelay(stdscr, TRUE);
     noecho();
     cbreak(); 
@@ -46,13 +46,13 @@ int main(int argc, char **argv) {
         
         for (int y = 0; y < 40; y++) {
             for (int x = 0; x < 80; x++) {
-                move(y, x);
+                move(y + 1, x);
 
                 addch(level->data[y][x]); 
             }
         }
         
-        move(player.y, player.x);
+        move(player.y + 1, player.x);
         
         if (player.state == WALKING)
             addch('@');
@@ -62,15 +62,15 @@ int main(int argc, char **argv) {
         move(0,0);
 
         clock_t now = clock();
-        float delta = ((float) (now - last) / CLOCKS_PER_SEC);
+        double delta = ((double) (now - last) / CLOCKS_PER_SEC);
         
-        printw("FPS: %f X: %f Y: %f", delta, player.x, player.y);
+        printw("FPS: %f X: %f Y: %f X_vel: %f, Y_vel: %f", delta, player.x, player.y, player.x_vel, player.y_vel);
 
         refresh();
         
         now = clock();
 
-        delta = ((float) (now - last) / CLOCKS_PER_SEC);
+        delta = ((double) (now - last) / CLOCKS_PER_SEC);
         
         last = now;
 
@@ -82,7 +82,7 @@ int main(int argc, char **argv) {
     return 0;
 }
 
-void process(float delta, chtype input) {
+void process(double delta, chtype input) {
     switch(input) {
         case ERR:
             break;
@@ -97,6 +97,7 @@ void process(float delta, chtype input) {
             break;
         case KEY_RIGHT:
             player.x_vel = 10;
+            break;
     }
     
     int old_x = (int) player.x;
@@ -111,7 +112,7 @@ void process(float delta, chtype input) {
         player.x_vel = 0.0;
         new_x = old_x;
     }
-
+    
     int new_y = (int) player.y;
     if (level->data[new_y][new_x] == '#') {
         player.y = (float) old_y;
@@ -123,6 +124,6 @@ void process(float delta, chtype input) {
     }
 
     if (level->data[new_y + 1][new_x] != '#') {
-        player.y_vel += 3 * delta;
+        player.y_vel += 4 * delta;
     }
 }
