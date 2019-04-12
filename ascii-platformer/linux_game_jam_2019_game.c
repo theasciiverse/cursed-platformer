@@ -5,6 +5,7 @@
 #include <unistd.h>
 
 #include "level.h"
+#include "enemy.h"
 
 #define PROJECT_NAME "linux-game-jam-2019-game"
 #define KEY_SPACEBAR ' '
@@ -20,13 +21,18 @@ struct entity {
     char state;
 } player;
 
+struct Enemy* muncher;
+
 struct Level* level;
+
 
 void process(double delta, chtype input);
 
 int main(int argc, char **argv) {
     level = load("level1.txt");
     
+    muncher = (struct Enemy*) createMuncher(level, 5.0, 5.0);
+
     initscr();
     resize_term(31, 80);
     nodelay(stdscr, TRUE);
@@ -60,13 +66,16 @@ int main(int argc, char **argv) {
         else
             addch('X');
         
+        move(muncher->y, muncher->x);
+        addch(muncher->sprite);
+
         move(0,0);
 
         clock_t now = clock();
         double delta = ((double) (now - last) / CLOCKS_PER_SEC);
         
         char* statestr = (player.state == WALKING) ? "WALKING" : (player.state == AIRBORNE) ? "AIRBORNE" : "DEAD";
-        printw("FPS: %f X: %f Y: %f ST: %s", delta, player.x, player.y, statestr);
+        printw("FPS: %f X: %f Y: %f ST: %s     ", delta, player.x, player.y, statestr);
 
         refresh();
         
@@ -77,6 +86,7 @@ int main(int argc, char **argv) {
         last = now;
 
         process(delta, input);
+        processMuncher(muncher, delta);
     }
 
     endwin();
@@ -101,8 +111,8 @@ void process(double delta, chtype input) {
             }
             break;
         case KEY_LEFT:
-			if (level->data[old_y][old_x - 1] != '#' && level->data[old_y][old_x - 1] != '^') {
-				player.x -= 1;
+            if (level->data[old_y][old_x - 1] != '#' && level->data[old_y][old_x - 1] != '^') {
+				player.x -= -1;
 			}
             break;
         case KEY_RIGHT:
