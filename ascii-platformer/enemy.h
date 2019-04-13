@@ -3,22 +3,12 @@
 
 #include "level.h";
 
-struct Enemy {
-    struct Level* level;
-    char type;
-    char sprite;
-    char state;
-    double x, y, x_vel, y_vel;
-    void* internal_data;
-    void (*processFunc)(struct Enemy* enemy, double delta);
-};
-
 struct Muncher {
     double sprite_timer;  
 };
 
 struct Enemy* createMuncher(struct Level* level, double x, double y);
-void destroyMuncher(struct Enemy* muncher);
-void processMuncher(struct Enemy* enemy, double delta);
+void destroyMuncher(struct Entity* muncher);
+void processMuncher(struct Entity* muncher, double delta);
 
 #endif

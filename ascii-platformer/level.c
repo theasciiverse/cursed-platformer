@@ -7,7 +7,7 @@ struct Level {
     char** data;
 };
 
-struct Level* load(char* name) {
+struct Level* load_level(char* name) {
     FILE* fp = fopen(name, "r");
 
     int width, height;

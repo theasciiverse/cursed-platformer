@@ -5,23 +5,16 @@
 #include <unistd.h>
 
 #include "level.h"
+#include "entity.h"
 #include "enemy.h"
+#include "helper.h"
 
 #define PROJECT_NAME "linux-game-jam-2019-game"
 #define KEY_SPACEBAR ' '
 
-#define WALKING 0
-#define AIRBORNE 1
-#define DEAD 9
+struct Entity player;
 
-struct entity {
-    double x, y;
-    double x_vel;
-    double y_vel;
-    char state;
-} player;
-
-struct Enemy* muncher;
+struct Entity* muncher;
 
 struct Level* level;
 
@@ -29,9 +22,10 @@ struct Level* level;
 void process(double delta, chtype input);
 
 int main(int argc, char **argv) {
-    level = load("level1.txt");
+    level = load_level("level1.txt");
     
     muncher = (struct Enemy*) createMuncher(level, 5.0, 5.0);
+
 
     initscr();
     resize_term(31, 80);
@@ -43,6 +37,7 @@ int main(int argc, char **argv) {
 
     player.x = 2;
     player.y = 2;
+    player.level = level;
 
     chtype input;
     
@@ -66,7 +61,7 @@ int main(int argc, char **argv) {
         else
             addch('X');
         
-        move(muncher->y, muncher->x);
+        move(muncher->y + 1, muncher->x);
         addch(muncher->sprite);
 
         move(0,0);
@@ -86,6 +81,7 @@ int main(int argc, char **argv) {
         last = now;
 
         process(delta, input);
+
         processMuncher(muncher, delta);
     }
 
@@ -123,46 +119,5 @@ void process(double delta, chtype input) {
                 player.x_vel = 8;
     }
     
-    if (level->data[old_y][old_x - 1] == '#' && level->data[old_y][old_x - 1] == '^') {
-        player.x_vel = 0;
-    }
-    
-    if (level->data[old_y][old_x + 1] == '#' && level->data[old_y][old_x + 1] == '^') {
-        player.x_vel = 0;
-    }
-
-    player.y += player.y_vel * delta;
-    player.x += player.x_vel * delta;
-
-    int new_x = (int) player.x;
-    
-    if (level->data[old_y][new_x] == '#' || level->data[old_y][new_x] == '^') {
-        player.x = (float) old_x;
-        new_x = old_x;
-    }
-
-    int new_y = (int) player.y;
-
-    if (level->data[new_y][new_x] == '#' || level->data[new_y][new_x] == '^') {
-        player.y = (float) old_y;
-        new_y = old_y;
-    }
-
-    if (level->data[new_y + 1][new_x] != '#') {
-        player.y_vel += 4 * delta;
-    }
- 
-	char below = level->data[new_y + 1][new_x];
-	if (below == '#') {
-		player.state = WALKING;
-		player.y_vel = 0;
-		player.y = (float) new_y;
-	} else if (below == '^') {
-		player.x = (float) old_x;
-		player.state = DEAD;
-		player.y_vel = 0;
-	} else {
-        player.y_vel += 12 * delta;
-		player.state = AIRBORNE;
-	}
+    processPhysics(&player, delta); 
 }
