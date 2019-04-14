@@ -2,7 +2,7 @@ project('linux-game-jam-2019-game', 'c',
   version : '0.1',
   default_options : ['warning_level=3'])
 
-src = ['linux_game_jam_2019_game.c', 'level.c', 'enemy.c', 'entity.c']
+src = ['src/main.c', 'src/level.c', 'srr/enemy.c', 'src/entity.c']
 
 if get_option('use_pdcurses')
   #todo : check if this actually worked

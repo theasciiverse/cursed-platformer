@@ -22,7 +22,7 @@ struct Level* level;
 void process(double delta, chtype input);
 
 int main(int argc, char **argv) {
-    level = load_level("level1.txt");
+    level = load_level("data/level1.txt");
     
     muncher = (struct Enemy*) createMuncher(level, 5.0, 5.0);
 
