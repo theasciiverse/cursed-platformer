@@ -16,7 +16,13 @@ struct Metadata* readMetadata(struct Level* level, char* path) {
     while (!feof(fp)) {
         fscanf(fp, "%s", command); 
 
-        if (strcmp(command, "size") == 0) {
+        if (strcmp(command, "title") == 0) {
+            char* title = malloc(sizeof(char) * 50);
+
+            fgets(title, 50, fp);
+
+            metadata->title = title;
+        } else if (strcmp(command, "size") == 0) {
             int width;
             int height;
 
@@ -24,7 +30,7 @@ struct Metadata* readMetadata(struct Level* level, char* path) {
 
             metadata->width = width;
             metadata->height = height;
-        }  else if (strcmp(command, "start") == 0) {
+        } else if (strcmp(command, "start") == 0) {
             int x;
             int y;
             
@@ -95,6 +101,7 @@ void addEntity(struct Level* level, struct Entity* entity) {
 }
 
 void destroyLevel(struct Level* level) {
+    free(level->metadata->title);
     free(level->map);
     free(level->metadata->next_level);
     free(level->metadata);

@@ -16,6 +16,8 @@ struct Level {
 };
 
 struct Metadata {
+    char* title;
+
     int width, height;
     int start_x, start_y;
     int goal_x, goal_y;

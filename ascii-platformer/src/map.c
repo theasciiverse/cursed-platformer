@@ -9,11 +9,9 @@ struct Map* loadMap(struct Metadata* metadata, char* name) {
     FILE* fp = fopen(name, "r");
     
     struct Map* map = malloc(sizeof(struct Map));
-    
+
     map->width = metadata->width;
     map->height = metadata->height;
-
-    printf("Size: %d, %d\n", map->width, map->height);
 
     map->width += 1;
 

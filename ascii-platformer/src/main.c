@@ -66,13 +66,16 @@ int main(int argc, char **argv) {
 
         wrefresh(mainwin);
 
+        mvwaddstr(infowin, 0, 0, "LEVEL:");
+        mvwaddnstr(infowin, 0, 7, level->metadata->title, 29);
+
         clock_t now = clock();
         double delta = ((double) (now - last) / CLOCKS_PER_SEC);
         
         char* statestr = (player.state == WALKING) ? "WALKING" : (player.state == AIRBORNE) ? "AIRBORNE" : "DEAD";
-        char* debugstr = (char *)malloc(46);
-        snprintf(debugstr, 46, "FPS: %-3i X:%-8f Y:%-8f ST:%-8s", (int) (delta * 1000000), player.x, player.y, statestr);
-        mvwaddnstr(infowin, 0, 36, debugstr, 46);
+        char* debugstr = (char *)malloc(44);
+        snprintf(debugstr, 44, "FPS:%-3i X:%-9f Y:%-9f ST:%-8s", (int) (delta * 1000000), player.x, player.y, statestr);
+        mvwaddnstr(infowin, 0, 36, debugstr, 44);
         free(debugstr);
 
         wrefresh(infowin);
