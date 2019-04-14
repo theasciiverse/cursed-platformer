@@ -1,7 +1,7 @@
 #ifndef ENEMY_H_INCLUDED
 #define ENEMY_H_INCLUDED
 
-#include "level.h";
+#include "level.h"
 
 struct Muncher {
     double sprite_timer;  
