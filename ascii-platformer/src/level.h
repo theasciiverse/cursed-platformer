@@ -31,6 +31,6 @@ void addEntity(struct Level* level, struct Entity* entity);
 
 void destroyLevel(struct Level* level); 
 
-void switchLevel(struct Level* level, char* name, struct Entity* player);
+void switchLevel(struct Level** level, char* name, struct Entity* player);
 
 #endif
