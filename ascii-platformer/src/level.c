@@ -43,3 +43,9 @@ void destroyLevel(struct Level* level) {
 
     free(level);
 }
+
+void switchLevel(struct Level* level, char* name, struct Entity* player) {
+    destroyLevel(level);
+
+    level = loadLevel(name, player);
+}

@@ -23,13 +23,16 @@ struct Level* level;
 void process(double delta, chtype input);
 
 int main(int argc, char **argv) {
-    level = loadLevel("level1");
+    level = loadLevel("level1", &player);
     
     muncher = (struct Entity*) createMuncher(level, 5.0, 5.0);
-    addEntity(level, muncher);
+    
+    // Just for testing
+    switchLevel(level, "level1", &player);
 
     initscr();
     resize_term(31, 80);
+    clear();
     nodelay(stdscr, TRUE);
     noecho();
     cbreak(); 
