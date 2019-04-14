@@ -8,7 +8,7 @@
 
 struct Metadata* readMetadata(char* path) {
     FILE* fp = fopen(path, "r");
-
+    
     char command[80];
     struct Metadata* metadata = malloc(sizeof(struct Metadata));
 
@@ -41,8 +41,6 @@ struct Metadata* readMetadata(char* path) {
             metadata->goal_x = x;
             metadata->goal_y = y;
             metadata->next_level = next_level;
-
-            printf("Goal set: %d, %d\n", metadata->goal_x, metadata->goal_y);
         }
     }
     

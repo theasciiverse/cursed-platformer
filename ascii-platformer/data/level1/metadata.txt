@@ -1,5 +1,4 @@
 size 80 24
-
 start 3 20 
-
-goal 21 77 level1 
+goal 77 21 level1 
+end
