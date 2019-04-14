@@ -1,5 +1,5 @@
-size 80 29
+size 80 24
 
-start 3 25 
+start 3 20 
 
-goal 19 73 level2 
+goal 13 73 level2 
