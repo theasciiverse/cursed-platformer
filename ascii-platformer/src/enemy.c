@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include "level.h"
+#include "map.h"
 #include "helper.h"
 #include "entity.h"
 
@@ -53,21 +54,23 @@ void processMuncher(struct Entity* muncher, double delta) {
     
     int x = (int) muncher->x;
     int y = (int) muncher->y;
+    
+    struct Map* map = muncher->level->map;
 
     char block_ahead;
 
     if (muncher->x_vel < 0)
-        block_ahead = muncher->level->data[y][x - 1];
+        block_ahead = map->data[y][x - 1];
     else
-        block_ahead = muncher->level->data[y][x + 1];
+        block_ahead = map->data[y][x + 1];
     
     if (block_ahead == '#' || block_ahead == '^')
         muncher->x_vel *= -1;
    
      if (muncher->x_vel < 0)
-        block_ahead = muncher->level->data[y + 1][x - 1];
+        block_ahead = map->data[y + 1][x - 1];
     else
-        block_ahead = muncher->level->data[y + 1][x + 1];
+        block_ahead = map->data[y + 1][x + 1];
     
     if (block_ahead == ' ' || block_ahead == '^')
         muncher->x_vel *= -1;

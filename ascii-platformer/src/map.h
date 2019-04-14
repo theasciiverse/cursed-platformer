@@ -1,11 +1,13 @@
-#ifndef LEVEL_H_INCLUDED
-#define LEVEL_H_INCLUDED
+#ifndef MAP_H_INCLUDED
+#define MAP_H_INCLUDED
 
-struct Level {
+struct Map {
     int width, height;
     char** data;
 };
 
-struct Level* load_level(char* name);
+struct Map* loadMap(char* name);
+
+void destroyMap(struct Map* map);
 
 #endif

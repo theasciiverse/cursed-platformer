@@ -1,7 +1,7 @@
 #ifndef ENTITY_H_INCLUDED
 #define ENTITY_H_INCLUDED
 
-#include "level.h";
+#include "map.h"
 
 struct Entity {
     struct Level* level;

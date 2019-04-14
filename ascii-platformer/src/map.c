@@ -2,12 +2,12 @@
 #include <stdlib.h>
 #include <string.h>
 
-struct Level {
+struct Map {
     int width, height;
     char** data;
 };
 
-struct Level* load_level(char* name) {
+struct Map* loadMap(char* name) {
     FILE* fp = fopen(name, "r");
 
     int width, height;
@@ -27,10 +27,15 @@ struct Level* load_level(char* name) {
 
     fclose(fp);
 
-    struct Level* level = malloc(sizeof(struct Level));
-    level->width = width;
-    level->height = height;
-    level->data = data;
+    struct Map* map = malloc(sizeof(struct Map));
+    map->width = width;
+    map->height = height;
+    map->data = data;
 
-    return level;
+    return map;
+}
+
+void destroyMap(struct Map* map) {
+    free(map->data);
+    free(map);
 }

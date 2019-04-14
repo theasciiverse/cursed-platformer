@@ -5,6 +5,7 @@
 #include <unistd.h>
 
 #include "level.h"
+#include "map.h"
 #include "entity.h"
 #include "enemy.h"
 #include "helper.h"
@@ -22,10 +23,10 @@ struct Level* level;
 void process(double delta, chtype input);
 
 int main(int argc, char **argv) {
-    level = load_level("data/level1.txt");
+    level = loadLevel("level1");
     
-    muncher = (struct Enemy*) createMuncher(level, 5.0, 5.0);
-
+    muncher = (struct Entity*) createMuncher(level, 5.0, 5.0);
+    addEntity(level, muncher);
 
     initscr();
     resize_term(31, 80);
@@ -46,11 +47,13 @@ int main(int argc, char **argv) {
     while (true) {
         input = getch();
         
+        struct Map* map = level->map;
+
         for (int y = 0; y < 30; y++) {
             for (int x = 0; x < 80; x++) {
                 move(y + 1, x);
 
-                addch(level->data[y][x]); 
+                addch(map->data[y][x]); 
             }
         }
         
