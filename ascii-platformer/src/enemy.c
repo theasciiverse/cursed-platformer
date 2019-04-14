@@ -27,6 +27,7 @@ struct Entity* createMuncher(struct Level* level, double x, double y) {
     muncher_data->sprite_timer = 0.0;
 
     muncher->processFunc = &processMuncher;
+    return muncher;
 }
 
 void destroyMuncher(struct Entity* muncher) {
