@@ -38,11 +38,7 @@ int main(int argc, char **argv) {
     cbreak(); 
     keypad(stdscr, TRUE);
     curs_set(0);
-
-    player.x = 2;
-    player.y = 2;
-    player.level = level;
-
+    
     chtype input;
     
     clock_t last = clock();
@@ -52,8 +48,8 @@ int main(int argc, char **argv) {
         
         struct Map* map = level->map;
 
-        for (int y = 0; y < 30; y++) {
-            for (int x = 0; x < 80; x++) {
+        for (int y = 0; y < map->height; y++) {
+            for (int x = 0; x < map->width; x++) {
                 move(y + 1, x);
 
                 addch(map->data[y][x]); 

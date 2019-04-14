@@ -16,14 +16,14 @@ struct Level* loadLevel(char* name, struct Entity* player) {
 
     char path[80] = "data/";
     strcat(path, name);
-
-    char map_path[80];
-    strcpy(map_path, path);
-    strcat(map_path, "/map.txt");
     
-    level->map = loadMap(map_path);
+    level->map = loadMap(path);
     level->player = player;
-    
+    level->player->level = level;
+
+    player->x = level->map->start_x;
+    player->y = level->map->start_y;
+
     return level;
 }
 

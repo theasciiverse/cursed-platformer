@@ -3,6 +3,7 @@
 
 struct Map {
     int width, height;
+    int start_x, start_y;
     char** data;
 };
 
