@@ -28,7 +28,7 @@ int main(int argc, char **argv) {
     level = loadLevel("level1", &player);
     
     initscr();
-    resize_term(31, 80);
+    resize_term(25, 80);
     nodelay(stdscr, TRUE);
     noecho();
     cbreak(); 
@@ -66,8 +66,8 @@ int main(int argc, char **argv) {
 
         wrefresh(mainwin);
 
-        mvwaddstr(infowin, 0, 0, "LEVEL:");
-        mvwaddnstr(infowin, 0, 7, level->metadata->title, 29);
+        mvwaddstr(infowin, 0, 0, "LEVEL");
+        mvwaddnstr(infowin, 0, 5, level->metadata->title, 31);
 
         clock_t now = clock();
         double delta = ((double) (now - last) / CLOCKS_PER_SEC);
