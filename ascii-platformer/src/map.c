@@ -15,8 +15,6 @@ struct Map* loadMap(struct Metadata* metadata, char* name) {
 
     printf("Size: %d, %d\n", map->width, map->height);
 
-    char buf[80];
-
     map->width += 1;
 
     char** data = malloc(sizeof(char*) * (map->width * map->height));
