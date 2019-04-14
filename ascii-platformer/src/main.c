@@ -96,9 +96,6 @@ void process(double delta, chtype input) {
 	if (player.state == DEAD)
 		return;
 
-	int old_x = (int) player.x;
-	int old_y = (int) player.y;
-
     switch(input) {
         case ERR:
             break;
