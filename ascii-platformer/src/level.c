@@ -3,10 +3,11 @@
 #include <string.h>
 
 #include "entity.h"
+#include "enemy.h"
 #include "map.h"
 #include "level.h"
 
-struct Metadata* readMetadata(char* path) {
+struct Metadata* readMetadata(struct Level* level, char* path) {
     FILE* fp = fopen(path, "r");
     
     char command[80];
@@ -41,6 +42,14 @@ struct Metadata* readMetadata(char* path) {
             metadata->goal_x = x;
             metadata->goal_y = y;
             metadata->next_level = next_level;
+        } else if (strcmp(command, "muncher") == 0) {
+            int x;
+            int y;
+
+            fscanf(fp, "%d %d", &x, &y);
+            
+            struct Entity* muncher = createMuncher(level, x, y);
+            addEntity(level, muncher);
         }
     }
     
@@ -62,8 +71,10 @@ struct Level* loadLevel(char* name, struct Entity* player) {
     char map_path[80];
     strcpy(map_path, path);
     strcat(map_path, "/map.txt");
+    
+    level->enemy_count = 0;
 
-    struct Metadata* metadata = readMetadata(metadata_path);
+    struct Metadata* metadata = readMetadata(level, metadata_path);
     
     level->metadata = metadata;
     level->map = loadMap(metadata, map_path);

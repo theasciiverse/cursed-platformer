@@ -7,7 +7,7 @@ struct Muncher {
     double sprite_timer;  
 };
 
-struct Enemy* createMuncher(struct Level* level, double x, double y);
+struct Entity* createMuncher(struct Level* level, double x, double y);
 void destroyMuncher(struct Entity* muncher);
 void processMuncher(struct Entity* muncher, double delta);
 

@@ -60,6 +60,10 @@ int main(int argc, char **argv) {
         else
             mvwaddch(mainwin, player.y, player.x, 'X');
         
+        for (int i = 0; i < level->enemy_count; i++) {
+            mvwaddch(mainwin, level->enemies[i]->y, level->enemies[i]->x, level->enemies[i]->sprite);
+        }
+
         wrefresh(mainwin);
 
         clock_t now = clock();
@@ -78,8 +82,12 @@ int main(int argc, char **argv) {
         delta = ((double) (now - last) / CLOCKS_PER_SEC);
         
         last = now;
-
+        
         process(delta, input);
+
+        for (int i = 0; i < level->enemy_count; i++) {
+            level->enemies[i]->processFunc(level->enemies[i], delta);
+        }
     }
 
     endwin();

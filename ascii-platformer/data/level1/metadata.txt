@@ -1,4 +1,6 @@
 size 80 24
 start 3 20 
 goal 77 21 level1 
+muncher 34 18 
+muncher 56 16 
 end
