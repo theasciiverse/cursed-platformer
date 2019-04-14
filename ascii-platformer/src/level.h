@@ -9,9 +9,18 @@
 
 struct Level {
     struct Map* map;
+    struct Metadata* metadata;
     struct Entity* player;
     struct Entity* enemies[100];
     int enemy_count;
+};
+
+struct Metadata {
+    int width, height;
+    int start_x, start_y;
+    int goal_x, goal_y;
+
+    char* next_level;
 };
 
 struct Level* loadLevel(char* name, struct Entity* player);
