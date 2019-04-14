@@ -6,7 +6,6 @@
 #include "map.h"
 #include "level.h"
 
-
 struct Metadata* readMetadata(char* path) {
     FILE* fp = fopen(path, "r");
 
@@ -42,6 +41,8 @@ struct Metadata* readMetadata(char* path) {
             metadata->goal_x = x;
             metadata->goal_y = y;
             metadata->next_level = next_level;
+
+            printf("Goal set: %d, %d\n", metadata->goal_x, metadata->goal_y);
         }
     }
     

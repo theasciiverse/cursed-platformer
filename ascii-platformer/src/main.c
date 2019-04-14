@@ -27,6 +27,8 @@ void process(double delta, chtype input);
 int main(int argc, char **argv) {
     level = loadLevel("level1", &player);
     
+    printf("BLAA: %d %d\n", level->metadata->goal_x, level->metadata->goal_y);
+
     muncher = (struct Entity*) createMuncher(level, 5.0, 5.0);
     
     // Just for testing
@@ -66,6 +68,7 @@ int main(int argc, char **argv) {
             mvwaddch(mainwin, player.y, player.x, 'X');
         
         mvwaddch(mainwin, muncher->y, muncher->x, muncher->sprite);
+        
         wrefresh(mainwin);
 
         clock_t now = clock();
@@ -119,6 +122,14 @@ void process(double delta, chtype input) {
                 player.x_vel = 0;
 			else
                 player.x_vel = 8;
+    }
+    
+    int x = (int) player.x;
+    int y = (int) player.y;
+
+    if (x == level->metadata->goal_x && y == level->metadata->goal_y) {
+        player.sprite = '!';
+        switchLevel(level, level->metadata->next_level, &player); 
     }
     
     processPhysics(&player, delta); 
