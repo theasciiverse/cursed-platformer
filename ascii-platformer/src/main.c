@@ -19,6 +19,8 @@ struct Entity* muncher;
 
 struct Level* level;
 
+WINDOW *infowin;
+WINDOW *mainwin;
 
 void process(double delta, chtype input);
 
@@ -32,13 +34,17 @@ int main(int argc, char **argv) {
 
     initscr();
     resize_term(31, 80);
-    clear();
     nodelay(stdscr, TRUE);
     noecho();
     cbreak(); 
     keypad(stdscr, TRUE);
     curs_set(0);
-    
+
+    infowin = newwin(1, 80, 0, 0);
+    werase(infowin);
+    mainwin = newwin(24, 80, 1, 0);
+    werase(mainwin);
+
     chtype input;
     
     clock_t last = clock();
@@ -50,31 +56,28 @@ int main(int argc, char **argv) {
 
         for (int y = 0; y < map->height; y++) {
             for (int x = 0; x < map->width; x++) {
-                move(y + 1, x);
-
-                addch(map->data[y][x]); 
+                mvwaddch(mainwin, y, x, map->data[y][x]);
             }
         }
         
-        move(player.y + 1, player.x);
-        
         if (player.state != DEAD)
-            addch('@');
+            mvwaddch(mainwin, player.y, player.x, '@');
         else
-            addch('X');
+            mvwaddch(mainwin, player.y, player.x, 'X');
         
-        move(muncher->y + 1, muncher->x);
-        addch(muncher->sprite);
-
-        move(0,0);
+        mvwaddch(mainwin, muncher->y, muncher->x, muncher->sprite);
+        wrefresh(mainwin);
 
         clock_t now = clock();
         double delta = ((double) (now - last) / CLOCKS_PER_SEC);
         
         char* statestr = (player.state == WALKING) ? "WALKING" : (player.state == AIRBORNE) ? "AIRBORNE" : "DEAD";
-        printw("FPS: %f X: %f Y: %f X_VEL: %f ST: %s     ", delta, player.x, player.y, player.x_vel, statestr);
+        char* debugstr = (char *)malloc(46);
+        snprintf(debugstr, 46, "FPS: %-3i X:%-8f Y:%-8f ST:%-8s", (int) (delta * 1000000), player.x, player.y, statestr);
+        mvwaddnstr(infowin, 0, 36, debugstr, 46);
+        free(debugstr);
 
-        refresh();
+        wrefresh(infowin);
         
         now = clock();
 
