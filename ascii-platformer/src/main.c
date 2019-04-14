@@ -130,8 +130,7 @@ void process(double delta, chtype input) {
     if (x == level->metadata->goal_x && y == level->metadata->goal_y) {
         char name[80];
         strcpy(name, level->metadata->next_level);
-
-        switchLevel(level, name, &player); 
+        switchLevel(&level, name, &player); 
     }
     
     processPhysics(&player, delta); 
