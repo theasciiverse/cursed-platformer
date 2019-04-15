@@ -10,4 +10,6 @@ stalaktite 28 6
 stalaktite 22 6
 stalaktite 23 6
 muncher 43 9
+button 53 7 73 15
+button 76 15 48 7
 end
