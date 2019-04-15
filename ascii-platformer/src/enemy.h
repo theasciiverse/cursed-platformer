@@ -10,8 +10,8 @@ struct Muncher {
 struct Entity* createMuncher(struct Level* level, double x, double y);
 void processMuncher(struct Entity* muncher, double delta);
 
-struct Entity* createStalaktite(struct Level* level, double x, double y);
-void processStalaktite(struct Entity* stalaktite, double delta); 
+struct Entity* createSpike(struct Level* level, double x, double y);
+void processSpike(struct Entity* spike, double delta); 
 
 struct Bat {
 };

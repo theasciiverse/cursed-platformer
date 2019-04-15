@@ -1,4 +1,6 @@
 #include <stdlib.h>
+#include <math.h>
+
 #include "level.h"
 #include "map.h"
 #include "helper.h"
@@ -84,60 +86,60 @@ void processMuncher(struct Entity* muncher, double delta) {
     processPhysics(muncher, delta);
 }
 
-struct Stalaktite {
+struct Spike {
 
 };
 
-void processStalaktite(struct Entity* enemy, double delta);
+void processSpike(struct Entity* enemy, double delta);
 
-struct Entity* createStalaktite(struct Level* level, double x, double y) {
-    struct Entity* stalaktite = malloc(sizeof(struct Entity));
+struct Entity* createSpike(struct Level* level, double x, double y) {
+    struct Entity* spike = malloc(sizeof(struct Entity));
 
-    stalaktite->x = x;
-    stalaktite->y = y;
-    stalaktite->x_vel = 0;
-    stalaktite->sprite = 'V';
-    stalaktite->state = IDLE; 
-    stalaktite->disabled = false;
-    stalaktite->hidden = false;
-    stalaktite->internal_data = malloc(sizeof(struct Stalaktite));
+    spike->x = x;
+    spike->y = y;
+    spike->x_vel = 0;
+    spike->sprite = 'V';
+    spike->state = IDLE; 
+    spike->disabled = false;
+    spike->hidden = false;
+    spike->internal_data = malloc(sizeof(struct Spike));
     
-    stalaktite->level = level;
+    spike->level = level;
 
-    struct Stalaktite* stalaktite_data = (struct Stalaktite*) stalaktite->internal_data;
+    struct Spike* spike_data = (struct Spike*) spike->internal_data;
 
 
-    stalaktite->processFunc = &processStalaktite;
-    return stalaktite;
+    spike->processFunc = &processSpike;
+    return spike;
 }
 
-void processStalaktite(struct Entity* stalaktite, double delta) {
+void processSpike(struct Entity* spike, double delta) {
     
-    int x = (int) stalaktite->x;
-    int y = (int) stalaktite->y;
+    int x = (int) spike->x;
+    int y = (int) spike->y;
 
-    int px = (int) stalaktite->level->player->x;
-    int py = (int) stalaktite->level->player->y;
+    int px = (int) spike->level->player->x;
+    int py = (int) spike->level->player->y;
     
-    if (stalaktite->state == IDLE) {
+    if (spike->state == IDLE) {
         if (x == px && y < py) {
             while (y < py) {
-                if (!isPassable(stalaktite->level->map->data[y][x]))
+                if (!isPassable(spike->level->map->data[y][x]))
                     break;
                 y++;
 
                 if (y == py)
-                    stalaktite->state = AIRBORNE;
+                    spike->state = AIRBORNE;
             }
 
         }
-     } else if (stalaktite->state == AIRBORNE) {
+     } else if (spike->state == AIRBORNE) {
         if (x == px && y == py - 1)
-            stalaktite->level->player->state = DEAD;
-        processPhysics(stalaktite, delta);
+            spike->level->player->state = DEAD;
+        processPhysics(spike, delta);
      } else {
-        stalaktite->sprite = '*';
-        stalaktite->state = GARBAGE;
+        spike->sprite = '*';
+        spike->state = GARBAGE;
      }
 }
 
@@ -191,6 +193,16 @@ void processBat(struct Entity* bat, double delta) {
     // Kill player on touch
     if (x == px && y == py) {
         bat->level->player->state = DEAD;
+    } 
+    
+    int dx = abs(x - px);
+    int dy = abs(y - py);
+    
+    double dist = sqrt(pow((double) dx, 2) + pow((double) dy, 2));
+    
+    if (dist < 5) {
+        bat->x_vel = px - x;
+        bat->y_vel = py - y;
     }
 
     struct Map* map = bat->level->map;
@@ -205,6 +217,6 @@ void processBat(struct Entity* bat, double delta) {
     if (block_ahead == '#' || block_ahead == '^')
         bat->x_vel *= -1;
     
-    bat->y_vel = 0.0;
     processPhysics(bat, delta);
+    bat->y_vel = 0.0;
 }

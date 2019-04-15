@@ -1,0 +1,16 @@
+title 3: Pit of DOOM
+size 80 24
+//start 1 1
+start 42 16
+bat 16 2
+goal 19 2 level1
+spike 6 1
+spike 7 1
+spike 8 1
+spike 9 1
+muncher 15 19
+muncher 30 18 
+button 12 9 36 19 
+message 34 21 0 Samsai Found your way in here?\ \Well done. 
+bat 48 14
+end

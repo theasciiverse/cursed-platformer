@@ -59,14 +59,14 @@ struct Metadata* readMetadata(struct Level* level, char* path) {
             
             struct Entity* muncher = createMuncher(level, x, y);
             addEntity(level, muncher);
-        } else if (strcmp(command, "stalaktite") == 0) {
+        } else if (strcmp(command, "spike") == 0) {
             int x;
             int y;
 
             fscanf(fp, "%d %d", &x, &y);
             
-            struct Entity* stalaktite = createStalaktite(level, x, y);
-            addEntity(level, stalaktite);
+            struct Entity* spike = createSpike(level, x, y);
+            addEntity(level, spike);
         } else if (strcmp(command, "bat") == 0) {
             int x;
             int y;

@@ -13,7 +13,7 @@ else
   curses = dependency('ncurses')
 endif
 
-exe = executable('linux_game_jam_2019_game', src,
+exe = executable('linux_game_jam_2019_game', src, link_args: '-lm',
   install : true, dependencies : [curses])
 
 test('basic', exe)
