@@ -116,12 +116,6 @@ void processStalaktite(struct Entity* stalaktite, double delta) {
     int py = (int) stalaktite->level->player->y;
     
     if (stalaktite->state == IDLE) {
-        int x = (int) stalaktite->x;
-        int y = (int) stalaktite->y;
-
-        int px = (int) stalaktite->level->player->x;
-        int py = (int) stalaktite->level->player->y;
-
         if (x == px && y < py) {
             while (y < py) {
                 if (!isPassable(stalaktite->level->map->data[y][x]))

@@ -88,10 +88,11 @@ struct Metadata* readMetadata(struct Level* level, char* path) {
 
 struct Level* loadLevel(char* name, struct Entity* player) {
     struct Level* level = malloc(sizeof(struct Level));
+    level->name = name;
 
     char path[80] = "data/";
     strcat(path, name);
-    
+     
     char metadata_path[80];
     strcpy(metadata_path, path);
     strcat(metadata_path, "/metadata.txt");

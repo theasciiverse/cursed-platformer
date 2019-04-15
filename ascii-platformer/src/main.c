@@ -19,6 +19,8 @@ struct Entity* muncher;
 
 struct Level* level;
 
+char current_level[80];
+
 WINDOW *infowin;
 WINDOW *mainwin;
 
@@ -28,7 +30,8 @@ int main(int argc, char **argv) {
     initHelp(mainwin);
 
     level = loadLevel("level1", &player);
-    
+    strcpy(current_level, "level1");
+
     initscr();
     resize_term(25, 80);
     nodelay(stdscr, TRUE);
@@ -105,7 +108,7 @@ int main(int argc, char **argv) {
 void process(double delta, chtype input) {
 	if (player.state == DEAD)
 		return;
-
+    
     switch(input) {
         case ERR:
             break;
@@ -126,15 +129,18 @@ void process(double delta, chtype input) {
                 player.x_vel = 0;
 			else
                 player.x_vel = 8;
+            break;
+        case 'r':
+            switchLevel(&level, current_level, &player);    
+            break;
     }
     
     int x = (int) player.x;
     int y = (int) player.y;
     
     if (x == level->metadata->goal_x && y == level->metadata->goal_y) {
-        char name[80];
-        strcpy(name, level->metadata->next_level);
-        switchLevel(&level, name, &player); 
+        strcpy(current_level, level->metadata->next_level);
+        switchLevel(&level, current_level, &player); 
     }
     
     processPhysics(&player, delta); 
