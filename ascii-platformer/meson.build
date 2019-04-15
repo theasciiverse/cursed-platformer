@@ -9,6 +9,7 @@ if get_option('use_pdcurses')
   run_command('cp', 'we_like_to_party/pdcurses/meson.build', 'subprojects/PDCurses')
   pdcurses = subproject('PDCurses')
   curses = pdcurses.get_variable('pdcurses')
+  add_project_arguments('-DUSE_PDCURSES', language : 'c')
 else
   curses = dependency('ncurses')
 endif
