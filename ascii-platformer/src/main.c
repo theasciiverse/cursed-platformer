@@ -28,9 +28,13 @@ void process(double delta, chtype input);
 
 int main(int argc, char **argv) {
     initHelp(mainwin);
-
-    level = loadLevel("level1", &player);
-    strcpy(current_level, "level1");
+    
+    if (argc > 1)
+        level = loadLevel(argv[1], &player);
+    else
+        level = loadLevel("level1", &player);
+    
+    strcpy(current_level, level->name);
 
     initscr();
     resize_term(25, 80);
@@ -97,7 +101,8 @@ int main(int argc, char **argv) {
 
         for (int i = 0; i < MAX_ENTITIES; i++) {
             if (level->enemies[i] != NULL)
-                level->enemies[i]->processFunc(level->enemies[i], delta);
+                if (!level->enemies[i]->disabled)
+                    level->enemies[i]->processFunc(level->enemies[i], delta);
         }
     }
 
