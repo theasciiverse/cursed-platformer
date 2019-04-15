@@ -27,4 +27,10 @@ struct Message {
 
 struct Entity* createMessage(struct Level* level, double x, double y, char* who, char* msg, int read); 
 
+struct Button {
+    int tx, ty;
+};
+
+struct Entity* createButton(struct Level* level, double x, double y, double tx, double ty);
+
 #endif

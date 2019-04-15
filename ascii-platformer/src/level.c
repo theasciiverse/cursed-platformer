@@ -79,6 +79,15 @@ struct Metadata* readMetadata(struct Level* level, char* path) {
             struct Entity* message = createMessage(level, x, y, who, msg, readable);
             addEntity(level, message);
             printf("Message added");
+        } else if (strcmp(command, "button") == 0) {
+            int x, y;
+            int tx, ty;
+
+            fscanf(fp, "%d %d %d %d ", &x, &y, &tx, &ty);
+
+            struct Entity* button = createButton(level, x, y, tx, ty);
+            addEntity(level, button);
+            printf("Message added");
         }
     }
     

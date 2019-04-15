@@ -95,3 +95,42 @@ void processMessage(struct Entity* message, double delta) {
         message->sprite = '!';
     }
 }
+
+void processButton(struct Entity* message, double delta);
+
+struct Entity* createButton(struct Level* level, double x, double y, double tx, double ty) {
+    struct Entity* button = malloc(sizeof(struct Entity));
+
+    button->x = x;
+    button->y = y;
+    button->x_vel = 0;
+    button->sprite = '_';
+    button->state = IDLE; 
+    button->internal_data = malloc(sizeof(struct Button));
+    
+    struct Button* button_data = (struct Button*) button->internal_data;
+
+    button->level = level;
+    button_data->tx = tx;
+    button_data->ty = ty; 
+
+    button->processFunc = &processButton;
+    return button;
+}
+
+void processButton(struct Entity* button, double delta) {
+    int x = (int) button->x;
+    int y = (int) button->y;
+
+    int px = (int) button->level->player->x;
+    int py = (int) button->level->player->y;
+
+    struct Button* message_data = (struct Button*) button->internal_data;
+    
+    if (x == px && y == py) {
+        int tx = message_data->tx;
+        int ty = message_data->ty;
+
+        button->level->map->data[ty][tx] = ' '; 
+    }
+}
