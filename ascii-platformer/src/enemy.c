@@ -79,3 +79,48 @@ void processMuncher(struct Entity* muncher, double delta) {
     processPhysics(muncher, delta);
 }
 
+struct Stalaktite {
+
+};
+
+void processStalaktite(struct Entity* enemy, double delta);
+
+struct Entity* createStalaktite(struct Level* level, double x, double y) {
+    struct Entity* stalaktite = malloc(sizeof(struct Entity));
+
+    stalaktite->x = x;
+    stalaktite->y = y;
+    stalaktite->x_vel = 0;
+    stalaktite->sprite = 'V';
+    stalaktite->state = IDLE; 
+    stalaktite->internal_data = malloc(sizeof(struct Stalaktite));
+    
+    stalaktite->level = level;
+
+    struct Stalaktite* stalaktite_data = (struct Stalaktite*) stalaktite->internal_data;
+
+
+    stalaktite->processFunc = &processStalaktite;
+    return stalaktite;
+}
+
+void destroyStalaktite(struct Entity* stalaktite) {
+    free(stalaktite->internal_data);
+    free(stalaktite);
+}
+
+void processStalaktite(struct Entity* stalaktite, double delta) {
+    if (stalaktite->state == IDLE) {
+        int x = (int) stalaktite->x;
+        int y = (int) stalaktite->y;
+
+        int px = (int) stalaktite->level->player->x;
+        int py = (int) stalaktite->level->player->y;
+
+        if (x == px) {
+            stalaktite->state = AIRBORNE;
+        }
+     } else {
+        processPhysics(stalaktite, delta);
+     }
+}

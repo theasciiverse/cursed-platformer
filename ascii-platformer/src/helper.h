@@ -5,6 +5,7 @@
 
 #define WALKING 0
 #define AIRBORNE 1
+#define IDLE 2
 #define DEAD 9
 
 void showMessage(WINDOW* parentwin, char* who, char* text);

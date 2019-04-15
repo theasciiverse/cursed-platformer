@@ -4,4 +4,7 @@ start 3 20
 goal 77 21 level1 
 muncher 34 18 
 muncher 56 16 
+stalaktite 66 9
+stalaktite 67 9
+stalaktite 68 9
 end
