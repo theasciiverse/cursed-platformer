@@ -67,6 +67,8 @@ struct Entity* createMessage(struct Level* level, double x, double y, char* who,
     message->x_vel = 0;
     message->sprite = '?';
     message->state = IDLE; 
+    message->disabled = false;
+    message->hidden = false;
     message->internal_data = malloc(sizeof(struct Message));
     
     struct Message* message_data = (struct Message*) message->internal_data;
@@ -92,6 +94,7 @@ void processMessage(struct Entity* message, double delta) {
     if (!message_data->read && x == px && y == py) {
         showMessage(getMainWin(), message_data->who, message_data->msg);       
         message_data->read = true;
+        message->disabled = true;
         message->sprite = '!';
     }
 }
@@ -106,6 +109,8 @@ struct Entity* createButton(struct Level* level, double x, double y, double tx, 
     button->x_vel = 0;
     button->sprite = '_';
     button->state = IDLE; 
+    button->disabled = false;
+    button->hidden = false;
     button->internal_data = malloc(sizeof(struct Button));
     
     struct Button* button_data = (struct Button*) button->internal_data;
@@ -132,5 +137,6 @@ void processButton(struct Entity* button, double delta) {
         int ty = message_data->ty;
 
         button->level->map->data[ty][tx] = ' '; 
+        button->disabled = true;
     }
 }

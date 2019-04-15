@@ -5,14 +5,14 @@
 
 struct Entity {
     struct Level* level;
-    char type;
+    char hidden;
+    char disabled;
     char sprite;
     char state;
     double x, y, x_vel, y_vel;
     void* internal_data;
     void (*processFunc)(struct Entity* entity, double delta);
 };
-
 
 void processPhysics(struct Entity* entity, double delta);
 

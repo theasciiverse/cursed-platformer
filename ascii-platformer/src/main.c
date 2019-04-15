@@ -60,16 +60,17 @@ int main(int argc, char **argv) {
             }
         }
         
+        for (int i = 0; i < MAX_ENTITIES; i++) {
+            if (level->enemies[i] != NULL)
+                if (!level->enemies[i]->disabled && !level->enemies[i]->hidden)
+                    mvwaddch(mainwin, level->enemies[i]->y, level->enemies[i]->x, level->enemies[i]->sprite);
+        }
+
         if (player.state != DEAD)
             mvwaddch(mainwin, player.y, player.x, '@');
         else
             mvwaddch(mainwin, player.y, player.x, 'X');
         
-        for (int i = 0; i < MAX_ENTITIES; i++) {
-            if (level->enemies[i] != NULL)
-                mvwaddch(mainwin, level->enemies[i]->y, level->enemies[i]->x, level->enemies[i]->sprite);
-        }
-
         wrefresh(mainwin);
 
         mvwaddstr(infowin, 0, 0, "LEVEL ");

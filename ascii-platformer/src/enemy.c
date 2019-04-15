@@ -18,6 +18,8 @@ struct Entity* createMuncher(struct Level* level, double x, double y) {
     muncher->x_vel = -4;
     muncher->sprite = '<';
     muncher->state = WALKING; 
+    muncher->disabled = false;
+    muncher->hidden = false;
     muncher->internal_data = malloc(sizeof(struct Muncher));
     
     muncher->level = level;
@@ -96,6 +98,8 @@ struct Entity* createStalaktite(struct Level* level, double x, double y) {
     stalaktite->x_vel = 0;
     stalaktite->sprite = 'V';
     stalaktite->state = IDLE; 
+    stalaktite->disabled = false;
+    stalaktite->hidden = false;
     stalaktite->internal_data = malloc(sizeof(struct Stalaktite));
     
     stalaktite->level = level;
