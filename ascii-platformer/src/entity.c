@@ -4,15 +4,17 @@
 
 void processPhysics(struct Entity* entity, double delta) {
     int old_x = (int) entity->x;
-	int old_y = (int) entity->y;
+    int old_y = (int) entity->y;
     
     struct Map* map = entity->level->map;
 
-    if (map->data[old_y][old_x - 1] == '#' && map->data[old_y][old_x - 1] == '^') {
+    if (entity->x_vel < 0 && (map->data[old_y][old_x - 1] == '#' || map->data[old_y][old_x - 1] == '^')) {
+        entity->x = (float) old_x;
         entity->x_vel = 0;
     }
     
-    if (map->data[old_y][old_x + 1] == '#' && map->data[old_y][old_x + 1] == '^') {
+    if (entity->x_vel > 0 && (map->data[old_y][old_x + 1] == '#' || map->data[old_y][old_x + 1] == '^')) {
+        entity->x = (float) old_x;
         entity->x_vel = 0;
     }
 
@@ -37,19 +39,19 @@ void processPhysics(struct Entity* entity, double delta) {
         entity->y_vel += 4 * delta;
     }
  
-	char below = map->data[new_y + 1][new_x];
-	if ((below == '#' || below == '"') && entity->y_vel >= 0) {
-		entity->state = WALKING;
-		entity->y_vel = 0;
-		entity->y = (float) new_y;
-	} else if (below == '^') {
-		entity->x = (float) old_x;
-		entity->state = DEAD;
-		entity->y_vel = 0;
-	} else {
+    char below = map->data[new_y + 1][new_x];
+    if ((below == '#' || below == '"') && entity->y_vel >= 0) {
+        entity->state = WALKING;
+        entity->y_vel = 0;
+        entity->y = (float) new_y;
+    } else if (below == '^') {
+        entity->state = DEAD;
+        entity->x = (float) new_x;
+        entity->y = (float) new_y;
+    } else {
         entity->y_vel += 12 * delta;
-		entity->state = AIRBORNE;
-	}
+        entity->state = AIRBORNE;
+    }
 }
 
 void destroyEntity(struct Entity* entity) {
