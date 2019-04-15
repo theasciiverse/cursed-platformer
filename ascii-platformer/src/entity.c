@@ -33,12 +33,12 @@ void processPhysics(struct Entity* entity, double delta) {
         new_y = old_y;
     }
 
-    if (map->data[new_y + 1][new_x] != '#') {
+    if (map->data[new_y + 1][new_x] != '#' || map->data[new_y + 1][new_x] != '"') {
         entity->y_vel += 4 * delta;
     }
  
 	char below = map->data[new_y + 1][new_x];
-	if (below == '#') {
+	if ((below == '#' || below == '"') && entity->y_vel >= 0) {
 		entity->state = WALKING;
 		entity->y_vel = 0;
 		entity->y = (float) new_y;

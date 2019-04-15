@@ -1,0 +1,13 @@
+title 2: Caves of aargh
+size 80 24
+start 3 20
+goal 11 2 level1
+stalaktite 43 13
+stalaktite 44 13
+stalaktite 45 13
+stalaktite 58 2
+stalaktite 28 6
+stalaktite 22 6
+stalaktite 23 6
+muncher 43 9
+end
