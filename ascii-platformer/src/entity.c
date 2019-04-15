@@ -56,3 +56,42 @@ void destroyEntity(struct Entity* entity) {
     free(entity->internal_data);
     free(entity);
 }
+
+void processMessage(struct Entity* message, double delta);
+
+struct Entity* createMessage(struct Level* level, double x, double y, char* who, char* msg, int read) {
+    struct Entity* message = malloc(sizeof(struct Entity));
+
+    message->x = x;
+    message->y = y;
+    message->x_vel = 0;
+    message->sprite = '?';
+    message->state = IDLE; 
+    message->internal_data = malloc(sizeof(struct Message));
+    
+    struct Message* message_data = (struct Message*) message->internal_data;
+
+    message->level = level;
+    message_data->who = who;
+    message_data->msg = msg;
+    message_data->read = read; 
+
+    message->processFunc = &processMessage;
+    return message;
+}
+
+void processMessage(struct Entity* message, double delta) {
+    int x = (int) message->x;
+    int y = (int) message->y;
+
+    int px = (int) message->level->player->x;
+    int py = (int) message->level->player->y;
+
+    struct Message* message_data = (struct Message*) message->internal_data;
+    
+    if (!message_data->read && x == px && y == py) {
+        showMessage(getMainWin(), message_data->who, message_data->msg);       
+        message_data->read = true;
+        message->sprite = '!';
+    }
+}

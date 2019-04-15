@@ -18,4 +18,13 @@ void processPhysics(struct Entity* entity, double delta);
 
 void destroyEntity(struct Entity* entity);
 
+struct Message {
+    int x,y;
+    char* who;
+    char* msg;
+    int read;
+};
+
+struct Entity* createMessage(struct Level* level, double x, double y, char* who, char* msg, int read); 
+
 #endif

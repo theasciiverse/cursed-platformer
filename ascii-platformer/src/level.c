@@ -66,6 +66,18 @@ struct Metadata* readMetadata(struct Level* level, char* path) {
             
             struct Entity* stalaktite = createStalaktite(level, x, y);
             addEntity(level, stalaktite);
+        } else if (strcmp(command, "message") == 0) {
+            int x, y;
+            int readable;
+            char* who = malloc(sizeof(char) * 40);
+            char* msg = malloc(sizeof(char) * 250);
+
+            fscanf(fp, "%d %d %d %s", &x, &y, &readable, who);
+            fgets(msg, 250, fp);
+
+            struct Entity* message = createMessage(level, x, y, who, msg, readable);
+            addEntity(level, message);
+            printf("Message added");
         }
     }
     

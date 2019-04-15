@@ -11,4 +11,10 @@
 
 void showMessage(WINDOW* parentwin, char* who, char* text);
 
+void initHelp(WINDOW* mainwin);
+
+WINDOW* getMainWin();
+
+int isPassable(chtype tile);
+
 #endif

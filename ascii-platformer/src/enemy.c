@@ -122,8 +122,16 @@ void processStalaktite(struct Entity* stalaktite, double delta) {
         int px = (int) stalaktite->level->player->x;
         int py = (int) stalaktite->level->player->y;
 
-        if (x == px) {
-            stalaktite->state = AIRBORNE;
+        if (x == px && y < py) {
+            while (y < py) {
+                if (!isPassable(stalaktite->level->map->data[y][x]))
+                    break;
+                y++;
+
+                if (y == py)
+                    stalaktite->state = AIRBORNE;
+            }
+
         }
      } else if (stalaktite->state == AIRBORNE) {
         if (x == px && y == py - 1)

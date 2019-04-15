@@ -2,6 +2,16 @@
 #include <stdlib.h>
 #include <string.h>
 
+WINDOW* mainwin;
+
+void initHelp(WINDOW* mainwin) {
+    mainwin = mainwin;
+}
+
+WINDOW* getMainWin() {
+    return mainwin;
+}
+
 /**
  * Shows a modal message window that can be closed with any key.
  * char* who    Optional name of quotee, or an empty string.
@@ -24,10 +34,10 @@ void showMessage(WINDOW* parentwin, char *who, char *text) {
         i += 2;
     }
 
-    token = strtok(str, "\n");
+    token = strtok(str, "\\");
     while (token != NULL) {
         mvwaddnstr(win, i, 2, token, 54);
-        token = strtok(NULL, "\n");
+        token = strtok(NULL, "\\");
         i++;
     }
 
@@ -36,4 +46,17 @@ void showMessage(WINDOW* parentwin, char *who, char *text) {
     wgetch(win);
     delwin(win);
     return;
+}
+
+int isPassable(chtype tile) {
+    switch (tile) {
+        case '#':
+            return false;
+        case ' ':
+            return true;
+        case '^':
+            return false;
+        default:
+            return true;
+    }
 }

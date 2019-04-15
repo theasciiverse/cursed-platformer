@@ -25,6 +25,8 @@ WINDOW *mainwin;
 void process(double delta, chtype input);
 
 int main(int argc, char **argv) {
+    initHelp(mainwin);
+
     level = loadLevel("level1", &player);
     
     initscr();

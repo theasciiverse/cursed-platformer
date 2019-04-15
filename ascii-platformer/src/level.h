@@ -7,7 +7,7 @@
 #include "entity.h"
 #include "map.h"
 
-#define MAX_ENTITIES 100
+#define MAX_ENTITIES 9001
 
 struct Level {
     struct Map* map;
