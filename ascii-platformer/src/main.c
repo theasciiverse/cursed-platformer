@@ -106,9 +106,18 @@ int main(int argc, char **argv) {
 }
 
 void process(double delta, chtype input) {
-	if (player.state == DEAD)
+	switch(input) {
+        case ERR:
+            break;
+        case 'r':
+            switchLevel(&level, current_level, &player);    
+            player.state = WALKING;
+            break;
+    }
+
+    if (player.state == DEAD)
 		return;
-    
+
     switch(input) {
         case ERR:
             break;
@@ -129,9 +138,6 @@ void process(double delta, chtype input) {
                 player.x_vel = 0;
 			else
                 player.x_vel = 8;
-            break;
-        case 'r':
-            switchLevel(&level, current_level, &player);    
             break;
     }
     
