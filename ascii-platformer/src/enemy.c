@@ -140,3 +140,71 @@ void processStalaktite(struct Entity* stalaktite, double delta) {
         stalaktite->state = GARBAGE;
      }
 }
+
+struct Bat {
+    double sprite_timer;  
+};
+
+void processBat(struct Entity* enemy, double delta);
+
+struct Entity* createBat(struct Level* level, double x, double y) {
+    struct Entity* muncher = malloc(sizeof(struct Entity));
+
+    muncher->x = x;
+    muncher->y = y;
+    muncher->x_vel = -4;
+    muncher->sprite = '^';
+    muncher->state = WALKING; 
+    muncher->disabled = false;
+    muncher->hidden = false;
+    muncher->internal_data = malloc(sizeof(struct Bat));
+    
+    muncher->level = level; 
+
+    struct Bat* muncher_data = (struct Bat*) muncher->internal_data;
+
+    muncher_data->sprite_timer = 0.0;
+
+    muncher->processFunc = &processBat;
+    return muncher;
+}
+
+void processBat(struct Entity* bat, double delta) {
+    struct Bat* bat_data = (struct Bat*) bat->internal_data;  
+
+    bat_data->sprite_timer += delta;
+
+    if (bat_data->sprite_timer > 0.2) {
+        if (bat->sprite == '^')
+            bat->sprite = 'v';
+        else
+            bat->sprite = '^';
+        bat_data->sprite_timer = 0.0;
+    }
+    
+    int x = (int) bat->x;
+    int y = (int) bat->y;
+
+    int px = (int) bat->level->player->x;
+    int py = (int) bat->level->player->y;
+    
+    // Kill player on touch
+    if (x == px && y == py) {
+        bat->level->player->state = DEAD;
+    }
+
+    struct Map* map = bat->level->map;
+
+    char block_ahead;
+
+    if (bat->x_vel < 0)
+        block_ahead = map->data[y][x - 1];
+    else
+        block_ahead = map->data[y][x + 1];
+    
+    if (block_ahead == '#' || block_ahead == '^')
+        bat->x_vel *= -1;
+    
+    bat->y_vel = 0.0;
+    processPhysics(bat, delta);
+}

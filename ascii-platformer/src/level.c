@@ -67,6 +67,14 @@ struct Metadata* readMetadata(struct Level* level, char* path) {
             
             struct Entity* stalaktite = createStalaktite(level, x, y);
             addEntity(level, stalaktite);
+        } else if (strcmp(command, "bat") == 0) {
+            int x;
+            int y;
+
+            fscanf(fp, "%d %d", &x, &y);
+            
+            struct Entity* bat = createBat(level, x, y);
+            addEntity(level, bat);
         } else if (strcmp(command, "message") == 0) {
             int x, y;
             int readable;
