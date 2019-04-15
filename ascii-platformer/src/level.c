@@ -140,8 +140,6 @@ struct Level* loadLevel(char* name, struct Entity* player) {
     player->x = level->metadata->start_x;
     player->y = level->metadata->start_y;
     
-    printf("Player location: %d,%d\n", player->x, player->y);
-
     return level;
 }
 
