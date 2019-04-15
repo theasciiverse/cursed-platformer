@@ -30,11 +30,6 @@ struct Entity* createMuncher(struct Level* level, double x, double y) {
     return muncher;
 }
 
-void destroyMuncher(struct Entity* muncher) {
-    free(muncher->internal_data);
-    free(muncher);
-}
-
 void processMuncher(struct Entity* muncher, double delta) {
     struct Muncher* muncher_data = (struct Muncher*) muncher->internal_data;  
 
@@ -55,7 +50,15 @@ void processMuncher(struct Entity* muncher, double delta) {
     
     int x = (int) muncher->x;
     int y = (int) muncher->y;
+
+    int px = (int) muncher->level->player->x;
+    int py = (int) muncher->level->player->y;
     
+    // Kill player on touch
+    if (x == px && y == py) {
+        muncher->level->player->state = DEAD;
+    }
+
     struct Map* map = muncher->level->map;
 
     char block_ahead;
@@ -104,12 +107,14 @@ struct Entity* createStalaktite(struct Level* level, double x, double y) {
     return stalaktite;
 }
 
-void destroyStalaktite(struct Entity* stalaktite) {
-    free(stalaktite->internal_data);
-    free(stalaktite);
-}
-
 void processStalaktite(struct Entity* stalaktite, double delta) {
+    
+    int x = (int) stalaktite->x;
+    int y = (int) stalaktite->y;
+
+    int px = (int) stalaktite->level->player->x;
+    int py = (int) stalaktite->level->player->y;
+    
     if (stalaktite->state == IDLE) {
         int x = (int) stalaktite->x;
         int y = (int) stalaktite->y;
@@ -120,7 +125,12 @@ void processStalaktite(struct Entity* stalaktite, double delta) {
         if (x == px) {
             stalaktite->state = AIRBORNE;
         }
-     } else {
+     } else if (stalaktite->state == AIRBORNE) {
+        if (x == px && y == py - 1)
+            stalaktite->level->player->state = DEAD;
         processPhysics(stalaktite, delta);
+     } else {
+        stalaktite->sprite = '*';
+        stalaktite->state = GARBAGE;
      }
 }

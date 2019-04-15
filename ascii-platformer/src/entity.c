@@ -51,3 +51,8 @@ void processPhysics(struct Entity* entity, double delta) {
 		entity->state = AIRBORNE;
 	}
 }
+
+void destroyEntity(struct Entity* entity) {
+    free(entity->internal_data);
+    free(entity);
+}

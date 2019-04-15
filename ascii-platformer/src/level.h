@@ -7,11 +7,13 @@
 #include "entity.h"
 #include "map.h"
 
+#define MAX_ENTITIES 100
+
 struct Level {
     struct Map* map;
     struct Metadata* metadata;
     struct Entity* player;
-    struct Entity* enemies[100];
+    struct Entity* enemies[MAX_ENTITIES];
     int enemy_count;
 };
 

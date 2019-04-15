@@ -7,6 +7,8 @@
 #include "map.h"
 #include "level.h"
 
+#include "helper.h"
+
 struct Metadata* readMetadata(struct Level* level, char* path) {
     FILE* fp = fopen(path, "r");
     
@@ -87,6 +89,9 @@ struct Level* loadLevel(char* name, struct Entity* player) {
     strcat(map_path, "/map.txt");
     
     level->enemy_count = 0;
+    for (int i = 0; i < MAX_ENTITIES; i++) {
+        level->enemies[i] = NULL;
+    }
 
     struct Metadata* metadata = readMetadata(level, metadata_path);
     
@@ -102,10 +107,22 @@ struct Level* loadLevel(char* name, struct Entity* player) {
 }
 
 void addEntity(struct Level* level, struct Entity* entity) {
-    entity->level = level;
-    level->enemies[level->enemy_count] = entity;
-    
-    level->enemy_count++;
+    for (int i = 0; i < MAX_ENTITIES; i++) {
+        if (level->enemies[i] == NULL) {
+            entity->level = level;
+            level->enemies[i] = entity;
+            level->enemy_count++;
+
+            return;
+        }
+
+        if (level->enemies[i]->state == GARBAGE) {
+            destroyEntity(level->enemies[i]);
+            level->enemies[i] = entity;
+            
+            return;
+        }
+    }
 }
 
 void destroyLevel(struct Level* level) {
@@ -114,8 +131,10 @@ void destroyLevel(struct Level* level) {
     free(level->metadata->next_level);
     free(level->metadata);
 
-    for (int i = 0; i < level->enemy_count; i++) {
-        free(level->enemies[i]);
+    for (int i = 0; i < MAX_ENTITIES; i++) {
+        if (level->enemies[i] != NULL) {
+            destroyEntity(level->enemies[i]);
+        }
     }
 
     free(level);

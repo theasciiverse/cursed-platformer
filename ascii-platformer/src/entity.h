@@ -16,4 +16,6 @@ struct Entity {
 
 void processPhysics(struct Entity* entity, double delta);
 
+void destroyEntity(struct Entity* entity);
+
 #endif

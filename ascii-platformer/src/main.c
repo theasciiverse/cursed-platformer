@@ -60,8 +60,9 @@ int main(int argc, char **argv) {
         else
             mvwaddch(mainwin, player.y, player.x, 'X');
         
-        for (int i = 0; i < level->enemy_count; i++) {
-            mvwaddch(mainwin, level->enemies[i]->y, level->enemies[i]->x, level->enemies[i]->sprite);
+        for (int i = 0; i < MAX_ENTITIES; i++) {
+            if (level->enemies[i] != NULL)
+                mvwaddch(mainwin, level->enemies[i]->y, level->enemies[i]->x, level->enemies[i]->sprite);
         }
 
         wrefresh(mainwin);
@@ -88,8 +89,9 @@ int main(int argc, char **argv) {
         
         process(delta, input);
 
-        for (int i = 0; i < level->enemy_count; i++) {
-            level->enemies[i]->processFunc(level->enemies[i], delta);
+        for (int i = 0; i < MAX_ENTITIES; i++) {
+            if (level->enemies[i] != NULL)
+                level->enemies[i]->processFunc(level->enemies[i], delta);
         }
     }
 

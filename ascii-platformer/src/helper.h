@@ -7,6 +7,7 @@
 #define AIRBORNE 1
 #define IDLE 2
 #define DEAD 9
+#define GARBAGE 127
 
 void showMessage(WINDOW* parentwin, char* who, char* text);
 
