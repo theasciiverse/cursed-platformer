@@ -72,8 +72,8 @@ int main(int argc, char **argv) {
 
         wrefresh(mainwin);
 
-        mvwaddstr(infowin, 0, 0, "LEVEL");
-        mvwaddnstr(infowin, 0, 5, level->metadata->title, 31);
+        mvwaddstr(infowin, 0, 0, "LEVEL ");
+        mvwaddnstr(infowin, 0, 6, level->metadata->title, 30);
 
         clock_t now = clock();
         double delta = ((double) (now - last) / CLOCKS_PER_SEC);

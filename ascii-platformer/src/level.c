@@ -21,6 +21,7 @@ struct Metadata* readMetadata(struct Level* level, char* path) {
         if (strcmp(command, "title") == 0) {
             char* title = malloc(sizeof(char) * 50);
 
+            fseek(fp, 1, SEEK_CUR);
             fgets(title, 50, fp);
 
             metadata->title = title;
@@ -72,7 +73,7 @@ struct Metadata* readMetadata(struct Level* level, char* path) {
             char* who = malloc(sizeof(char) * 40);
             char* msg = malloc(sizeof(char) * 250);
 
-            fscanf(fp, "%d %d %d %s", &x, &y, &readable, who);
+            fscanf(fp, "%d %d %d %s ", &x, &y, &readable, who);
             fgets(msg, 250, fp);
 
             struct Entity* message = createMessage(level, x, y, who, msg, readable);
