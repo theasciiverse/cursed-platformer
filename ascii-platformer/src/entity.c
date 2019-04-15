@@ -140,3 +140,45 @@ void processButton(struct Entity* button, double delta) {
         button->disabled = true;
     }
 }
+
+void processTeleport(struct Entity* message, double delta);
+
+struct Entity* createTeleport(struct Level* level, double x, double y, double tx, double ty) {
+    struct Entity* teleport = malloc(sizeof(struct Entity));
+
+    teleport->x = x;
+    teleport->y = y;
+    teleport->x_vel = 0;
+    teleport->sprite = '|';
+    teleport->state = IDLE; 
+    teleport->disabled = false;
+    teleport->hidden = false;
+    teleport->internal_data = malloc(sizeof(struct Teleport));
+    
+    struct Teleport* teleport_data = (struct Teleport*) teleport->internal_data;
+
+    teleport->level = level;
+    teleport_data->tx = tx;
+    teleport_data->ty = ty; 
+
+    teleport->processFunc = &processTeleport;
+    return teleport;
+}
+
+void processTeleport(struct Entity* teleport, double delta) {
+    int x = (int) teleport->x;
+    int y = (int) teleport->y;
+
+    int px = (int) teleport->level->player->x;
+    int py = (int) teleport->level->player->y;
+
+    struct Teleport* message_data = (struct Teleport*) teleport->internal_data;
+    
+    if (x == px && y == py) {
+        int tx = message_data->tx;
+        int ty = message_data->ty;
+
+        teleport->level->player->x = tx;
+        teleport->level->player->y = ty;
+    }
+}

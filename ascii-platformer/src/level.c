@@ -33,7 +33,6 @@ struct Metadata* readMetadata(struct Level* level, char* path) {
 
             metadata->width = width;
             metadata->height = height;
-        } else if (strcmp(command, "start") == 0) {
             int x;
             int y;
             
@@ -86,7 +85,6 @@ struct Metadata* readMetadata(struct Level* level, char* path) {
 
             struct Entity* message = createMessage(level, x, y, who, msg, readable);
             addEntity(level, message);
-            printf("Message added");
         } else if (strcmp(command, "button") == 0) {
             int x, y;
             int tx, ty;
@@ -95,8 +93,15 @@ struct Metadata* readMetadata(struct Level* level, char* path) {
 
             struct Entity* button = createButton(level, x, y, tx, ty);
             addEntity(level, button);
-            printf("Message added");
-        }
+        } else if (strcmp(command, "teleport") == 0) {
+            int x, y;
+            int tx, ty;
+
+            fscanf(fp, "%d %d %d %d ", &x, &y, &tx, &ty);
+
+            struct Entity* teleport = createTeleport(level, x, y, tx, ty);
+            addEntity(level, teleport);
+        } 
     }
     
     fclose(fp);

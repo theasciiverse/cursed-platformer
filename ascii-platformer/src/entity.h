@@ -33,4 +33,10 @@ struct Button {
 
 struct Entity* createButton(struct Level* level, double x, double y, double tx, double ty);
 
+struct Teleport {
+    int tx, ty;
+};
+
+struct Entity* createTeleport(struct Level* level, double x, double y, double tx, double ty);
+
 #endif
