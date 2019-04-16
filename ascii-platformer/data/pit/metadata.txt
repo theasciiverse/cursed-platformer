@@ -1,7 +1,7 @@
 title 3: Pit of Bats
 size 80 24
 start 1 1
-goal 29 9 level1
+goal 19 2 level1
 spike 6 1
 spike 7 1
 spike 8 1
@@ -9,9 +9,11 @@ spike 9 1
 muncher 15 19
 muncher 30 18 
 button 12 9 36 19 
+button 12 9 68 14 
 message 34 21 0 Samsai Found your way in here?\ \Well done. 
 bat 48 14
 bat 35 7
 bat 54 7
-//teleport 41 8 16 3
+teleport 41 8 16 3
+teleport 2 2 16 3
 end
