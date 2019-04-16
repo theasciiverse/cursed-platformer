@@ -8,12 +8,12 @@ void processPhysics(struct Entity* entity, double delta) {
     
     struct Map* map = entity->level->map;
 
-    if (entity->x_vel < 0 && (map->data[old_y][old_x - 1] == '#' || map->data[old_y][old_x - 1] == '^')) {
+    if (entity->x_vel < 0 && !isPassable(map->data[old_y][old_x - 1])) {
         entity->x = (float) old_x;
         entity->x_vel = 0;
     }
     
-    if (entity->x_vel > 0 && (map->data[old_y][old_x + 1] == '#' || map->data[old_y][old_x + 1] == '^')) {
+    if (entity->x_vel > 0 && !isPassable(map->data[old_y][old_x + 1])) {
         entity->x = (float) old_x;
         entity->x_vel = 0;
     }
@@ -23,30 +23,30 @@ void processPhysics(struct Entity* entity, double delta) {
 
     int new_x = (int) entity->x;
     
-    if (map->data[old_y][new_x] == '#' || map->data[old_y][new_x] == '^') {
+    if (!isPassable(map->data[old_y][new_x])) {
         entity->x = (float) old_x;
         new_x = old_x;
     }
 
     int new_y = (int) entity->y;
 
-    if (map->data[new_y][new_x] == '#' || map->data[new_y][new_x] == '^') {
+    if (!isPassable(map->data[new_y][new_x])) {
         entity->y = (float) old_y;
         new_y = old_y;
     }
 
-    if (map->data[new_y + 1][new_x] != '#' || map->data[new_y + 1][new_x] != '"') {
+    if (isPassable(map->data[new_y + 1][new_x])) {
         entity->y_vel += 4 * delta;
     }
  
     char below = map->data[new_y + 1][new_x];
-    if ((below == '#' || below == '"') && entity->y_vel >= 0) {
-        entity->state = WALKING;
-        entity->y_vel = 0;
-        entity->y = (float) new_y;
-    } else if (below == '^') {
+    if (below == '^') {
         entity->state = DEAD;
         entity->x = (float) new_x;
+        entity->y = (float) new_y;
+    } else if (!isPassable(below) && entity->y_vel >= 0) {
+        entity->state = WALKING;
+        entity->y_vel = 0;
         entity->y = (float) new_y;
     } else {
         entity->y_vel += 12 * delta;

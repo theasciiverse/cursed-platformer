@@ -52,9 +52,11 @@ int isPassable(chtype tile) {
     switch (tile) {
         case '#':
             return false;
-        case ' ':
-            return true;
         case '^':
+            return false;
+        case ']':
+            return false;
+        case '[':
             return false;
         default:
             return true;
