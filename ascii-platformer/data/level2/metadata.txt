@@ -11,5 +11,5 @@ spike 22 6
 spike 23 6
 muncher 43 9
 button 53 7 73 15
-button 76 15 48 7
+button 76 15 9 2
 end
