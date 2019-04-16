@@ -50,8 +50,19 @@ int main(int argc, char **argv) {
     werase(mainwin);
 
     chtype input;
-    
+
+    clock_t now = 0;
     clock_t last = clock();
+    time_t sec;
+    time(&sec);
+    time_t lastsec = sec;
+    int fps = 0;
+    int frames = 0;
+
+    double delta = 0;
+    double slack = 0;
+
+    char* debugstr = (char *)malloc(44);
 
     while (true) {
         input = getch();
@@ -77,26 +88,38 @@ int main(int argc, char **argv) {
         
         wrefresh(mainwin);
 
-        mvwaddstr(infowin, 0, 0, "LEVEL ");
-        mvwaddnstr(infowin, 0, 6, level->metadata->title, 30);
+        time(&sec);
 
-        clock_t now = clock();
-        double delta = ((double) (now - last) / CLOCKS_PER_SEC);
-        
-        char* statestr = (player.state == WALKING) ? "WALKING" : (player.state == AIRBORNE) ? "AIRBORNE" : "DEAD";
-        char* debugstr = (char *)malloc(44);
-        snprintf(debugstr, 44, "FPS:%-3i X:%-9f Y:%-9f ST:%-8s", (int) (delta * 1000000), player.x, player.y, statestr);
-        mvwaddnstr(infowin, 0, 36, debugstr, 44);
-        free(debugstr);
+		if (sec - lastsec > 0) {
+            fps = frames;
+            frames = 0;
+            lastsec = sec;
+        }
+        frames++;
 
-        wrefresh(infowin);
-        
         now = clock();
 
         delta = ((double) (now - last) / CLOCKS_PER_SEC);
-        
+        slack = (1.0 / 60) - delta;
+        if (slack > 0) {
+			struct timespec delay;
+			delay.tv_sec = 0;
+            delay.tv_nsec = slack * 1000000000L;
+            clock_nanosleep(CLOCK_REALTIME, 0, &delay, NULL);
+            delta += slack;
+        }
+
         last = now;
-        
+
+        mvwaddstr(infowin, 0, 0, "LEVEL ");
+        mvwaddnstr(infowin, 0, 6, level->metadata->title, 30);
+   
+        char* statestr = (player.state == WALKING) ? "WALKING" : (player.state == AIRBORNE) ? "AIRBORNE" : "DEAD";
+        snprintf(debugstr, 44, "FPS:%-3d X:%-9f Y:%-9f ST:%-8s", fps, player.x, player.y, statestr);
+        mvwaddnstr(infowin, 0, 36, debugstr, 44);
+
+        wrefresh(infowin);
+
         process(delta, input);
 
         for (int i = 0; i < MAX_ENTITIES; i++) {
@@ -106,6 +129,7 @@ int main(int argc, char **argv) {
         }
     }
 
+    free(debugstr);
     endwin();
 
     return 0;
