@@ -4,15 +4,15 @@ start 7 22
 button 9 22 10 22
 message 7 22 0 tutorial Welcome to our game!\ \Use arrow keys to move around.
 
-message 16 22 0 tutorial This is a message.\ \You can find them on the various level.
+message 16 22 0 tutorial This is a message.\ \You can find them on the various levels.
 
 message 22 22 0 tutorial You can jump using Spacebar.
 
 button 51 22 56 22   
 button 51 22 62 14 
-message 49 22 0 tutorial This is a button.\ \It opens paths around the level.
+message 49 22 0 tutorial The _ block is a button.\ \It opens paths around the level.
 
-message 61 22 0 tutorial You can climb up these blocks by jumping.
+message 61 22 0 tutorial You can climb up the " blocks by jumping.
 
 message 74 22 0 tutorial This is the level exit.\ \Step into it to begin the adventure!
 goal 78 22 level1
