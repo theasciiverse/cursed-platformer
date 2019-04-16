@@ -98,6 +98,7 @@ struct Entity* createSpike(struct Level* level, double x, double y) {
     spike->x = x;
     spike->y = y;
     spike->x_vel = 0;
+    spike->y_vel = 0;
     spike->sprite = 'V';
     spike->state = IDLE; 
     spike->disabled = false;
