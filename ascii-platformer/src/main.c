@@ -26,6 +26,8 @@ WINDOW *mainwin;
 
 void process(double delta, chtype input);
 
+int debug = 0;
+
 int main(int argc, char **argv) {
     initHelp(mainwin);
     
@@ -90,7 +92,7 @@ int main(int argc, char **argv) {
 
         time(&sec);
 
-		if (sec - lastsec > 0) {
+        if (sec - lastsec > 0) {
             fps = frames;
             frames = 0;
             lastsec = sec;
@@ -102,8 +104,8 @@ int main(int argc, char **argv) {
         delta = ((double) (now - last) / CLOCKS_PER_SEC);
         slack = (1.0 / 60) - delta;
         if (slack > 0) {
-			struct timespec delay;
-			delay.tv_sec = 0;
+            struct timespec delay;
+            delay.tv_sec = 0;
             delay.tv_nsec = slack * 1000000000L;
             clock_nanosleep(CLOCK_REALTIME, 0, &delay, NULL);
             delta += slack;
@@ -112,11 +114,12 @@ int main(int argc, char **argv) {
         last = now;
 
         mvwaddstr(infowin, 0, 0, "LEVEL ");
-        mvwaddnstr(infowin, 0, 6, level->metadata->title, 30);
-   
-        char* statestr = (player.state == WALKING) ? "WALKING" : (player.state == AIRBORNE) ? "AIRBORNE" : "DEAD";
-        snprintf(debugstr, 44, "FPS:%-3d X:%-9f Y:%-9f ST:%-8s", fps, player.x, player.y, statestr);
-        mvwaddnstr(infowin, 0, 36, debugstr, 44);
+        mvwaddnstr(infowin, 0, 6, level->metadata->title, 70);
+        if (debug) {
+            char* statestr = (player.state == WALKING) ? "WALKING" : (player.state == AIRBORNE) ? "AIRBORNE" : "DEAD";
+            snprintf(debugstr, 44, "FPS:%-3d X:%-9f Y:%-9f ST:%-8s", fps, player.x, player.y, statestr);
+            mvwaddnstr(infowin, 0, 36, debugstr, 44);
+        }
 
         wrefresh(infowin);
 
@@ -136,17 +139,20 @@ int main(int argc, char **argv) {
 }
 
 void process(double delta, chtype input) {
-	switch(input) {
+    switch(input) {
         case ERR:
             break;
         case 'r':
             switchLevel(&level, current_level, &player);    
             player.state = WALKING;
             break;
+        case KEY_F(8):
+            debug = !debug;
+            werase(infowin);
     }
 
     if (player.state == DEAD)
-		return;
+        return;
 
     switch(input) {
         case ERR:
@@ -160,15 +166,14 @@ void process(double delta, chtype input) {
         case KEY_LEFT:
             if (player.x_vel < 0)
                 player.x_vel = 0;
-			else
+            else
                 player.x_vel = -8;
             break;
         case KEY_RIGHT:
             if (player.x_vel > 0)
                 player.x_vel = 0;
-			else
+            else
                 player.x_vel = 8;
-            break;
     }
     
     int x = (int) player.x;
