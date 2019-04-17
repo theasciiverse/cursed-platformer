@@ -39,4 +39,13 @@ struct Teleport {
 
 struct Entity* createTeleport(struct Level* level, double x, double y, double tx, double ty);
 
+struct Platform {
+    int sx, sy;
+    int tx, ty;
+
+    char dir;
+};
+
+struct Entity* createPlatform(struct Level* level, double sx, double sy, double tx, double ty);
+
 #endif

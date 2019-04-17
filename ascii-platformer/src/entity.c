@@ -132,11 +132,11 @@ void processButton(struct Entity* button, double delta) {
     int px = (int) button->level->player->x;
     int py = (int) button->level->player->y;
 
-    struct Button* message_data = (struct Button*) button->internal_data;
+    struct Button* button_data = (struct Button*) button->internal_data;
     
     if (x == px && y == py) {
-        int tx = message_data->tx;
-        int ty = message_data->ty;
+        int tx = button_data->tx;
+        int ty = button_data->ty;
 
         button->level->map->data[ty][tx] = ' '; 
         button->disabled = true;
@@ -174,13 +174,93 @@ void processTeleport(struct Entity* teleport, double delta) {
     int px = (int) teleport->level->player->x;
     int py = (int) teleport->level->player->y;
 
-    struct Teleport* message_data = (struct Teleport*) teleport->internal_data;
+    struct Teleport* teleport_data = (struct Teleport*) teleport->internal_data;
     
     if (x == px && y == py) {
-        int tx = message_data->tx;
-        int ty = message_data->ty;
+        int tx = teleport_data->tx;
+        int ty = teleport_data->ty;
 
         teleport->level->player->x = tx;
         teleport->level->player->y = ty;
     }
+}
+
+void processPlatform(struct Entity* platform, double delta);
+
+struct Entity* createPlatform(struct Level* level, double sx, double sy, double tx, double ty) {
+    struct Entity* platform = malloc(sizeof(struct Entity));
+
+    platform->x = sx;
+    platform->y = sx;
+    platform->x_vel = 0;
+    platform->sprite = 'T';
+    platform->state = IDLE; 
+    platform->disabled = false;
+    platform->hidden = false;
+    platform->internal_data = malloc(sizeof(struct Platform));
+    
+    struct Platform* platform_data = (struct Platform*) platform->internal_data;
+
+    platform->level = level;
+    platform_data->sx = sx;
+    platform_data->sy = sy;
+    platform_data->tx = tx;
+    platform_data->ty = ty; 
+    
+    if (platform_data->sx == platform_data->tx) {
+        platform_data->dir = 'V';
+    } else {
+        platform_data->dir = 'H';
+    }
+
+    platform->processFunc = &processPlatform;
+    return platform;
+}
+
+void processPlatform(struct Entity* platform, double delta) {
+    int x = (int) platform->x;
+    int y = (int) platform->y;
+
+    int px = (int) platform->level->player->x;
+    int py = (int) platform->level->player->y;
+
+    struct Platform* platform_data = (struct Platform*) platform->internal_data;
+    
+    platform->y_vel = 0;
+    platform->x_vel = 0;
+
+    if (platform_data->dir == 'V') {
+        int dir = platform_data->ty - y;
+
+        if (dir < 0) {
+            platform->y_vel = -2;
+        } else {
+            platform->y_vel = 2;
+        }
+    } else {
+        int dir = platform_data->tx - x;
+
+        if (dir < 0) {
+            platform->x_vel = -2;
+        } else {
+            platform->x_vel = 2;
+        }
+    }
+
+    if (x == platform_data->tx && y == platform_data->ty) {
+        platform_data->tx = platform_data->sx;
+        platform_data->ty = platform_data->sy;
+
+        platform_data->sx = x;
+        platform_data->sy = y;
+
+        platform->x = platform_data->sx;
+        platform->y = platform_data->sy;
+    }
+    
+    if (px == x && py == y - 1) {
+        // TODO: Figure out physics for the player
+    }
+
+    processPhysics(platform, delta);
 }

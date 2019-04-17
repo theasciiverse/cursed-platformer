@@ -102,6 +102,14 @@ struct Metadata* readMetadata(struct Level* level, char* path) {
 
             struct Entity* teleport = createTeleport(level, x, y, tx, ty);
             addEntity(level, teleport);
+        } else if (strcmp(command, "platform") == 0) {
+            int sx, sy;
+            int tx, ty;
+
+            fscanf(fp, "%d %d %d %d ", &sx, &sy, &tx, &ty);
+
+            struct Entity* platform = createPlatform(level, sx, sy, tx, ty);
+            addEntity(level, platform);
         } 
     }
     
