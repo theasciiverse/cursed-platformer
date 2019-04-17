@@ -27,7 +27,6 @@ void showMessage(WINDOW* parentwin, char *who, char *text) {
 
     win = derwin(parentwin, 10, 60, 5, 10);
     werase(win);
-    box(win, 0, 0);
 
     if (strlen(who) > 0) {
         mvwprintw(win, 1, 2, "%s says:", who);
@@ -42,6 +41,8 @@ void showMessage(WINDOW* parentwin, char *who, char *text) {
     }
 
     mvwprintw(win, 8, 2, "[...]");
+
+    box(win, 0, 0);
 
     wgetch(win);
     delwin(win);
