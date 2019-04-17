@@ -1,4 +1,4 @@
-title 3: Pit of Bats
+title 4: Pit of Bats
 size 80 24
 start 1 1
 goal 19 2 level1
