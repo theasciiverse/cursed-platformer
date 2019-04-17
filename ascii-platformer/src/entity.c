@@ -264,3 +264,38 @@ void processPlatform(struct Entity* platform, double delta) {
 
     processPhysics(platform, delta);
 }
+
+void processTrampoline(struct Entity* trampoline, double delta);
+
+struct Entity* createTrampoline(struct Level* level, double x, double y) {
+    struct Entity* trampoline = malloc(sizeof(struct Entity));
+
+    trampoline->x = x;
+    trampoline->y = y;
+    trampoline->x_vel = 0;
+    trampoline->sprite = 'Z';
+    trampoline->state = IDLE; 
+    trampoline->disabled = false;
+    trampoline->hidden = false;
+    trampoline->internal_data = malloc(sizeof(struct Teleport));
+    
+    trampoline->level = level;
+
+    trampoline->processFunc = &processTrampoline;
+    return trampoline;
+}
+
+void processTrampoline(struct Entity* trampoline, double delta) {
+    int x = (int) trampoline->x;
+    int y = (int) trampoline->y;
+
+    int px = (int) trampoline->level->player->x;
+    int py = (int) trampoline->level->player->y;
+    
+    if (x == px && y == py + 1) {
+        if (trampoline->level->player->y_vel > 4)
+            trampoline->level->player->y_vel *= -0.9;
+    } else if (x == px && y == py - 1) {
+        trampoline->level->player->y_vel *= -0.9;
+    }
+}
