@@ -11,12 +11,12 @@
 
 struct Metadata* readMetadata(struct Level* level, char* path) {
     FILE* fp = fopen(path, "r");
-    
+
     char command[80];
     struct Metadata* metadata = malloc(sizeof(struct Metadata));
 
     while (!feof(fp)) {
-        fscanf(fp, "%s", command); 
+        fscanf(fp, "%s", command);
 
         if (strcmp(command, "title") == 0) {
             char* title = malloc(sizeof(char) * 50);
@@ -36,7 +36,7 @@ struct Metadata* readMetadata(struct Level* level, char* path) {
         } else if (strcmp(command, "start") == 0) {
             int x;
             int y;
-            
+
             fscanf(fp, "%d %d", &x, &y);
 
             metadata->start_x = x;
@@ -56,7 +56,7 @@ struct Metadata* readMetadata(struct Level* level, char* path) {
             int y;
 
             fscanf(fp, "%d %d", &x, &y);
-            
+
             struct Entity* muncher = createMuncher(level, x, y);
             addEntity(level, muncher);
         } else if (strcmp(command, "spike") == 0) {
@@ -64,7 +64,7 @@ struct Metadata* readMetadata(struct Level* level, char* path) {
             int y;
 
             fscanf(fp, "%d %d", &x, &y);
-            
+
             struct Entity* spike = createSpike(level, x, y);
             addEntity(level, spike);
         } else if (strcmp(command, "bat") == 0) {
@@ -72,7 +72,7 @@ struct Metadata* readMetadata(struct Level* level, char* path) {
             int y;
 
             fscanf(fp, "%d %d", &x, &y);
-            
+
             struct Entity* bat = createBat(level, x, y);
             addEntity(level, bat);
         } else if (strcmp(command, "message") == 0) {
@@ -90,7 +90,7 @@ struct Metadata* readMetadata(struct Level* level, char* path) {
             int x, y;
             int tx, ty;
 
-            fscanf(fp, "%d %d %d %d ", &x, &y, &tx, &ty);
+            fscanf(fp, "%d %d %d %d", &x, &y, &tx, &ty);
 
             struct Entity* button = createButton(level, x, y, tx, ty);
             addEntity(level, button);
@@ -98,18 +98,18 @@ struct Metadata* readMetadata(struct Level* level, char* path) {
             int x, y;
             int tx, ty;
 
-            fscanf(fp, "%d %d %d %d ", &x, &y, &tx, &ty);
+            fscanf(fp, "%d %d %d %d", &x, &y, &tx, &ty);
 
             struct Entity* teleport = createTeleport(level, x, y, tx, ty);
             addEntity(level, teleport);
         } else if (strcmp(command, "platform") == 0) {
             int sx, sy;
             int tx, ty;
+            int width;
 
-            fscanf(fp, "%d %d %d %d ", &sx, &sy, &tx, &ty);
-            
-            printf("Creating platform at %d %d\n", sx, sy);
-            struct Entity* platform = createPlatform(level, sx, sy, tx, ty);
+            fscanf(fp, "%d %d %d %d %d", &sx, &sy, &tx, &ty, &width);
+
+            struct Entity* platform = createPlatform(level, sx, sy, tx, ty, width);
             addEntity(level, platform);
         } else if (strcmp(command, "trampoline") == 0) {
             int sx, sy;
@@ -120,7 +120,7 @@ struct Metadata* readMetadata(struct Level* level, char* path) {
             addEntity(level, trampoline);
         }
     }
-    
+
     fclose(fp);
 
     return metadata;
@@ -132,22 +132,22 @@ struct Level* loadLevel(char* name, struct Entity* player) {
 
     char path[80] = "data/";
     strcat(path, name);
-     
+
     char metadata_path[80];
     strcpy(metadata_path, path);
     strcat(metadata_path, "/metadata.txt");
-    
+
     char map_path[80];
     strcpy(map_path, path);
     strcat(map_path, "/map.txt");
-    
+
     level->enemy_count = 0;
     for (int i = 0; i < MAX_ENTITIES; i++) {
         level->enemies[i] = NULL;
     }
 
     struct Metadata* metadata = readMetadata(level, metadata_path);
-    
+
     level->metadata = metadata;
     level->map = loadMap(metadata, map_path);
     level->player = player;
@@ -155,7 +155,7 @@ struct Level* loadLevel(char* name, struct Entity* player) {
 
     player->x = level->metadata->start_x;
     player->y = level->metadata->start_y;
-    
+
     return level;
 }
 
@@ -172,7 +172,7 @@ void addEntity(struct Level* level, struct Entity* entity) {
         if (level->enemies[i]->state == GARBAGE) {
             destroyEntity(level->enemies[i]);
             level->enemies[i] = entity;
-            
+
             return;
         }
     }
