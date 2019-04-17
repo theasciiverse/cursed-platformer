@@ -5,14 +5,14 @@
 void processPhysics(struct Entity* entity, double delta) {
     int old_x = (int) entity->x;
     int old_y = (int) entity->y;
-    
+
     struct Map* map = entity->level->map;
 
     if (entity->x_vel < 0 && !isPassable(map->data[old_y][old_x - 1])) {
         entity->x = (float) old_x;
         entity->x_vel = 0;
     }
-    
+
     if (entity->x_vel > 0 && !isPassable(map->data[old_y][old_x + 1])) {
         entity->x = (float) old_x;
         entity->x_vel = 0;
@@ -22,7 +22,7 @@ void processPhysics(struct Entity* entity, double delta) {
     entity->x += entity->x_vel * delta;
 
     int new_x = (int) entity->x;
-    
+
     if (!isPassable(map->data[old_y][new_x])) {
         entity->x = (float) old_x;
         new_x = old_x;
@@ -38,13 +38,13 @@ void processPhysics(struct Entity* entity, double delta) {
     if (isPassable(map->data[new_y + 1][new_x])) {
         entity->y_vel += 4 * delta;
     }
- 
+
     char below = map->data[new_y + 1][new_x];
     if (below == '^') {
         entity->state = DEAD;
         entity->x = (float) new_x;
         entity->y = (float) new_y;
-    } else if ((!isPassable(below) || below == '"') && entity->y_vel >= 0) {
+    } else if ((!isPassable(below) || below == '"' || below == 'T') && entity->y_vel >= 0) {
         entity->state = WALKING;
         entity->y_vel = 0;
         entity->y = (float) new_y;
@@ -66,19 +66,20 @@ struct Entity* createMessage(struct Level* level, double x, double y, char* who,
 
     message->x = x;
     message->y = y;
+    message->width = 1;
     message->x_vel = 0;
     message->sprite = '?';
-    message->state = IDLE; 
+    message->state = IDLE;
     message->disabled = false;
     message->hidden = false;
     message->internal_data = malloc(sizeof(struct Message));
-    
+
     struct Message* message_data = (struct Message*) message->internal_data;
 
     message->level = level;
     message_data->who = who;
     message_data->msg = msg;
-    message_data->read = read; 
+    message_data->read = read;
 
     message->processFunc = &processMessage;
     return message;
@@ -92,9 +93,9 @@ void processMessage(struct Entity* message, double delta) {
     int py = (int) message->level->player->y;
 
     struct Message* message_data = (struct Message*) message->internal_data;
-    
+
     if (!message_data->read && x == px && y == py) {
-        showMessage(getMainWin(), message_data->who, message_data->msg);       
+        showMessage(getMainWin(), message_data->who, message_data->msg);
         message_data->read = true;
         message->disabled = true;
         message->sprite = '!';
@@ -110,16 +111,16 @@ struct Entity* createButton(struct Level* level, double x, double y, double tx, 
     button->y = y;
     button->x_vel = 0;
     button->sprite = '_';
-    button->state = IDLE; 
+    button->state = IDLE;
     button->disabled = false;
     button->hidden = false;
     button->internal_data = malloc(sizeof(struct Button));
-    
+
     struct Button* button_data = (struct Button*) button->internal_data;
 
     button->level = level;
     button_data->tx = tx;
-    button_data->ty = ty; 
+    button_data->ty = ty;
 
     button->processFunc = &processButton;
     return button;
@@ -133,12 +134,12 @@ void processButton(struct Entity* button, double delta) {
     int py = (int) button->level->player->y;
 
     struct Button* button_data = (struct Button*) button->internal_data;
-    
+
     if (x == px && y == py) {
         int tx = button_data->tx;
         int ty = button_data->ty;
 
-        button->level->map->data[ty][tx] = ' '; 
+        button->level->map->data[ty][tx] = ' ';
         button->disabled = true;
     }
 }
@@ -150,18 +151,19 @@ struct Entity* createTeleport(struct Level* level, double x, double y, double tx
 
     teleport->x = x;
     teleport->y = y;
+    teleport->width = 1;
     teleport->x_vel = 0;
     teleport->sprite = '|';
-    teleport->state = IDLE; 
+    teleport->state = IDLE;
     teleport->disabled = false;
     teleport->hidden = false;
     teleport->internal_data = malloc(sizeof(struct Teleport));
-    
+
     struct Teleport* teleport_data = (struct Teleport*) teleport->internal_data;
 
     teleport->level = level;
     teleport_data->tx = tx;
-    teleport_data->ty = ty; 
+    teleport_data->ty = ty;
 
     teleport->processFunc = &processTeleport;
     return teleport;
@@ -175,7 +177,7 @@ void processTeleport(struct Entity* teleport, double delta) {
     int py = (int) teleport->level->player->y;
 
     struct Teleport* teleport_data = (struct Teleport*) teleport->internal_data;
-    
+
     if (x == px && y == py) {
         int tx = teleport_data->tx;
         int ty = teleport_data->ty;
@@ -187,28 +189,29 @@ void processTeleport(struct Entity* teleport, double delta) {
 
 void processPlatform(struct Entity* platform, double delta);
 
-struct Entity* createPlatform(struct Level* level, int sx, int sy, int tx, int ty) {
+struct Entity* createPlatform(struct Level* level, int sx, int sy, int tx, int ty, int width) {
     struct Entity* platform = malloc(sizeof(struct Entity));
 
     platform->x = sx;
     platform->y = sy;
+    platform->width = width;
 
     platform->x_vel = 0;
     platform->y_vel = 0;
     platform->sprite = 'T';
-    platform->state = IDLE; 
+    platform->state = IDLE;
     platform->disabled = false;
     platform->hidden = false;
     platform->internal_data = malloc(sizeof(struct Platform));
-    
+
     struct Platform* platform_data = (struct Platform*) platform->internal_data;
 
     platform->level = level;
     platform_data->sx = (double) sx;
     platform_data->sy = (double) sy;
     platform_data->tx = (double) tx;
-    platform_data->ty = (double) ty; 
-    
+    platform_data->ty = (double) ty;
+
     if (platform_data->sx == platform_data->tx) {
         platform_data->dir = 'V';
     } else {
@@ -227,7 +230,7 @@ void processPlatform(struct Entity* platform, double delta) {
     int py = (int) platform->level->player->y;
 
     struct Platform* platform_data = (struct Platform*) platform->internal_data;
-    
+
     platform->y_vel = 0;
     platform->x_vel = 0;
 
@@ -235,17 +238,17 @@ void processPlatform(struct Entity* platform, double delta) {
         int dir = platform_data->ty - y;
 
         if (dir < 0) {
-            platform->y_vel = -2;
+            platform->y_vel = -3;
         } else {
-            platform->y_vel = 2;
+            platform->y_vel = 3;
         }
     } else {
         int dir = platform_data->tx - x;
 
         if (dir < 0) {
-            platform->x_vel = -2;
+            platform->x_vel = -3;
         } else {
-            platform->x_vel = 2;
+            platform->x_vel = 3;
         }
     }
 
@@ -259,13 +262,16 @@ void processPlatform(struct Entity* platform, double delta) {
         platform->x = platform_data->sx;
         platform->y = platform_data->sy;
     }
-    
-    if (px == x && py == y - 1) {
-        // TODO: Figure out physics for the player
-    }
 
     platform->x += platform->x_vel * delta;
     platform->y += platform->y_vel * delta;
+
+    if (px >= x && px < x + platform->width && py == y - 1) {
+        platform->level->player->state = WALKING;
+        platform->level->player->y_vel = 0;
+        platform->level->player->y = platform->y - 1;
+        platform->level->player->x += platform->x_vel * delta;
+    }
 }
 
 void processTrampoline(struct Entity* trampoline, double delta);
@@ -275,13 +281,14 @@ struct Entity* createTrampoline(struct Level* level, double x, double y) {
 
     trampoline->x = x;
     trampoline->y = y;
+    trampoline->width = 1;
     trampoline->x_vel = 0;
     trampoline->sprite = 'Z';
-    trampoline->state = IDLE; 
+    trampoline->state = IDLE;
     trampoline->disabled = false;
     trampoline->hidden = false;
     trampoline->internal_data = malloc(sizeof(struct Teleport));
-    
+
     trampoline->level = level;
 
     trampoline->processFunc = &processTrampoline;
@@ -294,7 +301,7 @@ void processTrampoline(struct Entity* trampoline, double delta) {
 
     int px = (int) trampoline->level->player->x;
     int py = (int) trampoline->level->player->y;
-    
+
     if (x == px && y == py + 1) {
         if (trampoline->level->player->y_vel > 4)
             trampoline->level->player->y_vel *= -0.9;

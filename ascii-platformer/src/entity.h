@@ -5,6 +5,7 @@
 
 struct Entity {
     struct Level* level;
+    int width;
     char hidden;
     char disabled;
     char sprite;
@@ -25,7 +26,7 @@ struct Message {
     int read;
 };
 
-struct Entity* createMessage(struct Level* level, double x, double y, char* who, char* msg, int read); 
+struct Entity* createMessage(struct Level* level, double x, double y, char* who, char* msg, int read);
 
 struct Button {
     int tx, ty;
@@ -46,7 +47,7 @@ struct Platform {
     char dir;
 };
 
-struct Entity* createPlatform(struct Level* level, int sx, int sy, int tx, int ty);
+struct Entity* createPlatform(struct Level* level, int sx, int sy, int tx, int ty, int width);
 
 struct Entity* createTrampoline(struct Level* level, double x, double y);
 

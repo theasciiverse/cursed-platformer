@@ -30,19 +30,19 @@ int debug = 0;
 
 int main(int argc, char **argv) {
     initHelp(mainwin);
-    
+
     if (argc > 1)
         level = loadLevel(argv[1], &player);
     else
         level = loadLevel("level1", &player);
-    
+
     strcpy(current_level, level->name);
 
     initscr();
     resize_term(25, 80);
     nodelay(stdscr, TRUE);
     noecho();
-    cbreak(); 
+    cbreak();
     keypad(stdscr, TRUE);
     curs_set(0);
 
@@ -68,7 +68,7 @@ int main(int argc, char **argv) {
 
     while (true) {
         input = getch();
-        
+
         struct Map* map = level->map;
 
         for (int y = 0; y < map->height; y++) {
@@ -76,19 +76,21 @@ int main(int argc, char **argv) {
                 mvwaddch(mainwin, y, x, map->data[y][x]);
             }
         }
-        
+
         for (int i = 0; i < MAX_ENTITIES; i++) {
-            if (level->enemies[i] != NULL)
-                if (!level->enemies[i]->disabled && !level->enemies[i]->hidden)
-                    mvwaddch(mainwin, level->enemies[i]->y, level->enemies[i]->x, level->enemies[i]->sprite);
+            if (level->enemies[i] != NULL) {
+                if (!level->enemies[i]->disabled && !level->enemies[i]->hidden) {
+                    for (int j = 0; j < level->enemies[i]->width; j++) {
+                        mvwaddch(mainwin, level->enemies[i]->y, level->enemies[i]->x + j, level->enemies[i]->sprite);
+                    }
+                }
+            }
         }
 
         if (player.state != DEAD)
             mvwaddch(mainwin, player.y, player.x, '@');
         else
             mvwaddch(mainwin, player.y, player.x, 'X');
-        
-        wrefresh(mainwin);
 
         time(&sec);
 
@@ -120,16 +122,16 @@ int main(int argc, char **argv) {
             snprintf(debugstr, 44, "FPS:%-3d X:%-9f Y:%-9f ST:%-8s", fps, player.x, player.y, statestr);
             mvwaddnstr(infowin, 0, 36, debugstr, 44);
         }
-
         wrefresh(infowin);
-
-        process(delta, input);
 
         for (int i = 0; i < MAX_ENTITIES; i++) {
             if (level->enemies[i] != NULL)
                 if (!level->enemies[i]->disabled)
                     level->enemies[i]->processFunc(level->enemies[i], delta);
         }
+
+        process(delta, input);
+        wrefresh(mainwin);
     }
 
     free(debugstr);
@@ -143,7 +145,7 @@ void process(double delta, chtype input) {
         case ERR:
             break;
         case 'r':
-            switchLevel(&level, current_level, &player);    
+            switchLevel(&level, current_level, &player);
             player.state = WALKING;
             break;
         case KEY_F(8):
@@ -175,14 +177,14 @@ void process(double delta, chtype input) {
             else
                 player.x_vel = 8;
     }
-    
+
     int x = (int) player.x;
     int y = (int) player.y;
-    
+
     if (x == level->metadata->goal_x && y == level->metadata->goal_y) {
         strcpy(current_level, level->metadata->next_level);
-        switchLevel(&level, current_level, &player); 
+        switchLevel(&level, current_level, &player);
     }
-    
-    processPhysics(&player, delta); 
+
+    processPhysics(&player, delta);
 }

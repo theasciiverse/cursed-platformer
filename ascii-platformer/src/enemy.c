@@ -7,7 +7,7 @@
 #include "entity.h"
 
 struct Muncher {
-    double sprite_timer;  
+    double sprite_timer;
 };
 
 void processMuncher(struct Entity* enemy, double delta);
@@ -17,13 +17,14 @@ struct Entity* createMuncher(struct Level* level, double x, double y) {
 
     muncher->x = x;
     muncher->y = y;
+    muncher->width = 1;
     muncher->x_vel = -4;
     muncher->sprite = '<';
-    muncher->state = WALKING; 
+    muncher->state = WALKING;
     muncher->disabled = false;
     muncher->hidden = false;
     muncher->internal_data = malloc(sizeof(struct Muncher));
-    
+
     muncher->level = level;
 
     struct Muncher* muncher_data = (struct Muncher*) muncher->internal_data;
@@ -35,7 +36,7 @@ struct Entity* createMuncher(struct Level* level, double x, double y) {
 }
 
 void processMuncher(struct Entity* muncher, double delta) {
-    struct Muncher* muncher_data = (struct Muncher*) muncher->internal_data;  
+    struct Muncher* muncher_data = (struct Muncher*) muncher->internal_data;
 
     muncher_data->sprite_timer += delta;
 
@@ -46,18 +47,18 @@ void processMuncher(struct Entity* muncher, double delta) {
             muncher->sprite = '-';
         muncher_data->sprite_timer = 0.0;
     }
-    
+
     if (muncher->x_vel < 0 && muncher->sprite != '-')
         muncher->sprite = '>';
     else if (muncher->sprite != '-')
         muncher->sprite = '<';
-    
+
     int x = (int) muncher->x;
     int y = (int) muncher->y;
 
     int px = (int) muncher->level->player->x;
     int py = (int) muncher->level->player->y;
-    
+
     // Kill player on touch
     if (x == px && y == py) {
         muncher->level->player->state = DEAD;
@@ -71,15 +72,15 @@ void processMuncher(struct Entity* muncher, double delta) {
         block_ahead = map->data[y][x - 1];
     else
         block_ahead = map->data[y][x + 1];
-    
+
     if (block_ahead == '#' || block_ahead == '^')
         muncher->x_vel *= -1;
-   
+
      if (muncher->x_vel < 0)
         block_ahead = map->data[y + 1][x - 1];
     else
         block_ahead = map->data[y + 1][x + 1];
-    
+
     if (block_ahead == ' ' || block_ahead == '^')
         muncher->x_vel *= -1;
 
@@ -97,14 +98,15 @@ struct Entity* createSpike(struct Level* level, double x, double y) {
 
     spike->x = x;
     spike->y = y;
+    spike->width = 1;
     spike->x_vel = 0;
     spike->y_vel = 0;
     spike->sprite = 'V';
-    spike->state = IDLE; 
+    spike->state = IDLE;
     spike->disabled = false;
     spike->hidden = false;
     spike->internal_data = malloc(sizeof(struct Spike));
-    
+
     spike->level = level;
 
     struct Spike* spike_data = (struct Spike*) spike->internal_data;
@@ -115,13 +117,13 @@ struct Entity* createSpike(struct Level* level, double x, double y) {
 }
 
 void processSpike(struct Entity* spike, double delta) {
-    
+
     int x = (int) spike->x;
     int y = (int) spike->y;
 
     int px = (int) spike->level->player->x;
     int py = (int) spike->level->player->y;
-    
+
     if (spike->state == IDLE) {
         if (x == px && y < py) {
             while (y < py) {
@@ -145,35 +147,36 @@ void processSpike(struct Entity* spike, double delta) {
 }
 
 struct Bat {
-    double sprite_timer;  
+    double sprite_timer;
 };
 
 void processBat(struct Entity* enemy, double delta);
 
 struct Entity* createBat(struct Level* level, double x, double y) {
-    struct Entity* muncher = malloc(sizeof(struct Entity));
+    struct Entity* bat = malloc(sizeof(struct Entity));
 
-    muncher->x = x;
-    muncher->y = y;
-    muncher->x_vel = -4;
-    muncher->sprite = '^';
-    muncher->state = WALKING; 
-    muncher->disabled = false;
-    muncher->hidden = false;
-    muncher->internal_data = malloc(sizeof(struct Bat));
-    
-    muncher->level = level; 
+    bat->x = x;
+    bat->y = y;
+    bat->width = 1;
+    bat->x_vel = -4;
+    bat->sprite = '^';
+    bat->state = WALKING;
+    bat->disabled = false;
+    bat->hidden = false;
+    bat->internal_data = malloc(sizeof(struct Bat));
 
-    struct Bat* muncher_data = (struct Bat*) muncher->internal_data;
+    bat->level = level;
 
-    muncher_data->sprite_timer = 0.0;
+    struct Bat* bat_data = (struct Bat*) bat->internal_data;
 
-    muncher->processFunc = &processBat;
-    return muncher;
+    bat_data->sprite_timer = 0.0;
+
+    bat->processFunc = &processBat;
+    return bat;
 }
 
 void processBat(struct Entity* bat, double delta) {
-    struct Bat* bat_data = (struct Bat*) bat->internal_data;  
+    struct Bat* bat_data = (struct Bat*) bat->internal_data;
 
     bat_data->sprite_timer += delta;
 
@@ -184,23 +187,23 @@ void processBat(struct Entity* bat, double delta) {
             bat->sprite = '^';
         bat_data->sprite_timer = 0.0;
     }
-    
+
     int x = (int) bat->x;
     int y = (int) bat->y;
 
     int px = (int) bat->level->player->x;
     int py = (int) bat->level->player->y;
-    
+
     // Kill player on touch
     if (x == px && y == py) {
         bat->level->player->state = DEAD;
-    } 
-    
+    }
+
     int dx = abs(x - px);
     int dy = abs(y - py);
-    
+
     double dist = sqrt(pow((double) dx, 2) + pow((double) dy, 2));
-    
+
     if (dist < 5) {
         bat->x_vel = px - x;
         bat->y_vel = py - y;
@@ -214,10 +217,10 @@ void processBat(struct Entity* bat, double delta) {
         block_ahead = map->data[y][x - 1];
     else
         block_ahead = map->data[y][x + 1];
-    
+
     if (block_ahead == '#' || block_ahead == '^')
         bat->x_vel *= -1;
-    
+
     processPhysics(bat, delta);
     bat->y_vel = 0.0;
 }
