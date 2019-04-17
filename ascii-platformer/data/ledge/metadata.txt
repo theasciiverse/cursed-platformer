@@ -1,0 +1,25 @@
+title 3: Moving Platforms - Science or Sorcery?
+size 80 24
+start 5 7
+message 11 7 0 @ Is that an actual pyramid down there in the distance?\ \...And why is it on fire?
+
+platform 39 15 9 15
+platform 40 15 10 15
+platform 41 15 11 15
+platform 42 15 12 15
+
+platform 40 6 40 13
+platform 41 6 41 13
+platform 42 6 42 13
+platform 43 6 43 13
+
+platform 51 19 64 19
+platform 52 19 65 19
+platform 53 19 66 19
+platform 54 19 67 19
+
+message 69 20 0 @ I wonder what sort of magic\makes those platforms move.
+muncher 65 6
+muncher 76 11
+goal 71 3
+
