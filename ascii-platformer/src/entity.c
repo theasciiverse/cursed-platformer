@@ -44,7 +44,7 @@ void processPhysics(struct Entity* entity, double delta) {
         entity->state = DEAD;
         entity->x = (float) new_x;
         entity->y = (float) new_y;
-    } else if (!isPassable(below) && entity->y_vel >= 0) {
+    } else if ((!isPassable(below) || below == '"') && entity->y_vel >= 0) {
         entity->state = WALKING;
         entity->y_vel = 0;
         entity->y = (float) new_y;
