@@ -57,8 +57,3 @@ lib = static_library('pdcurses',
 dependencies : [sdl2])
 
 pdcurses = declare_dependency(link_with : lib)
-
-
-firework = executable('firework', 'demos/firework.c', 
-  dependencies : [pdcurses]
-  )
