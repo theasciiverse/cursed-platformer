@@ -109,6 +109,7 @@ struct Entity* createButton(struct Level* level, double x, double y, double tx, 
 
     button->x = x;
     button->y = y;
+    button->width = 1;
     button->x_vel = 0;
     button->sprite = '_';
     button->state = IDLE;
