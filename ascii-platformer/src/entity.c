@@ -187,12 +187,14 @@ void processTeleport(struct Entity* teleport, double delta) {
 
 void processPlatform(struct Entity* platform, double delta);
 
-struct Entity* createPlatform(struct Level* level, double sx, double sy, double tx, double ty) {
+struct Entity* createPlatform(struct Level* level, int sx, int sy, int tx, int ty) {
     struct Entity* platform = malloc(sizeof(struct Entity));
 
     platform->x = sx;
-    platform->y = sx;
+    platform->y = sy;
+
     platform->x_vel = 0;
+    platform->y_vel = 0;
     platform->sprite = 'T';
     platform->state = IDLE; 
     platform->disabled = false;
@@ -202,10 +204,10 @@ struct Entity* createPlatform(struct Level* level, double sx, double sy, double 
     struct Platform* platform_data = (struct Platform*) platform->internal_data;
 
     platform->level = level;
-    platform_data->sx = sx;
-    platform_data->sy = sy;
-    platform_data->tx = tx;
-    platform_data->ty = ty; 
+    platform_data->sx = (double) sx;
+    platform_data->sy = (double) sy;
+    platform_data->tx = (double) tx;
+    platform_data->ty = (double) ty; 
     
     if (platform_data->sx == platform_data->tx) {
         platform_data->dir = 'V';
@@ -262,7 +264,8 @@ void processPlatform(struct Entity* platform, double delta) {
         // TODO: Figure out physics for the player
     }
 
-    processPhysics(platform, delta);
+    platform->x += platform->x_vel * delta;
+    platform->y += platform->y_vel * delta;
 }
 
 void processTrampoline(struct Entity* trampoline, double delta);

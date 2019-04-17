@@ -107,7 +107,8 @@ struct Metadata* readMetadata(struct Level* level, char* path) {
             int tx, ty;
 
             fscanf(fp, "%d %d %d %d ", &sx, &sy, &tx, &ty);
-
+            
+            printf("Creating platform at %d %d\n", sx, sy);
             struct Entity* platform = createPlatform(level, sx, sy, tx, ty);
             addEntity(level, platform);
         } else if (strcmp(command, "trampoline") == 0) {

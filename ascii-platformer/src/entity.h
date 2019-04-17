@@ -46,7 +46,7 @@ struct Platform {
     char dir;
 };
 
-struct Entity* createPlatform(struct Level* level, double sx, double sy, double tx, double ty);
+struct Entity* createPlatform(struct Level* level, int sx, int sy, int tx, int ty);
 
 struct Entity* createTrampoline(struct Level* level, double x, double y);
 
