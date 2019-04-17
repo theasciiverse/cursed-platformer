@@ -126,8 +126,9 @@ int main(int argc, char **argv) {
 
         for (int i = 0; i < MAX_ENTITIES; i++) {
             if (level->enemies[i] != NULL)
-                if (!level->enemies[i]->disabled)
+                if (!level->enemies[i]->disabled) {
                     level->enemies[i]->processFunc(level->enemies[i], delta);
+                }
         }
 
         process(delta, input);
@@ -146,6 +147,7 @@ void process(double delta, chtype input) {
             break;
         case 'r':
             switchLevel(&level, current_level, &player);
+            werase(mainwin);
             player.state = WALKING;
             break;
         case KEY_F(8):
