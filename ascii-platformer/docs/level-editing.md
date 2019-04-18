@@ -14,10 +14,10 @@ The map.txt file contains the ASCII representation of the static elements in the
 geometry. Most ASCII characters are purely decorative, but there are a couple of characters that have a special 
 role.
 
-- # represents a wall or a floor, it is impassable from all directions
-- " represents a platform or a ladder that can be climbed from below but you cannot fall through
-- ^ is a static spike, falling on it will be deadly and it cannot be passed from either side
-- ] and [ are "doors" but act essentially like wall tiles
+* # represents a wall or a floor, it is impassable from all directions
+* " represents a platform or a ladder that can be climbed from below but you cannot fall through
+* ^ is a static spike, falling on it will be deadly and it cannot be passed from either side
+* ] and [ are "doors" but act essentially like wall tiles
 
 You can then "draw" the map using your favourite text editor into the map.txt file. What you write into
 the file will look the same in game. Note that the game cannot display maps larger than 80x24 but your
