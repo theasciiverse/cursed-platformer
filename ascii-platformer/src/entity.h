@@ -49,6 +49,6 @@ struct Platform {
 
 struct Entity* createPlatform(struct Level* level, int sx, int sy, int tx, int ty, int width);
 
-struct Entity* createTrampoline(struct Level* level, double x, double y);
+struct Entity* createTrampoline(struct Level* level, double x, double y, int width);
 
 #endif

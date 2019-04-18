@@ -279,12 +279,12 @@ void processPlatform(struct Entity* platform, double delta) {
 
 void processTrampoline(struct Entity* trampoline, double delta);
 
-struct Entity* createTrampoline(struct Level* level, double x, double y) {
+struct Entity* createTrampoline(struct Level* level, double x, double y, int width) {
     struct Entity* trampoline = malloc(sizeof(struct Entity));
 
     trampoline->x = x;
     trampoline->y = y;
-    trampoline->width = 1;
+    trampoline->width = width;
     trampoline->x_vel = 0;
     trampoline->sprite = 'Z';
     trampoline->state = IDLE;
@@ -305,10 +305,8 @@ void processTrampoline(struct Entity* trampoline, double delta) {
     int px = (int) trampoline->level->player->x;
     int py = (int) trampoline->level->player->y;
 
-    if (x == px && y == py + 1) {
+    if (px >= x && px < x + trampoline->width && py == y - 1) {
         if (trampoline->level->player->y_vel > 4)
             trampoline->level->player->y_vel *= -0.9;
-    } else if (x == px && y == py - 1) {
-        trampoline->level->player->y_vel *= -0.9;
     }
 }

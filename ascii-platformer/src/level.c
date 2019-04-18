@@ -112,12 +112,16 @@ struct Metadata* readMetadata(struct Level* level, char* path) {
             struct Entity* platform = createPlatform(level, sx, sy, tx, ty, width);
             addEntity(level, platform);
         } else if (strcmp(command, "trampoline") == 0) {
-            int sx, sy;
+            int sx, sy, width;
 
-            fscanf(fp, "%d %d", &sx, &sy);
+            fscanf(fp, "%d %d %d", &sx, &sy, &width);
 
-            struct Entity* trampoline = createTrampoline(level, sx, sy);
+            struct Entity* trampoline = createTrampoline(level, sx, sy, width);
             addEntity(level, trampoline);
+        } else if (strcmp(command, "//") == 0) {
+            char buf[250];
+
+            fgets(buf, 250, fp);
         }
     }
 
