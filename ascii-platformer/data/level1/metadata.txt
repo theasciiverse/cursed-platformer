@@ -2,8 +2,8 @@ title 1: Insanity awaits!
 size 80 24
 start 3 20
 message 10 20 0 tutorial You can press "r" to restart the level!
-message 27 18 0 tutorial Watch out for the Munchers!
-goal 77 21 level2
+message 27 18 0 tutorial Watch out for the Munchers!\They pack a nasty bite!
 muncher 34 18
 muncher 56 16
+goal 77 21 level2
 end

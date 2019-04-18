@@ -19,10 +19,10 @@ struct Metadata* readMetadata(struct Level* level, char* path) {
         fscanf(fp, "%s", command);
 
         if (strcmp(command, "title") == 0) {
-            char* title = malloc(sizeof(char) * 50);
+            char* title = malloc(sizeof(char) * 70);
 
             fseek(fp, 1, SEEK_CUR);
-            fgets(title, 50, fp);
+            fgets(title, 70, fp);
 
             metadata->title = title;
         } else if (strcmp(command, "size") == 0) {

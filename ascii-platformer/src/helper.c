@@ -18,14 +18,14 @@ WINDOW* getMainWin() {
  * char* text   Message text. Can contain several lines of max 54 chars
  *              delimited with "\n".
  **/
-void showMessage(WINDOW* parentwin, char *who, char *text) {
+void showMessage(char *who, char *text) {
     WINDOW *win;
     char *token;
     int i = 1;
     char str[400];
     strncpy(str, text, 400);
 
-    win = derwin(parentwin, 10, 60, 5, 10);
+    win = derwin(mainwin, 12, 60, 5, 7);
     werase(win);
 
     if (strlen(who) > 0) {
@@ -40,7 +40,7 @@ void showMessage(WINDOW* parentwin, char *who, char *text) {
         i++;
     }
 
-    mvwprintw(win, 8, 2, "[...]");
+    mvwprintw(win, 10, 2, "[...]");
 
     box(win, 0, 0);
 

@@ -1,19 +1,19 @@
-title 1: A Humble Beginning
+title 1: This is where it all began.
 size 80 24
 start 7 22
 button 9 22 10 22
-message 7 22 0 tutorial Welcome to our game!\ \Use arrow keys to move around.
+message 7 22 0 @ Well met kind sir or fair maiden!\ \I shall endeavour to bring you pleasure!\As long as your pleasure is for me to move that is.\Hit an arrow key and I'll keep moving until you press\it again.
 
-message 16 22 0 tutorial This is a message.\ \You can find them on the various levels.
+message 17 22 0 @ This is what we in the industry call "a message".\ \A message might provide a bit of textual exposition\to advance my epic story. It might even contain\a hint for one of the brilliantly devious puzzles.
 
-message 22 22 0 tutorial You can jump using Spacebar.
+message 26 22 0 @ I enjoy jumping. I enjoy it a lot!\In fact, I can jump three times my own height!\ \Just hit Spacebar or Up arrow to let me do just that.\Please?
 
-button 51 22 56 22   
-button 51 22 62 14 
-message 49 22 0 tutorial The _ block is a button.\ \It opens paths around the level.
+button 53 22 56 22
+button 53 22 62 14
+message 51 22 0 @ The _ block is a switch.\ \It opens doors or pathways around the level.
 
-message 61 22 0 tutorial You can climb up the " blocks by jumping.
+message 61 22 0 @ You can climb up the " blocks by jumping.\ \Did I already mention how much I enjoy jumping?\
 
-message 74 22 0 tutorial This is the level exit.\ \Step into it to begin the adventure!
+message 74 22 0 @ That block to my right is the level exit.\ \That's where you should direct me when you want to\advance to the next level.
 goal 78 22 level1
 end
