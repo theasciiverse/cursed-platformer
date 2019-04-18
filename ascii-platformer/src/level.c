@@ -157,6 +157,9 @@ struct Level* loadLevel(char* name, struct Entity* player) {
     level->player = player;
     level->player->level = level;
 
+    player->x_vel = 0;
+    player->y_vel = 0;
+
     player->x = level->metadata->start_x;
     player->y = level->metadata->start_y;
 
