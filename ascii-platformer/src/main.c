@@ -162,6 +162,7 @@ void process(double delta, chtype input) {
         case ERR:
             break;
         case KEY_SPACEBAR:
+        case KEY_UP:
             if (player.state == WALKING) {
                 player.y_vel = -8;
                 player.state = AIRBORNE;
