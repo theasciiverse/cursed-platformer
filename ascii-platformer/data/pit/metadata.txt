@@ -1,7 +1,7 @@
 title 5: Pit of Bats
 size 80 24
 start 1 1
-goal 19 2 level0
+goal 19 2 misdirection
 spike 6 1
 spike 7 1
 spike 8 1
