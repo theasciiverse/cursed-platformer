@@ -184,7 +184,6 @@ void addEntity(struct Level* level, struct Entity* entity) {
 
 void destroyLevel(struct Level* level) {
     free(level->metadata->title);
-    free(level->name);
     free(level->map);
     free(level->metadata->next_level);
     free(level->metadata);
