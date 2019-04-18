@@ -1,8 +1,8 @@
-title 1: Insanity awaits!
+title 2: Muncher Meadows
 size 80 24
 start 3 20
-message 10 20 0 tutorial You can press "r" to restart the level!
-message 27 18 0 tutorial Watch out for the Munchers!\They pack a nasty bite!
+message 10 20 0 @ Should I end up in a situation most critical,\you can press 'r' to reset the level. 
+message 27 18 0 @ Watch out for the Munchers!\They pack a nasty bite!
 muncher 34 18
 muncher 56 16
 goal 77 21 level2

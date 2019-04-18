@@ -1,4 +1,4 @@
-title 3: Moving Platforms - Science or Sorcery?
+title 4: Moving Platforms - Science or Sorcery?
 size 80 24
 start 5 7
 message 11 7 0 @ That's one big-ass pyramid down there in the distance.\ \...But why is it on fire?
