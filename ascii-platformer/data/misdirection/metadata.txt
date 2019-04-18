@@ -1,0 +1,35 @@
+title 6: Hall of Misdirection
+size 80 24
+start 3 3  
+goal 36 22 level0 
+teleport 11 3 36 1 
+teleport 3 8 1 17  
+teleport 8 8 78 22  
+
+// Left puzzle room
+trampoline 5 21 2
+trampoline 13 21 2
+platform 20 21 25 21 2  
+spike 22 17
+spike 23 16 
+
+// Open path
+button 29 20 35 16
+button 29 20 36 16
+button 29 20 37 16
+
+teleport 33 20 3 3   
+
+// Right puzzle room
+bat 67 19 
+muncher 44 21 
+muncher 50 18 
+muncher 51 15
+
+button 58 15 35 18
+button 58 15 36 18
+button 58 15 37 18
+
+teleport 61 15 3 3
+
+end
