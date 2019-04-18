@@ -57,6 +57,14 @@ void processPhysics(struct Entity* entity, double delta) {
     }
 }
 
+struct Entity* createEntity() {
+    struct Entity* entity = malloc(sizeof(struct Entity));
+
+    memset(entity, 0, sizeof(struct Entity));
+
+    return entity;
+}
+
 void destroyEntity(struct Entity* entity) {
     free(entity->internal_data);
     free(entity);
@@ -65,7 +73,7 @@ void destroyEntity(struct Entity* entity) {
 void processMessage(struct Entity* message, double delta);
 
 struct Entity* createMessage(struct Level* level, double x, double y, char* who, char* msg, int read) {
-    struct Entity* message = malloc(sizeof(struct Entity));
+    struct Entity* message = createEntity();
 
     message->x = x;
     message->y = y;
@@ -110,7 +118,7 @@ void processMessage(struct Entity* message, double delta) {
 void processButton(struct Entity* message, double delta);
 
 struct Entity* createButton(struct Level* level, double x, double y, double tx, double ty) {
-    struct Entity* button = malloc(sizeof(struct Entity));
+    struct Entity* button = createEntity();
 
     button->x = x;
     button->y = y;
@@ -153,7 +161,7 @@ void processButton(struct Entity* button, double delta) {
 void processTeleport(struct Entity* message, double delta);
 
 struct Entity* createTeleport(struct Level* level, double x, double y, double tx, double ty) {
-    struct Entity* teleport = malloc(sizeof(struct Entity));
+    struct Entity* teleport = createEntity();
 
     teleport->x = x;
     teleport->y = y;
@@ -196,7 +204,7 @@ void processTeleport(struct Entity* teleport, double delta) {
 void processPlatform(struct Entity* platform, double delta);
 
 struct Entity* createPlatform(struct Level* level, int sx, int sy, int tx, int ty, int width) {
-    struct Entity* platform = malloc(sizeof(struct Entity));
+    struct Entity* platform = createEntity();
 
     platform->x = sx;
     platform->y = sy;
@@ -283,7 +291,7 @@ void processPlatform(struct Entity* platform, double delta) {
 void processTrampoline(struct Entity* trampoline, double delta);
 
 struct Entity* createTrampoline(struct Level* level, double x, double y, int width) {
-    struct Entity* trampoline = malloc(sizeof(struct Entity));
+    struct Entity* trampoline = createEntity();
 
     trampoline->x = x;
     trampoline->y = y;
@@ -317,7 +325,7 @@ void processTrampoline(struct Entity* trampoline, double delta) {
 void processContinue(struct Entity* trampoline, double delta);
 
 struct Entity* createContinue(struct Level* level, double x, double y) {
-    struct Entity* cont = malloc(sizeof(struct Entity));
+    struct Entity* cont = createEntity();
 
     cont->x = x;
     cont->y = y;

@@ -13,7 +13,7 @@ struct Muncher {
 void processMuncher(struct Entity* enemy, double delta);
 
 struct Entity* createMuncher(struct Level* level, double x, double y) {
-    struct Entity* muncher = malloc(sizeof(struct Entity));
+    struct Entity* muncher = createEntity();
 
     muncher->x = x;
     muncher->y = y;
@@ -94,7 +94,7 @@ struct Spike {
 void processSpike(struct Entity* enemy, double delta);
 
 struct Entity* createSpike(struct Level* level, double x, double y) {
-    struct Entity* spike = malloc(sizeof(struct Entity));
+    struct Entity* spike = createEntity();
 
     spike->x = x;
     spike->y = y;
@@ -153,7 +153,7 @@ struct Bat {
 void processBat(struct Entity* enemy, double delta);
 
 struct Entity* createBat(struct Level* level, double x, double y) {
-    struct Entity* bat = malloc(sizeof(struct Entity));
+    struct Entity* bat = createEntity();
 
     bat->x = x;
     bat->y = y;

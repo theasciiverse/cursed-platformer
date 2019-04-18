@@ -17,6 +17,8 @@ struct Entity {
 
 void processPhysics(struct Entity* entity, double delta);
 
+struct Entity* createEntity();
+
 void destroyEntity(struct Entity* entity);
 
 struct Message {
