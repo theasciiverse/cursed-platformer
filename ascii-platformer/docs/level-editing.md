@@ -31,62 +31,62 @@ place on the level and where. The instructions, their arguments and their functi
 
 Each instruction should be placed on its own line. The strings should not contain special characters.
 
-### title <string>
+### title string
 
 Set the level's in-game title. This may differ from the folder name.
 
-### size <width> <height>
+### size width height
 
 Sets the level's size. This instruction is mandatory, since this information is used to load the level geometry.
 
-### start <x> <y>
+### start x y
 
 Sets the X,Y coordinate of the level's starting position. When the level is loaded, the player will be placed
 here.
 
-### goal <x> <y> <level-name>
+### goal x y level-name
 
 Sets the location of the goal on the level. When the player steps into this coordinate, they will be moved
 to the specified level. NOTE: the level name must match one of the folders in the data/ directory.
 
-### muncher <x> <y>
+### muncher x y
 
 Adds a muncher creature to the specified X,Y coordinate.
 
-### spike <x> <y>
+### spike x y
 
 Adds a falling spike to the specified X,Y coordinate.
 
-### bat <x> <y>
+### bat x y
 
 Adds a bat creature to the specified X,Y coordinate
 
-### message <x> <y> <read> <who> <message>
+### message x y read who message
 
 Adds a message entity to the level in the specified coordinates. The <read> argument indicates if the message
 has been read, <who> is a string of who is saying the message (for story-telling reasons) and <message> is the 
 actual message content. When player steps on the message and <read> is 0 the message will be drawn on the screen.
 
-### button <x> <y> <tx> <ty>
+### button x y tx ty
 
 Adds a button entity to the level at the specified coordinate. When stepped on, the block specified by the <tx>
 and <ty> coordinates will be turned into air. Useful for opening paths.
 
-### teleport <x> <y> <tx> <ty>
+### teleport x y tx ty
 
 Adds a teleporter at the specified coordinates that will transport the player to the TX,TY coordinate when
 stepped on.
 
-### platform <x> <y> <tx> <ty> <width>
+### platform x y tx ty width
 
 Adds a moving platform between X,Y and TX,TY that is <width> tiles wide. Either the X and TX or the Y and TY
 coordinates should match. Platforms cannot move diagonally.
 
-### trampoline <x> <y> <width>
+### trampoline x y width
 
 Adds a trampoline to the level at the specified coordinates. The trampoline will be <width> tiles wide.
 
-### // <comment>
+### // comment
 
 Ignores the rest of the line. Can be used to add comments to the metadata for reminders or to organize
 the metadata or to temporarily remove an entity from the level. NOTE: the // should be immediately followed
