@@ -5,6 +5,7 @@ project('linux-game-jam-2019-game', 'c',
 src = ['src/main.c', 'src/level.c', 'src/map.c', 'src/enemy.c', 'src/entity.c', 'src/helper.c']
 
 sdl2 = dependency('sdl2')
+sdl2_mixer = dependency('SDL2_mixer')
 
 if get_option('use_pdcurses')
   #todo : check if this actually worked
@@ -17,6 +18,6 @@ else
 endif
 
 exe = executable('linux_game_jam_2019_game', src, link_args: '-lm',
-  install : true, dependencies : [sdl2, curses])
+  install : true, dependencies : [sdl2, curses, sdl2_mixer])
 
 test('basic', exe)

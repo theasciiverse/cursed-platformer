@@ -4,6 +4,9 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#include <SDL.h>
+#include <SDL_mixer.h>
+
 #include "level.h"
 #include "map.h"
 #include "entity.h"
@@ -28,7 +31,22 @@ void process(double delta, chtype input);
 
 int debug = 0;
 
+Mix_Music *mus = NULL;
+
 int main(int argc, char **argv) {
+    if(SDL_Init(SDL_INIT_AUDIO) < 0) {
+        printf("SDL audio could not initialize! SDL Error: %s\n", SDL_GetError());
+    }
+
+    if(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
+        printf("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
+    }
+
+    mus = Mix_LoadMUS("data/midnight-tale-by-kevin-macleod.ogg" );
+    if( mus == NULL ) {
+        printf( "Failed to load music! SDL_mixer Error: %s\n", Mix_GetError());
+    }
+
     initHelp(mainwin);
 
     if (argc > 1)
@@ -65,6 +83,8 @@ int main(int argc, char **argv) {
     double slack = 0;
 
     char* debugstr = (char *)malloc(44);
+
+    Mix_PlayMusic(mus, -1);
 
     while (true) {
         input = getch();
@@ -138,6 +158,11 @@ int main(int argc, char **argv) {
     free(debugstr);
     endwin();
 
+    Mix_FreeMusic(mus);
+    mus = NULL;
+    Mix_Quit();
+    SDL_Quit();
+
     return 0;
 }
 
@@ -153,6 +178,13 @@ void process(double delta, chtype input) {
         case KEY_F(8):
             debug = !debug;
             werase(infowin);
+            break;
+        case 'q':
+            if(Mix_PlayingMusic() == 0) {
+                Mix_PlayMusic(mus, -1);
+            } else {
+                Mix_HaltMusic();
+            }
     }
 
     if (player.state == DEAD)
