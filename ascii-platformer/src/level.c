@@ -184,9 +184,9 @@ void addEntity(struct Level* level, struct Entity* entity) {
 
 void destroyLevel(struct Level* level) {
     free(level->metadata->title);
-    free(level->map);
     free(level->metadata->next_level);
     free(level->metadata);
+    destroyMap(level->map);
 
     for (int i = 0; i < MAX_ENTITIES; i++) {
         if (level->enemies[i] != NULL) {
