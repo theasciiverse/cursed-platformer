@@ -10,7 +10,7 @@
 #define MAX_ENTITIES 9001
 
 struct Level {
-    char* name;
+    char name[80];
     struct Map* map;
     struct Metadata* metadata;
     struct Entity* player;
