@@ -118,11 +118,18 @@ struct Metadata* readMetadata(struct Level* level, char* path) {
 
             struct Entity* trampoline = createTrampoline(level, sx, sy, width);
             addEntity(level, trampoline);
+        } else if (strcmp(command, "continue") == 0) {
+            int x, y;
+
+            fscanf(fp, "%d %d", &x, &y);
+
+            struct Entity* cont = createContinue(level, x, y);
+            addEntity(level, cont);
         } else if (strcmp(command, "//") == 0) {
             char buf[250];
 
             fgets(buf, 250, fp);
-        }
+        } 
     }
 
     fclose(fp);
@@ -201,7 +208,10 @@ void destroyLevel(struct Level* level) {
 }
 
 void switchLevel(struct Level** level, char* name, struct Entity* player) {
+    char buf[80];
+    strcpy(buf, name);
+    
     destroyLevel(*level);
-
+    
     *level = loadLevel(name, player);
 }
