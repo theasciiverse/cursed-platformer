@@ -171,7 +171,6 @@ void process(double delta, chtype input) {
         case ERR:
             break;
         case 'r':
-            printf("Restarting: %s\n", level->name);
             switchLevel(&level, level->name, &player);
             werase(mainwin);
             player.state = WALKING;

@@ -139,10 +139,7 @@ struct Metadata* readMetadata(struct Level* level, char* path) {
 
 struct Level* loadLevel(char* name, struct Entity* player) {
     struct Level* level = malloc(sizeof(struct Level));
-     
-    strcpy(level->name, name);
-    
-    printf("Level: %s loaded\n", level->name);
+    level->name = name;
 
     char path[80] = "data/";
     strcat(path, name);
@@ -216,5 +213,5 @@ void switchLevel(struct Level** level, char* name, struct Entity* player) {
     
     destroyLevel(*level);
     
-    *level = loadLevel(buf, player);
+    *level = loadLevel(name, player);
 }
