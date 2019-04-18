@@ -34,7 +34,7 @@ int main(int argc, char **argv) {
     if (argc > 1)
         level = loadLevel(argv[1], &player);
     else
-        level = loadLevel("level1", &player);
+        level = loadLevel("level0", &player);
 
     strcpy(current_level, level->name);
 
