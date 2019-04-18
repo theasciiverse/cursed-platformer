@@ -78,8 +78,8 @@ struct Metadata* readMetadata(struct Level* level, char* path) {
         } else if (strcmp(command, "message") == 0) {
             int x, y;
             int readable;
-            char* who = malloc(sizeof(char) * 40);
-            char* msg = malloc(sizeof(char) * 250);
+            char who[40];
+            char msg[250];
 
             fscanf(fp, "%d %d %d %s ", &x, &y, &readable, who);
             fgets(msg, 250, fp);
@@ -184,6 +184,7 @@ void addEntity(struct Level* level, struct Entity* entity) {
 
 void destroyLevel(struct Level* level) {
     free(level->metadata->title);
+    free(level->name);
     free(level->map);
     free(level->metadata->next_level);
     free(level->metadata);

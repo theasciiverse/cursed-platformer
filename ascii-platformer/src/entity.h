@@ -21,8 +21,8 @@ void destroyEntity(struct Entity* entity);
 
 struct Message {
     int x,y;
-    char* who;
-    char* msg;
+    char who[80];
+    char msg[250];
     int read;
 };
 

@@ -77,8 +77,8 @@ struct Entity* createMessage(struct Level* level, double x, double y, char* who,
     struct Message* message_data = (struct Message*) message->internal_data;
 
     message->level = level;
-    message_data->who = who;
-    message_data->msg = msg;
+    strcpy(message_data->who, who);
+    strcpy(message_data->msg, msg);
     message_data->read = read;
 
     message->processFunc = &processMessage;
