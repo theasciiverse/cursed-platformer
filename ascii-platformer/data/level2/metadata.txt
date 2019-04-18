@@ -1,4 +1,4 @@
-title 3: Caves of Blocked Passages
+title 3: Blocked Passages
 size 80 24
 start 3 20
 goal 11 2 ledge

@@ -142,8 +142,6 @@ struct Level* loadLevel(char* name, struct Entity* player) {
      
     strcpy(level->name, name);
     
-    printf("Level: %s loaded\n", level->name);
-
     char path[80] = "data/";
     strcat(path, name);
 
