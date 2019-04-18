@@ -51,6 +51,4 @@ struct Entity* createPlatform(struct Level* level, int sx, int sy, int tx, int t
 
 struct Entity* createTrampoline(struct Level* level, double x, double y, int width);
 
-struct Entity* createContinue(struct Level* level, double x, double y);
-
 #endif

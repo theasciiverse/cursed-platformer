@@ -3,7 +3,6 @@ size 80 24
 start 13 13
 
 goal 25 13 level0 
-continue 25 9 
 
 platform 3 18 3 10 2   
 

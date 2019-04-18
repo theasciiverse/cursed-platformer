@@ -171,7 +171,7 @@ void process(double delta, chtype input) {
         case ERR:
             break;
         case 'r':
-            switchLevel(&level, level->name, &player);
+            switchLevel(&level, current_level, &player);
             werase(mainwin);
             player.state = WALKING;
             break;
@@ -218,13 +218,6 @@ void process(double delta, chtype input) {
 
     if (x == level->metadata->goal_x && y == level->metadata->goal_y) {
         strcpy(current_level, level->metadata->next_level);
-        
-        FILE* fp = fopen("autosave.sav", "w");
-
-        fprintf(fp, "%s\n", current_level);
-        
-        fclose(fp);
-
         switchLevel(&level, current_level, &player);
     }
 

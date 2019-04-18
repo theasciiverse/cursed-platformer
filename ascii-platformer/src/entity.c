@@ -1,6 +1,3 @@
-#include <stdio.h>
-#include <unistd.h>
-
 #include "level.h"
 #include "map.h"
 #include "helper.h"
@@ -311,45 +308,5 @@ void processTrampoline(struct Entity* trampoline, double delta) {
     if (px >= x && px < x + trampoline->width && py == y - 1) {
         if (trampoline->level->player->y_vel > 4)
             trampoline->level->player->y_vel *= -0.9;
-    }
-}
-
-void processContinue(struct Entity* trampoline, double delta);
-
-struct Entity* createContinue(struct Level* level, double x, double y) {
-    struct Entity* cont = malloc(sizeof(struct Entity));
-
-    cont->x = x;
-    cont->y = y;
-    cont->width = 1;
-    cont->x_vel = 0;
-    cont->sprite = 'Z';
-    cont->state = IDLE;
-    cont->disabled = false;
-    cont->hidden = true;
-    cont->internal_data = malloc(sizeof(struct Teleport));
-
-    cont->level = level;
-
-    cont->processFunc = &processContinue;
-    return cont;
-}
-
-void processContinue(struct Entity* cont, double delta) {
-    int x = (int) cont->x;
-    int y = (int) cont->y;
-
-    int px = (int) cont->level->player->x;
-    int py = (int) cont->level->player->y;
-
-    if (px == x && py == y ) {
-        if (access("autosave.sav", F_OK) != -1) {
-            FILE* fp = fopen("autosave.sav", "r");
-            char level_name[80];
-            fscanf(fp, "%s", level_name);
-            fclose(fp);
-
-            switchLevel(&cont->level, level_name, cont->level->player); 
-        }
     }
 }
