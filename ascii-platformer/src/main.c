@@ -18,9 +18,6 @@
 
 struct Entity player;
 
-struct Entity* muncher;
-
-struct Level* level;
 
 WINDOW *infowin;
 WINDOW *mainwin;
@@ -81,11 +78,11 @@ int main(int argc, char **argv) {
     initHelp(mainwin);
 
     if (argc > 1)
-        level = loadLevel(argv[1], &player);
+        setCurrentLevel(loadLevel(argv[1], &player));
     else
-        level = loadLevel("menu", &player);
-
-    setCurrentLevel(level->name);
+        setCurrentLevel(loadLevel("menu", &player));
+    
+    //setCurrentLevel(level->name);
 
     initscr();
     resize_term(25, 80);
@@ -119,6 +116,8 @@ int main(int argc, char **argv) {
 
     while (!quit) {
         input = getch();
+        
+        struct Level* level = getCurrentLevel();
 
         struct Map* map = level->map;
 
@@ -202,11 +201,13 @@ int main(int argc, char **argv) {
 }
 
 void process(double delta, chtype input, SDL_Event ev) {
+    struct Level* level = getCurrentLevel();
+
     switch(input) {
         case ERR:
             break;
         case 'r':
-            switchLevel(&level, level->name, &player);
+            switchLevel(level->name, &player);
             werase(mainwin);
             player.state = WALKING;
             break;
@@ -231,7 +232,7 @@ void process(double delta, chtype input, SDL_Event ev) {
         } else if (ev.type == SDL_CONTROLLERBUTTONDOWN) {
             btn = ev.cbutton.button;
             if (btn == SDL_CONTROLLER_BUTTON_Y) {
-                switchLevel(&level, level->name, &player);
+                switchLevel(level->name, &player);
                 werase(mainwin);
                 player.state = WALKING;
                 break;

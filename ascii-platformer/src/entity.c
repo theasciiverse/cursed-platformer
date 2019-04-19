@@ -355,7 +355,7 @@ void processContinue(struct Entity* cont, double delta) {
             fscanf(fp, "%s", level_name);
             fclose(fp);
 
-            switchLevel(&cont->level, level_name, cont->level->player); 
+            switchLevel(level_name, cont->level->player); 
         }
     }
 }
@@ -398,8 +398,9 @@ void processGoal(struct Entity* goal, double delta) {
         fprintf(fp, "%s\n", goal_data->next_level);
         fclose(fp);
         
-        setCurrentLevel(goal_data->next_level);
-
-        switchLevel(&goal->level, goal_data->next_level, goal->level->player); 
+        //setCurrentLevel(goal_data->next_level);
+        
+        switchLevel(goal_data->next_level, goal->level->player); 
+        werase(getMainWin());
     }
 }

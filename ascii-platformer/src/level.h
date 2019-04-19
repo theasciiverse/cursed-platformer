@@ -24,8 +24,6 @@ struct Metadata {
     int width, height;
     int start_x, start_y;
     int goal_x, goal_y;
-
-    char next_level[250];
 };
 
 struct Level* loadLevel(char* name, struct Entity* player);
@@ -34,6 +32,6 @@ void addEntity(struct Level* level, struct Entity* entity);
 
 void destroyLevel(struct Level* level); 
 
-void switchLevel(struct Level** level, char* name, struct Entity* player);
+void switchLevel(char* name, struct Entity* player);
 
 #endif

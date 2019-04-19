@@ -138,7 +138,9 @@ struct Metadata* readMetadata(struct Level* level, char* path) {
 
 struct Level* loadLevel(char* name, struct Entity* player) {
     struct Level* level = malloc(sizeof(struct Level));
-     
+    
+    memset(level, 0, sizeof(level));
+
     strcpy(level->name, name);
     
     char path[80] = "data/";
@@ -206,11 +208,13 @@ void destroyLevel(struct Level* level) {
     free(level);
 }
 
-void switchLevel(struct Level** level, char* name, struct Entity* player) {
+void switchLevel(char* name, struct Entity* player) {
     char buf[80];
     strcpy(buf, name);
     
-    destroyLevel(*level);
+    struct Level* level = getCurrentLevel();
+
+    destroyLevel(level);
     
-    *level = loadLevel(buf, player);
+    setCurrentLevel(loadLevel(buf, player));
 }
