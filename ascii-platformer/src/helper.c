@@ -1,6 +1,7 @@
 #include <curses.h>
 #include <stdlib.h>
 #include <string.h>
+#include <SDL.h>
 
 WINDOW* mainwin;
 
@@ -29,6 +30,7 @@ void setCurrentLevel(char* new_current) {
  *              delimited with "\n".
  **/
 void showMessage(char *who, char *text) {
+    SDL_Event ev;
     WINDOW *win;
     char *token;
     int i = 1;
@@ -53,8 +55,15 @@ void showMessage(char *who, char *text) {
     mvwprintw(win, 10, 2, "[...]");
 
     box(win, 0, 0);
+    wrefresh(mainwin);
+    wrefresh(win);
 
-    wgetch(win);
+    while (true) {
+        SDL_PollEvent(&ev);
+        if (getch() != ERR || ev.type == SDL_CONTROLLERBUTTONDOWN)
+            break;
+        SDL_Delay(33);
+    }
     delwin(win);
     return;
 }

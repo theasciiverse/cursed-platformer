@@ -2,11 +2,11 @@ title 1: This is where it all began.
 size 80 24
 start 7 22
 button 9 22 10 22
-message 7 22 0 @ Well met kind sir or fair maiden!\ \I shall endeavour to bring you pleasure!\As long as your pleasure is for me to move that is.\Hit an arrow key and I'll keep moving until you press\it again.
+message 7 22 0 @ Well met kind sir or fair maiden!\ \I shall endeavour to obey your every command.\Hit an arrow key and I'll keep moving until you press\it again. Or use the D-Pad on your controller for a\less awkward experience.
 
 message 17 22 0 @ This is what we in the industry call "a message".\ \A message might provide a bit of textual exposition\to advance my epic story. It might even contain\a hint for one of the brilliantly devious puzzles.
 
-message 26 22 0 @ I enjoy jumping. I enjoy it a lot!\In fact, I can jump three times my own height!\ \Just hit Spacebar or Up arrow to let me do just that.\Please?
+message 26 22 0 @ I enjoy jumping. I enjoy it a lot!\In fact, I can jump three times my own height!\ \Just hit Spacebar, Up arrow or button A to let me\do just that. Pretty please?
 
 button 53 22 56 22
 button 53 22 62 14

@@ -13,12 +13,10 @@ void processPhysics(struct Entity* entity, double delta) {
 
     if (entity->x_vel < 0 && !isPassable(map->data[old_y][old_x - 1])) {
         entity->x = (float) old_x;
-        entity->x_vel = 0;
     }
 
     if (entity->x_vel > 0 && !isPassable(map->data[old_y][old_x + 1])) {
         entity->x = (float) old_x;
-        entity->x_vel = 0;
     }
 
     entity->y += entity->y_vel * delta;
