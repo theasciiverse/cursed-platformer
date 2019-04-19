@@ -1,12 +1,12 @@
-title ?: Railway 
+title 5: Railway
 size 80 24
 
 start 1 17 
 
-goal 77 13 level0 
+goal 78 12 pit
 
-platform 7 20 25 20 4  
-platform 25 18 35 18 4 
+platform 7 20 25 20 4
+platform 25 18 35 18 4
 platform 34 15 15 15
 
 platform 38 18 50 18 4

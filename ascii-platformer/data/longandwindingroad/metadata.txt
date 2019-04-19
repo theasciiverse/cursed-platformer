@@ -1,8 +1,8 @@
 // I am so sorry......
-title Long and winding road
+title 8: Long and winding road
 size 80 24
 start 2 2
-goal 9 3 ledge
+goal 9 3 pyramid
 // Top layer
 button 38 4 44 5
 spike 18 2

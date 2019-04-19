@@ -1,7 +1,7 @@
-title 6: Hall of Misdirection
+title 7: Hall of Misdirection
 size 80 24
 start 3 3  
-goal 36 22 level0 
+goal 36 22 longandwindingroad
 teleport 11 3 36 1 
 teleport 3 8 1 17  
 teleport 8 8 78 22  
