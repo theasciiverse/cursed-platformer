@@ -16,7 +16,7 @@ The game uses the Meson build system.
 To build the game run the following commands:
 
 ```sh
-cd ascii-platformer && meson -Duse_pdcurses=true --buildtype=release build && ninja -C build
+cd ascii-platformer && meson --buildtype=release build && ninja -C build
 ```
 
 You can then launch the game with the following command:
@@ -25,7 +25,13 @@ You can then launch the game with the following command:
 ./build/platformer_game_ncurses
 ```
 
-You can also launch the pdcurses version like this:
+If you want the pdcurses version:
+
+```sh
+cd ascii-platformer && meson -Duse_pdcurses=true --buildtype=release build && ninja -C build
+```
+
+You can then launch the game with the following command:
 
 ```
 ./build/platformer_game_pdcurses
