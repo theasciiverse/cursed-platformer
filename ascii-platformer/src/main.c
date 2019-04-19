@@ -156,10 +156,7 @@ int main(int argc, char **argv) {
         delta = ((double) (now - last) / CLOCKS_PER_SEC);
         slack = (1.0 / 60) - delta;
         if (slack > 0) {
-            struct timespec delay;
-            delay.tv_sec = 0;
-            delay.tv_nsec = slack * 1000000000L;
-            clock_nanosleep(CLOCK_REALTIME, 0, &delay, NULL);
+            SDL_Delay((long) (slack * 1000));
             delta += slack;
         }
 
