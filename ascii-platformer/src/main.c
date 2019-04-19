@@ -172,10 +172,11 @@ int main(int argc, char **argv) {
         wrefresh(infowin);
 
         for (int i = 0; i < MAX_ENTITIES; i++) {
-            if (level->enemies[i] != NULL)
+            if (level->enemies[i] != NULL) {
                 if (!level->enemies[i]->disabled) {
                     level->enemies[i]->processFunc(level->enemies[i], delta);
                 }
+            }
         }
 
         process(delta, input, ev);
