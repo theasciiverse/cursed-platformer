@@ -16,13 +16,19 @@ The game uses the Meson build system.
 To build the game run the following commands:
 
 ```sh
-cd ascii-platformer && meson build && ninja -C build
+cd ascii-platformer && meson -Duse_pdcurses=true --buildtype=release build && ninja -C build
 ```
 
 You can then launch the game with the following command:
 
 ```sh
-./build/linux_game_jam_2019_game
+./build/platformer_game_ncurses
+```
+
+You can also launch the pdcurses version like this:
+
+```
+./build/platformer_game_pdcurses
 ```
 
 ## Credits
