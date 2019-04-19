@@ -16,9 +16,9 @@
 #                     @@@@                                                     #
 #                                                                              #
 #                                                                              #
-#     by SAMSAI,                                     CONTINUE     NEW GAME     #
-#      TUUBI &       for LINUX GAME JAM 2019         <------- """ ------->     #
-#        YSBLOKJE                                                              #
+#     by SAMSAI,         for                       <----------:#:---------->   #
+#      TUUBI &          LINUX GAME JAM               CONTINUE     NEW GAME     #
+#        YSBLOKJE            2019                   <---------:#:--------->    #
 #                                                                              #
 #                                                                              #
 ################################################################################

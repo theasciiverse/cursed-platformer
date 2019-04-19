@@ -1,9 +1,9 @@
-title -1: The Main Menu
+title 0: Ye Olde Main Menu
 size 80 24
-start 63 18
+start 63 19
 
 muncher 14 22
 muncher 63 22
-goal 64 18 level0
-continue 62 18
+goal 64 19 level0
+continue 62 19
 end
