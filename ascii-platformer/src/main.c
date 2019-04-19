@@ -63,16 +63,16 @@ int main(int argc, char **argv) {
     SDL_Event ev;
 
     if(SDL_Init(SDL_INIT_AUDIO) < 0) {
-        printf("SDL audio could not initialize! SDL Error: %s\n", SDL_GetError());
+        SDL_Log("SDL audio could not initialize! SDL Error: %s\n", SDL_GetError());
     }
 
     if(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
-        printf("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
+        SDL_Log("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
     }
 
     mus = Mix_LoadMUS("data/midnight-tale-by-kevin-macleod.ogg" );
     if( mus == NULL ) {
-        printf( "Failed to load music! SDL_mixer Error: %s\n", Mix_GetError());
+        SDL_Log( "Failed to load music! SDL_mixer Error: %s\n", Mix_GetError());
     }
 
     initHelp(mainwin);
