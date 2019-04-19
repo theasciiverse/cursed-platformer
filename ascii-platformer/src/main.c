@@ -224,6 +224,41 @@ void process(double delta, chtype input, SDL_Event ev) {
             }
     }
 
+    Uint8 btn;
+
+    while (SDL_PollEvent(&ev)) {
+        if (ev.type == SDL_QUIT) {
+            quit = 1;
+            return;
+        } else if (ev.type == SDL_CONTROLLERBUTTONDOWN) {
+            btn = ev.cbutton.button;
+            if (btn == SDL_CONTROLLER_BUTTON_Y) {
+                switchLevel(&level, level->name, &player);
+                werase(mainwin);
+                player.state = WALKING;
+                break;
+            } else if (player.state != DEAD) {
+                if (btn == SDL_CONTROLLER_BUTTON_A) {
+                    if (player.state == WALKING) {
+                        player.y_vel = -8;
+                        player.state = AIRBORNE;
+                    }
+                }
+                if (btn == SDL_CONTROLLER_BUTTON_DPAD_LEFT) {
+                    player.x_vel = -8;
+                } else if (btn == SDL_CONTROLLER_BUTTON_DPAD_RIGHT) {
+                    player.x_vel = 8;
+                }
+            }
+        } else if (ev.type == SDL_CONTROLLERBUTTONUP && player.state != DEAD) {
+            btn = ev.cbutton.button;
+            if ((btn == SDL_CONTROLLER_BUTTON_DPAD_LEFT && player.x_vel < 0) ||
+                (btn == SDL_CONTROLLER_BUTTON_DPAD_RIGHT && player.x_vel > 0)) {
+                player.x_vel = 0;
+            }
+        }
+    }
+
     if (player.state == DEAD)
         return;
 
@@ -248,34 +283,6 @@ void process(double delta, chtype input, SDL_Event ev) {
                 player.x_vel = 0;
             else
                 player.x_vel = 8;
-    }
-
-    Uint8 btn;
-
-    while (SDL_PollEvent(&ev)) {
-        if (ev.type == SDL_QUIT) {
-            quit = 1;
-            return;
-        } else if (ev.type == SDL_CONTROLLERBUTTONDOWN && player.state != DEAD) {
-            btn = ev.cbutton.button;
-            if (btn == SDL_CONTROLLER_BUTTON_A) {
-                if (player.state == WALKING) {
-                    player.y_vel = -8;
-                    player.state = AIRBORNE;
-                }
-            }
-            if (btn == SDL_CONTROLLER_BUTTON_DPAD_LEFT) {
-                player.x_vel = -8;
-            } else if (btn == SDL_CONTROLLER_BUTTON_DPAD_RIGHT) {
-                player.x_vel = 8;
-            }
-        } else if (ev.type == SDL_CONTROLLERBUTTONUP && player.state != DEAD) {
-            btn = ev.cbutton.button;
-            if ((btn == SDL_CONTROLLER_BUTTON_DPAD_LEFT && player.x_vel < 0) ||
-                (btn == SDL_CONTROLLER_BUTTON_DPAD_RIGHT && player.x_vel > 0)) {
-                player.x_vel = 0;
-            }
-        }
     }
 
     int x = (int) player.x;
