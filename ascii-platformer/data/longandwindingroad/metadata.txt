@@ -1,0 +1,52 @@
+// I am so sorry......
+title Long and winding road
+size 80 24
+start 2 2
+goal 9 3 ledge
+// Top layer
+button 38 4 44 5
+spike 18 2
+spike 19 2
+spike 20 2
+spike 21 2
+spike 22 2
+spike 23 2
+spike 24 2
+spike 25 2
+spike 26 2
+spike 27 2
+muncher 43 2
+bat 50 3
+bat 55 3
+bat 60 3
+bat 65 3
+// second layer
+button 3 10 40 11
+button 4 10 40 13
+platform 3 12 20 12 4
+platform 8 13 8 18 4
+
+bat 61 16
+bat 56 17
+bat 61 18
+
+
+muncher 2 7
+muncher 60 7
+muncher 35 10
+spike 32 8
+
+// bottom layer
+bat 50 20 
+bat 55 20
+bat 60 20
+bat 65 20
+
+spike 48 20 
+spike 44 20 
+spike 43 20
+spike 40 20
+spike 38 20
+spike 36 20
+
+end
