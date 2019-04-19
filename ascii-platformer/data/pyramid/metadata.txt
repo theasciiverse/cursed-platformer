@@ -1,11 +1,12 @@
-title ?: Pyramid of Tuthanascii
+title 9: Pyramid of Tuthanascii
 size 80 24
 
 start 1 19 
-goal 37 2 level0
-goal 38 2 level0
-platform 37 22 37 3 2  
+message 24 22 0 @ Looks like the trail leads into this pyramid.\But I don't see anyone.\ \Maybe at the top?
+goal 46 3 thatsallfolks
+goal 47 3 thatsallfolks
+platform 46 22 46 4 2  
 
-teleport 35 7 40 7  
+teleport 44 7 49 7  
 
 end
