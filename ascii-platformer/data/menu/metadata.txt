@@ -6,4 +6,6 @@ muncher 14 22
 muncher 63 22
 goal 64 19 level0
 continue 62 19
+goal 62 19 level0
+
 end

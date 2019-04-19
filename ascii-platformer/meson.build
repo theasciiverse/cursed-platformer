@@ -11,13 +11,20 @@ if get_option('use_pdcurses')
   #todo : check if this actually worked
   run_command('cp', 'we_like_to_party/pdcurses/meson.build', 'subprojects/PDCurses')
   pdcurses = subproject('PDCurses')
-  curses = pdcurses.get_variable('pdcurses')
+  pdcurses = pdcurses.get_variable('pdcurses')
   add_project_arguments('-DUSE_PDCURSES', language : 'c')
-else
-  curses = dependency('ncurses')
 endif
 
-exe = executable('linux_game_jam_2019_game', src, link_args: '-lm',
-  install : true, dependencies : [sdl2, curses, sdl2_mixer])
+ncurses = dependency('ncurses')
+
+exe = executable('platformer_game_ncurses', src, link_args: '-lm',
+  install : true, dependencies : [sdl2, ncurses, sdl2_mixer])
 
 test('basic', exe)
+
+if get_option('use_pdcurses')
+  exe_pdcurses = executable('platformer_game_pdcurses', src, link_args: '-lm',
+  install : true, dependencies : [sdl2, pdcurses, sdl2_mixer])
+  test('basic', exe_pdcurses)
+endif
+
