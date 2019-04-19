@@ -48,9 +48,8 @@ struct Metadata* readMetadata(struct Level* level, char* path) {
 
             fscanf(fp, "%d %d %s", &x, &y, next_level);
 
-            metadata->goal_x = x;
-            metadata->goal_y = y;
-            metadata->next_level = next_level;
+            struct Entity* goal = createGoal(level, x, y, next_level); 
+            addEntity(level, goal);
         } else if (strcmp(command, "muncher") == 0) {
             int x;
             int y;
@@ -195,7 +194,6 @@ void addEntity(struct Level* level, struct Entity* entity) {
 
 void destroyLevel(struct Level* level) {
     free(level->metadata->title);
-    free(level->metadata->next_level);
     free(level->metadata);
     destroyMap(level->map);
 

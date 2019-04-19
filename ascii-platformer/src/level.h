@@ -25,7 +25,7 @@ struct Metadata {
     int start_x, start_y;
     int goal_x, goal_y;
 
-    char* next_level;
+    char next_level[250];
 };
 
 struct Level* loadLevel(char* name, struct Entity* player);

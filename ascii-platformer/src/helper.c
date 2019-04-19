@@ -12,6 +12,16 @@ WINDOW* getMainWin() {
     return mainwin;
 }
 
+char current_level[250];
+
+char* getCurrentLevel() {
+    return current_level;
+}
+
+void setCurrentLevel(char* new_current) {
+    strncpy(current_level, new_current, 250);
+}
+
 /**
  * Shows a modal message window that can be closed with any key.
  * char* who    Optional name of quotee, or an empty string.

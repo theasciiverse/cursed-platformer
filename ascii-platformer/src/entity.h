@@ -30,6 +30,12 @@ struct Message {
 
 struct Entity* createMessage(struct Level* level, double x, double y, char* who, char* msg, int read);
 
+struct Goal {
+    char next_level[250];
+};
+
+struct Entity* createGoal(struct Level* level, double x, double y, char* next_level);
+
 struct Button {
     int tx, ty;
 };

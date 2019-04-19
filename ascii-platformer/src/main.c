@@ -22,8 +22,6 @@ struct Entity* muncher;
 
 struct Level* level;
 
-char current_level[80];
-
 WINDOW *infowin;
 WINDOW *mainwin;
 
@@ -54,7 +52,7 @@ int main(int argc, char **argv) {
     else
         level = loadLevel("level0", &player);
 
-    strcpy(current_level, level->name);
+    setCurrentLevel(level->name);
 
     initscr();
     resize_term(25, 80);
@@ -215,18 +213,6 @@ void process(double delta, chtype input) {
 
     int x = (int) player.x;
     int y = (int) player.y;
-
-    if (x == level->metadata->goal_x && y == level->metadata->goal_y) {
-        strcpy(current_level, level->metadata->next_level);
-        
-        FILE* fp = fopen("autosave.sav", "w");
-
-        fprintf(fp, "%s\n", current_level);
-        
-        fclose(fp);
-
-        switchLevel(&level, current_level, &player);
-    }
 
     processPhysics(&player, delta);
 }

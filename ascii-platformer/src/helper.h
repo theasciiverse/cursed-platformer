@@ -15,6 +15,9 @@ void initHelp(WINDOW* mainwin);
 
 WINDOW* getMainWin();
 
+char* getCurrentLevel(); 
+void setCurrentLevel(char* new_current);
+
 int isPassable(chtype tile);
 
 #endif

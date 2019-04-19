@@ -361,3 +361,47 @@ void processContinue(struct Entity* cont, double delta) {
         }
     }
 }
+
+void processGoal(struct Entity* goal, double delta);
+
+struct Entity* createGoal(struct Level* level, double x, double y, char* next_level) {
+    struct Entity* goal = createEntity();
+
+    goal->x = x;
+    goal->y = y;
+    goal->width = 1;
+    goal->x_vel = 0;
+    goal->sprite = 'Z';
+    goal->state = IDLE;
+    goal->disabled = false;
+    goal->hidden = true;
+    goal->internal_data = malloc(sizeof(struct Goal));
+    
+    struct Goal* goal_data = (struct Goal*) goal->internal_data;
+    strcpy(goal_data->next_level, next_level);
+
+    goal->level = level;
+
+    goal->processFunc = &processGoal;
+    return goal;
+}
+
+void processGoal(struct Entity* goal, double delta) {
+    int x = (int) goal->x;
+    int y = (int) goal->y;
+
+    int px = (int) goal->level->player->x;
+    int py = (int) goal->level->player->y;
+
+    if (px == x && py == y ) {
+        struct Goal* goal_data = (struct Goal*) goal->internal_data;
+        
+        FILE* fp = fopen("autosave.sav", "w");
+        fprintf(fp, "%s\n", goal_data->next_level);
+        fclose(fp);
+        
+        setCurrentLevel(goal_data->next_level);
+
+        switchLevel(&goal->level, goal_data->next_level, goal->level->player); 
+    }
+}
