@@ -45,7 +45,7 @@ void showMessage(char *who, char *text) {
     mvwprintw(win, 10, 2, "[...]");
 
     box(win, 0, 0);
-    touchwin(mainwin);
+    wrefresh(mainwin);
     wrefresh(win);
 
     while (true) {
