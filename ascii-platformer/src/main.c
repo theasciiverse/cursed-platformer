@@ -32,6 +32,8 @@ int debug = 0;
 Mix_Music *mus = NULL;
 
 int main(int argc, char **argv) {
+    printf("Starting up...\n");
+
     if(SDL_Init(SDL_INIT_AUDIO) < 0) {
         printf("SDL audio could not initialize! SDL Error: %s\n", SDL_GetError());
     }
@@ -50,7 +52,7 @@ int main(int argc, char **argv) {
     if (argc > 1)
         level = loadLevel(argv[1], &player);
     else
-        level = loadLevel("level0", &player);
+        level = loadLevel("menu", &player);
 
     setCurrentLevel(level->name);
 
