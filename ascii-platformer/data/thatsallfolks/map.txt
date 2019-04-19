@@ -1,5 +1,5 @@
 ################################################################################
-#      '  .    .     .      .       .    .  ....' .       .                    #
+#      '  .    .     .      .       .    .  .....'.       .                    #
 #    `   .    ' .    `       `      .  .'  '  :   :      .:. ,  ..             #
 #      . .   .        ' .    ..    .  '  .    :   :'. ,-: :    '.              #
 #    ' .' . .          .     .    .  '       .'   : : '.: ;   `..'             #
@@ -8,16 +8,16 @@
 #  .'. . .          .          .. .              '.: : :  .:':  : : :.' '.   : #
 # ,   ' '. '  .    .         .  .'  .                      : '..' : : : ..'  . #
 # .      .    .   .    .       ..                          '                   #
-# '     ' .      '.  .      ' . .        You've been playing a game by:        #
+# '     ' .      '.  .      ' . .         You've been playing a game by:       #
 #  `  .     .    .        .'  .                                                #
 #   ' .    '  .   .   .      .       SAMSAI                                    #
 #    . .         .   .     .          - Still salty at the memory allocator    #
 #     .  `     '    . .  .'                                                    #
 #    /'              ' . '           TUUBI                                     #
-#   /# &              #\.              - Now remembers why he gave up on C     #
+#   /# &              #\.             - Now remembers why he gave up on C      #
 #  //#######"""""#######\\                                                     #
 # //#     ##     ##     #\\          YSBLOKJE                                  #
-#//#      ##     ##      #\\           - Asleep on his couch again             #
+#//#      ##     ##      #\\          - Refuses to comment on the situation ;) #
 #/#       ##     ##       #\\                                                  #
 ##        `#     #'        #\\       Music by Kevin MacLeod (incompetech.com)  #
 #          ]     [          #\\                                               (#
