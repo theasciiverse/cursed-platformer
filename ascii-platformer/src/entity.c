@@ -309,14 +309,17 @@ struct Entity* createTrampoline(struct Level* level, double x, double y, int wid
 
 void processTrampoline(struct Entity* trampoline, double delta) {
     int x = (int) trampoline->x;
-    int y = (int) trampoline->y;
+    double y = trampoline->y;
 
     int px = (int) trampoline->level->player->x;
-    int py = (int) trampoline->level->player->y;
+    double py = trampoline->level->player->y;
 
-    if (px >= x && px < x + trampoline->width && py == y - 1) {
+    if (px >= x && px < x + trampoline->width && py > y - 0.5 && py < y) {
         if (trampoline->level->player->y_vel > 4)
             trampoline->level->player->y_vel *= -0.9;
+        trampoline->sprite = 'z';
+    } else {
+        trampoline->sprite = 'Z';
     }
 }
 
