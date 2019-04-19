@@ -10,7 +10,7 @@ install the Meson build tool and the build-essentials (GCC).
 
 You can install them with the following command on Debian/Ubuntu:
 ```sh
-sudo apt install meson build-essentials libsdl2-dev libsdl2-mixer-dev libncurses-dev
+sudo apt install meson build-essential libsdl2-dev libsdl2-mixer-dev libncurses-dev
 ```
 
 On other distros, use your regional equivalents.
