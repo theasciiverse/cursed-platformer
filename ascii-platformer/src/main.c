@@ -27,13 +27,46 @@ char current_level[80];
 WINDOW *infowin;
 WINDOW *mainwin;
 
-void process(double delta, chtype input);
+void process(double delta, chtype input, SDL_Event ev);
+
+SDL_GameController* gamepad = NULL;
 
 int debug = 0;
+int quit = 0;
 
 Mix_Music *mus = NULL;
 
 int main(int argc, char **argv) {
+    if (SDL_WasInit(SDL_INIT_EVENTS) == 0) {
+        if (SDL_Init(SDL_INIT_EVENTS) != 0) {
+            SDL_Log("Unable to initialize SDL events: %s", SDL_GetError());
+            return 1;
+        }
+    }
+
+    if (SDL_WasInit(SDL_INIT_GAMECONTROLLER) == 0) {
+        if (SDL_InitSubSystem(SDL_INIT_GAMECONTROLLER) != 0) {
+            SDL_Log("Unable to initialize SDL game controller: %s", SDL_GetError());
+            return 1;
+        }
+    }
+
+    SDL_GameController *gamepad = NULL;
+
+    for (int i = 0; i < SDL_NumJoysticks(); ++i) {
+        if (SDL_IsGameController(i)) {
+            gamepad = SDL_GameControllerOpen(i);
+            if (gamepad != NULL) {
+                SDL_Log("Gamepad Found: %s\n", SDL_GameControllerNameForIndex(i));
+                break;
+            } else {
+                SDL_Log("Could not open gamepad %i: %s\n", i, SDL_GetError());
+            }
+        }
+    }
+
+    SDL_Event ev;
+
     if(SDL_Init(SDL_INIT_AUDIO) < 0) {
         printf("SDL audio could not initialize! SDL Error: %s\n", SDL_GetError());
     }
@@ -86,7 +119,7 @@ int main(int argc, char **argv) {
 
     Mix_PlayMusic(mus, -1);
 
-    while (true) {
+    while (!quit) {
         input = getch();
 
         struct Map* map = level->map;
@@ -151,7 +184,7 @@ int main(int argc, char **argv) {
                 }
         }
 
-        process(delta, input);
+        process(delta, input, ev);
         wrefresh(mainwin);
     }
 
@@ -161,12 +194,16 @@ int main(int argc, char **argv) {
     Mix_FreeMusic(mus);
     mus = NULL;
     Mix_Quit();
+
+    if (gamepad != NULL)
+        SDL_GameControllerClose(gamepad);
+
     SDL_Quit();
 
     return 0;
 }
 
-void process(double delta, chtype input) {
+void process(double delta, chtype input, SDL_Event ev) {
     switch(input) {
         case ERR:
             break;
@@ -211,6 +248,34 @@ void process(double delta, chtype input) {
                 player.x_vel = 0;
             else
                 player.x_vel = 8;
+    }
+
+    Uint8 btn;
+
+    while (SDL_PollEvent(&ev)) {
+        if (ev.type == SDL_QUIT) {
+            quit = 1;
+            return;
+        } else if (ev.type == SDL_CONTROLLERBUTTONDOWN && player.state != DEAD) {
+            btn = ev.cbutton.button;
+            if (btn == SDL_CONTROLLER_BUTTON_A) {
+                if (player.state == WALKING) {
+                    player.y_vel = -8;
+                    player.state = AIRBORNE;
+                }
+            }
+            if (btn == SDL_CONTROLLER_BUTTON_DPAD_LEFT) {
+                player.x_vel = -8;
+            } else if (btn == SDL_CONTROLLER_BUTTON_DPAD_RIGHT) {
+                player.x_vel = 8;
+            }
+        } else if (ev.type == SDL_CONTROLLERBUTTONUP && player.state != DEAD) {
+            btn = ev.cbutton.button;
+            if ((btn == SDL_CONTROLLER_BUTTON_DPAD_LEFT && player.x_vel < 0) ||
+                (btn == SDL_CONTROLLER_BUTTON_DPAD_RIGHT && player.x_vel > 0)) {
+                player.x_vel = 0;
+            }
+        }
     }
 
     int x = (int) player.x;
