@@ -1,0 +1,11 @@
+title ?: Pyramid of Tuthanascii
+size 80 24
+
+start 1 19 
+goal 37 2 level0
+goal 38 2 level0
+platform 37 22 37 2 2  
+
+teleport 35 7 40 7  
+
+end
