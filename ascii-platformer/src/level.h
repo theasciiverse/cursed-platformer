@@ -19,7 +19,7 @@ struct Level {
 };
 
 struct Metadata {
-    char* title;
+    char title[80];
 
     int width, height;
     int start_x, start_y;

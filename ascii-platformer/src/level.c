@@ -19,12 +19,8 @@ struct Metadata* readMetadata(struct Level* level, char* path) {
         fscanf(fp, "%s", command);
 
         if (strcmp(command, "title") == 0) {
-            char* title = malloc(sizeof(char) * 70);
-
             fseek(fp, 1, SEEK_CUR);
-            fgets(title, 70, fp);
-
-            metadata->title = title;
+            fgets(metadata->title, 70, fp);
         } else if (strcmp(command, "size") == 0) {
             int width;
             int height;
@@ -44,7 +40,7 @@ struct Metadata* readMetadata(struct Level* level, char* path) {
         } else if (strcmp(command, "goal") == 0) {
             int x;
             int y;
-            char* next_level = malloc(sizeof(char) * 80);
+            char next_level[80];
 
             fscanf(fp, "%d %d %s", &x, &y, next_level);
 
@@ -195,7 +191,6 @@ void addEntity(struct Level* level, struct Entity* entity) {
 }
 
 void destroyLevel(struct Level* level) {
-    free(level->metadata->title);
     free(level->metadata);
     destroyMap(level->map);
 
