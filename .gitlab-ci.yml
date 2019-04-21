@@ -6,6 +6,6 @@ build_ubuntu_18_04:
     image: ubuntu:18.04
     script:
         - apt-get update
-        - apt-get install -y meson gcc libncurses-dev
+        - apt-get install -y meson gcc libncurses-dev lsb-release libsdl2-dev libsdl2-mixer-dev
         - cd ascii-platformer
         - sh ./package.sh
