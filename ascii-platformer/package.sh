@@ -20,7 +20,7 @@ cp ../run_pdcurses.sh ./
 chmod +x run*.sh
 popd
 
-DISTRO=`lsb_release lsb_release -is`
+DISTRO=`lsb_release -is`
 DISTRO_VERSION=`lsb_release -sc`
 echo \"${DISTRO_VERSION}\"
 if [ "${DISTRO_VERSION}" = "n/a" ] ; then
