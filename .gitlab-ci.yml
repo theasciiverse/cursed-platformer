@@ -1,7 +1,11 @@
+variables:
+  GIT_STRATEGY: fetch
+  GIT_SUBMODULE_STRATEGY: recursive
 build_ubuntu_18_04:
     stage: build
     image: ubuntu:18.04
     script:
-        - apt install -y meson gcc
+        - apt-get update
+        - apt-get install -y meson gcc libncurses-dev
         - cd ascii-platformer
         - sh ./package.sh
