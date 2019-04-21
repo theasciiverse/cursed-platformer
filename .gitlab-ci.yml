@@ -4,8 +4,8 @@ variables:
 
 .debianlike_build_template: &debianlike_definitions
     script:
-        - apt-get update
-        - apt-get install -y meson gcc libncurses-dev lsb-release libsdl2-dev libsdl2-mixer-dev
+#        - apt-get update
+#        - apt-get install -y meson gcc libncurses-dev lsb-release libsdl2-dev libsdl2-mixer-dev
         - cd ascii-platformer
         - bash ./package.sh
     artifacts:
@@ -20,4 +20,4 @@ build_ubuntu_18_04:
 build_debian_stretch:
     <<: *debianlike_definitions
     stage: build
-    image: debian:stretch
+    image: registry.gitlab.com/samsai/linux-game-jam-2019-game/debianstretch_build_image
