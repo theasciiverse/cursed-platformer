@@ -1,6 +1,6 @@
 #! /bin/sh
 
-meson build
+meson -Duse_pdcurses=true --buildtype=release build
 ninja -C build
 
 mkdir -p platformer_package
