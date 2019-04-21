@@ -1,5 +1,9 @@
-#include <stdio.h>
+#ifndef USE_PDCURSES
 #include <curses.h>
+#else 
+#include <PDCurses/curses.h>
+#endif
+#include <stdio.h>
 #include <time.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -85,6 +89,7 @@ int main(int argc, char **argv) {
     //setCurrentLevel(level->name);
 
     initscr();
+    start_color();
     resize_term(25, 80);
     nodelay(stdscr, TRUE);
     noecho();
@@ -92,7 +97,6 @@ int main(int argc, char **argv) {
     keypad(stdscr, TRUE);
     curs_set(0);
 
-    start_color();
     init_pair(1, COLOR_WHITE, COLOR_BLACK);
     init_pair(2, COLOR_RED, COLOR_BLACK);
     init_pair(3, COLOR_GREEN, COLOR_BLACK);
