@@ -92,6 +92,15 @@ int main(int argc, char **argv) {
     keypad(stdscr, TRUE);
     curs_set(0);
 
+    start_color();
+    init_pair(1, COLOR_WHITE, COLOR_BLACK);
+    init_pair(2, COLOR_RED, COLOR_BLACK);
+    init_pair(3, COLOR_GREEN, COLOR_BLACK);
+    init_pair(4, COLOR_BLUE, COLOR_BLACK);
+    init_pair(5, COLOR_CYAN, COLOR_BLACK);
+    init_pair(6, COLOR_MAGENTA, COLOR_BLACK);
+    init_pair(7, COLOR_YELLOW, COLOR_BLACK);
+
     infowin = newwin(1, 80, 0, 0);
     werase(infowin);
     mainwin = newwin(24, 80, 1, 0);
@@ -121,10 +130,25 @@ int main(int argc, char **argv) {
 
         struct Map* map = level->map;
 
+        int color = 0;
+
         for (int y = 0; y < map->height; y++) {
             for (int x = 0; x < map->width; x++) {
+                if (map->colors[y][x] != color) {
+                    if (color != 0) {
+                        wattroff(mainwin, COLOR_PAIR(color - '0'));
+                    }
+                    color = map->colors[y][x];
+                    if (color != 0) {
+                        wattron(mainwin, COLOR_PAIR(color - '0'));
+                    }
+                }
                 mvwaddch(mainwin, y, x, map->data[y][x]);
             }
+        }
+        if (color != 0) {
+            wattroff(mainwin, COLOR_PAIR(color - '0'));
+            color = 0;
         }
 
         for (int i = 0; i < MAX_ENTITIES; i++) {
