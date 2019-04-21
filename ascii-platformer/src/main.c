@@ -282,8 +282,5 @@ void process(double delta, chtype input, SDL_Event ev) {
                 player.x_vel = 8;
     }
 
-    int x = (int) player.x;
-    int y = (int) player.y;
-
     processPhysics(&player, delta);
 }
