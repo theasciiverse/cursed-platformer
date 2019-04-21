@@ -1,0 +1,7 @@
+build_ubuntu_18_04:
+    stage: build
+    image: ubuntu:18.04
+    script:
+        - apt install -y meson gcc
+        - cd ascii-platformer
+        - sh ./package.sh
