@@ -8,4 +8,4 @@ build_ubuntu_18_04:
         - apt-get update
         - apt-get install -y meson gcc libncurses-dev lsb-release libsdl2-dev libsdl2-mixer-dev
         - cd ascii-platformer
-        - sh ./package.sh
+        - bash ./package.sh

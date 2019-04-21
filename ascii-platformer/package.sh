@@ -1,4 +1,4 @@
-#! /bin/sh
+#! /bin/bash
 
 meson -Duse_pdcurses=true --buildtype=release build
 ninja -C build
