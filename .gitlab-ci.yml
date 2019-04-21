@@ -1,11 +1,23 @@
 variables:
   GIT_STRATEGY: fetch
   GIT_SUBMODULE_STRATEGY: recursive
-build_ubuntu_18_04:
-    stage: build
-    image: ubuntu:18.04
+
+.debianlike_build_template: &debianlike_definitions
     script:
         - apt-get update
         - apt-get install -y meson gcc libncurses-dev lsb-release libsdl2-dev libsdl2-mixer-dev
         - cd ascii-platformer
         - bash ./package.sh
+    artifacts:
+        paths:
+            - ascii-platformer/*.tar.gz
+
+build_ubuntu_18_04:
+    <<: *debianlike_definitions
+    stage: build
+    image: ubuntu:18.04
+
+build_debian_stretch:
+    <<: *debianlike_definitions
+    stage: build
+    image: debian:stretch
