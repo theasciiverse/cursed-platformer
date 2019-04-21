@@ -15,7 +15,7 @@ variables:
 build_ubuntu_18_04:
     <<: *debianlike_definitions
     stage: build
-    image: ubuntu:18.04
+    image: registry.gitlab.com/samsai/linux-game-jam-2019-game/ubuntu1804_build_image
 
 build_debian_stretch:
     <<: *debianlike_definitions
