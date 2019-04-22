@@ -9,122 +9,24 @@
 
 #include "helper.h"
 
+
+void processMetaDataLine(char const * line, struct Metadata* metadata, struct Level* level);
+
 struct Metadata* readMetadata(struct Level* level, char* path) {
     FILE* fp = fopen(path, "r");
 
-    char command[80];
     struct Metadata* metadata = malloc(sizeof(struct Metadata));
 
     while (!feof(fp)) {
-        fscanf(fp, "%s", command);
-
-        if (strcmp(command, "title") == 0) {
-            fseek(fp, 1, SEEK_CUR);
-            fgets(metadata->title, 70, fp);
-        } else if (strcmp(command, "size") == 0) {
-            int width;
-            int height;
-
-            fscanf(fp, "%d %d", &width, &height);
-
-            metadata->width = width;
-            metadata->height = height;
-        } else if (strcmp(command, "start") == 0) {
-            int x;
-            int y;
-
-            fscanf(fp, "%d %d", &x, &y);
-
-            metadata->start_x = x;
-            metadata->start_y = y;
-        } else if (strcmp(command, "goal") == 0) {
-            int x;
-            int y;
-            char next_level[80];
-
-            fscanf(fp, "%d %d %s", &x, &y, next_level);
-
-            struct Entity* goal = createGoal(level, x, y, next_level); 
-            addEntity(level, goal);
-        } else if (strcmp(command, "muncher") == 0) {
-            int x;
-            int y;
-
-            fscanf(fp, "%d %d", &x, &y);
-
-            struct Entity* muncher = createMuncher(level, x, y);
-            addEntity(level, muncher);
-        } else if (strcmp(command, "spike") == 0) {
-            int x;
-            int y;
-
-            fscanf(fp, "%d %d", &x, &y);
-
-            struct Entity* spike = createSpike(level, x, y);
-            addEntity(level, spike);
-        } else if (strcmp(command, "bat") == 0) {
-            int x;
-            int y;
-
-            fscanf(fp, "%d %d", &x, &y);
-
-            struct Entity* bat = createBat(level, x, y);
-            addEntity(level, bat);
-        } else if (strcmp(command, "message") == 0) {
-            int x, y;
-            int readable;
-            char who[40];
-            char msg[250];
-
-            fscanf(fp, "%d %d %d %s ", &x, &y, &readable, who);
-            fgets(msg, 250, fp);
-
-            struct Entity* message = createMessage(level, x, y, who, msg, readable);
-            addEntity(level, message);
-        } else if (strcmp(command, "button") == 0) {
-            int x, y;
-            int tx, ty;
-
-            fscanf(fp, "%d %d %d %d", &x, &y, &tx, &ty);
-
-            struct Entity* button = createButton(level, x, y, tx, ty);
-            addEntity(level, button);
-        } else if (strcmp(command, "teleport") == 0) {
-            int x, y;
-            int tx, ty;
-
-            fscanf(fp, "%d %d %d %d", &x, &y, &tx, &ty);
-
-            struct Entity* teleport = createTeleport(level, x, y, tx, ty);
-            addEntity(level, teleport);
-        } else if (strcmp(command, "platform") == 0) {
-            int sx, sy;
-            int tx, ty;
-            int width;
-
-            fscanf(fp, "%d %d %d %d %d", &sx, &sy, &tx, &ty, &width);
-
-            struct Entity* platform = createPlatform(level, sx, sy, tx, ty, width);
-            addEntity(level, platform);
-        } else if (strcmp(command, "trampoline") == 0) {
-            int sx, sy, width;
-
-            fscanf(fp, "%d %d %d", &sx, &sy, &width);
-
-            struct Entity* trampoline = createTrampoline(level, sx, sy, width);
-            addEntity(level, trampoline);
-        } else if (strcmp(command, "continue") == 0) {
-            int x, y;
-
-            fscanf(fp, "%d %d", &x, &y);
-
-            struct Entity* cont = createContinue(level, x, y);
-            addEntity(level, cont);
-        } else if (strcmp(command, "//") == 0) {
-            char buf[250];
-
-            fgets(buf, 250, fp);
-        } 
+        char  *command = NULL;
+        size_t n = 0;
+        getline(&command, &n, fp);
+        if(n) {
+            processMetaDataLine(command, metadata, level);
+        }
+        if(command) {
+            free(command);
+        }
     }
 
     fclose(fp);
@@ -212,4 +114,120 @@ void switchLevel(char* name, struct Entity* player) {
     destroyLevel(level);
     
     setCurrentLevel(loadLevel(buf, player));
+}
+
+void processMetaDataLine(char const * line, struct Metadata* metadata, struct Level *level) {
+    char const *command = line;
+    const int command_length = strlen(line);
+
+        if (memcmp(command, "title", 5) == 0) {
+            command += 6;
+            strncpy(metadata->title, command, sizeof(metadata->title));
+        } else if (memcmp(command, "size", 4) == 0) {
+            int width;
+            int height;
+            command += 5;
+            sscanf(command, "%d %d", &width, &height);
+            metadata->width = width;
+            metadata->height = height;
+        } else if (memcmp(command, "start", 5) == 0) {
+            int x;
+            int y;
+            command += 6;
+            sscanf(command, "%d %d", &x, &y);
+            metadata->start_x = x;
+            metadata->start_y = y;
+        } else if (memcmp(command, "goal", 4) == 0) {
+            int x;
+            int y;
+            command += 5;
+            char next_level[80];
+
+            sscanf(command, "%d %d %s", &x, &y, next_level);
+
+            struct Entity* goal = createGoal(level, x, y, next_level); 
+            addEntity(level, goal);
+        } else if (memcmp(command, "muncher", 7) == 0) {
+            int x;
+            int y;
+            command += 8;
+
+            sscanf(command, "%d %d", &x, &y);
+
+            struct Entity* muncher = createMuncher(level, x, y);
+            addEntity(level, muncher);
+        } else if (memcmp(command, "spike", 5) == 0) {
+            int x;
+            int y;
+            command += 6;
+            sscanf(command, "%d %d", &x, &y);
+
+            struct Entity* spike = createSpike(level, x, y);
+            addEntity(level, spike);
+        } else if (memcmp(command, "bat", 3) == 0) {
+            int x;
+            int y;
+            command += 4;
+            sscanf(command, "%d %d", &x, &y);
+
+            struct Entity* bat = createBat(level, x, y);
+            addEntity(level, bat);
+        } else if (memcmp(command, "message", 7) == 0) {
+            int x, y;
+            int readable;
+            char who[40];
+            char msg[250];
+            command += 8;
+
+            int bytesread = sscanf(command, "%d %d %d %s %[^\n]\n", &x, &y, &readable, who, msg);
+
+            struct Entity* message = createMessage(level, x, y, who, msg, readable);
+            addEntity(level, message);
+        } else if (memcmp(command, "button", 6) == 0) {
+            int x, y;
+            int tx, ty;
+            command += 7;
+
+            sscanf(command, "%d %d %d %d", &x, &y, &tx, &ty);
+
+            struct Entity* button = createButton(level, x, y, tx, ty);
+            addEntity(level, button);
+        } else if (memcmp(command, "teleport", 8) == 0) {
+            int x, y;
+            int tx, ty;
+            command += 9;
+            sscanf(command, "%d %d %d %d", &x, &y, &tx, &ty);
+
+            struct Entity* teleport = createTeleport(level, x, y, tx, ty);
+            addEntity(level, teleport);
+        } else if (memcmp(command, "platform", 8) == 0) {
+            int sx, sy;
+            int tx, ty;
+            int width;
+            command += 9;
+
+            sscanf(command, "%d %d %d %d %d", &sx, &sy, &tx, &ty, &width);
+
+            struct Entity* platform = createPlatform(level, sx, sy, tx, ty, width);
+            addEntity(level, platform);
+        } else if (memcmp(command, "trampoline", 10) == 0) {
+            int sx, sy, width;
+            command += 11;
+            sscanf(command, "%d %d %d", &sx, &sy, &width);
+
+            struct Entity* trampoline = createTrampoline(level, sx, sy, width);
+            addEntity(level, trampoline);
+        } else if (memcmp(command, "continue", 8) == 0) {
+            int x, y;
+            command += 9;
+
+            sscanf(command, "%d %d", &x, &y);
+
+            struct Entity* cont = createContinue(level, x, y);
+            addEntity(level, cont);
+        } else if (strcmp(command, "//") == 0) {
+//            char buf[250];
+//            fgets(buf, 250, fp);
+        } 
+
 }
