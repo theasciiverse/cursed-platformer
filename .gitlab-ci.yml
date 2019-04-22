@@ -17,7 +17,7 @@ build_ubuntu_18_04:
     stage: build
     image: registry.gitlab.com/samsai/linux-game-jam-2019-game/ubuntu1804_build_image
 
-build_debian_stretch:
-    <<: *debianlike_definitions
-    stage: build
-    image: registry.gitlab.com/samsai/linux-game-jam-2019-game/debianstretch_build_image
+#build_debian_stretch:
+#    <<: *debianlike_definitions
+#    stage: build
+#    image: registry.gitlab.com/samsai/linux-game-jam-2019-game/debianstretch_build_image
