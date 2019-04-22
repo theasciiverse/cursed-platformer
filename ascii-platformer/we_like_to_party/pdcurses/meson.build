@@ -1,6 +1,9 @@
 project('pdcurses', 'c', version : '3.6', default_options : ['warning_level=1'])
 
 sdl2 = dependency('sdl2')
+sdl2_ttf = dependency('SDL2_ttf')
+
+add_project_arguments('-DPDC_WIDE', language : 'c')
 
 lib = static_library('pdcurses', 
 'pdcurses/addch.c',
@@ -54,6 +57,6 @@ lib = static_library('pdcurses',
 'sdl2/pdcutil.c',
 'sdl2/sdltest.c',
 
-dependencies : [sdl2])
+dependencies : [sdl2, sdl2_ttf])
 
 pdcurses = declare_dependency(link_with : lib)

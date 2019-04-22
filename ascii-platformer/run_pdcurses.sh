@@ -1,2 +1,2 @@
 #! /bin/sh
-LD_LIBRARY_PATH=./libs ./platformer_game_pdcurses
+PDC_FONT_SIZE=22 LD_LIBRARY_PATH=./libs ./platformer_game_pdcurses
