@@ -11,8 +11,9 @@ cp -r data platformer_package
 mkdir -p platformer_package/libs
 pushd platformer_package
 
-// This should include a minimal set of deps when building on Ubuntu/Debian
+# This should include a minimal set of deps when building on Ubuntu/Debian
 cp $(ldd platformer_game_ncurses | grep -E 'libtinfo|libncurses|libSDL2|libsndio|libfluidsynth|libreadline' |awk -F ' ' '{print $3}') libs/
+cp -u $(ldd platformer_game_pdcurses | grep -E 'libSDL2' |awk -F ' ' '{print $3}') libs/
 
 cp ../run_ncurses.sh ./
 cp ../run_pdcurses.sh ./
