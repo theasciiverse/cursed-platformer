@@ -175,8 +175,11 @@ int main(int argc, char **argv) {
 
         if (player.state != DEAD)
             mvwaddch(mainwin, player.y, player.x, '@');
-        else
+        else {
+            wattron(mainwin, COLOR_PAIR(2));
             mvwaddch(mainwin, player.y, player.x, 'X');
+            wattroff(mainwin, COLOR_PAIR(2));
+        }
 
         time(&sec);
 
