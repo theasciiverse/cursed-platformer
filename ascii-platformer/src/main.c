@@ -163,7 +163,11 @@ int main(int argc, char **argv) {
             if (level->enemies[i] != NULL) {
                 if (!level->enemies[i]->disabled && !level->enemies[i]->hidden) {
                     for (int j = 0; j < level->enemies[i]->width; j++) {
+                        if (level->enemies[i]->color != 0)
+                            wattron(mainwin, COLOR_PAIR(level->enemies[i]->color));
                         mvwaddch(mainwin, level->enemies[i]->y, level->enemies[i]->x + j, level->enemies[i]->sprite);
+                        if (level->enemies[i]->color != 0)
+                            wattroff(mainwin, COLOR_PAIR(level->enemies[i]->color));
                     }
                 }
             }

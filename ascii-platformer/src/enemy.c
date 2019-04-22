@@ -20,6 +20,7 @@ struct Entity* createMuncher(struct Level* level, double x, double y) {
     muncher->width = 1;
     muncher->x_vel = -4;
     muncher->sprite = '<';
+    muncher->color = 2;
     muncher->state = WALKING;
     muncher->disabled = false;
     muncher->hidden = false;
@@ -102,6 +103,7 @@ struct Entity* createSpike(struct Level* level, double x, double y) {
     spike->x_vel = 0;
     spike->y_vel = 0;
     spike->sprite = 'V';
+    spike->color = 7;
     spike->state = IDLE;
     spike->disabled = false;
     spike->hidden = false;
@@ -160,6 +162,7 @@ struct Entity* createBat(struct Level* level, double x, double y) {
     bat->width = 1;
     bat->x_vel = -4;
     bat->sprite = '^';
+    bat->color = 5;
     bat->state = WALKING;
     bat->disabled = false;
     bat->hidden = false;
