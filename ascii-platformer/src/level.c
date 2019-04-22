@@ -135,7 +135,7 @@ struct Metadata* readMetadata(struct Level* level, char* path) {
 struct Level* loadLevel(char* name, struct Entity* player) {
     struct Level* level = malloc(sizeof(struct Level));
     
-    memset(level, 0, sizeof(level));
+    memset(level, 0, sizeof(struct Level));
 
     strcpy(level->name, name);
     
