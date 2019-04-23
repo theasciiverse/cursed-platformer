@@ -6,6 +6,7 @@
 struct Map {
     int width, height;
     char** data;
+    char** colors;
 };
 
 struct Map* loadMap(struct Metadata* metadata, char* name);

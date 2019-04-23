@@ -12,7 +12,7 @@ if get_option('use_pdcurses')
   run_command('cp', 'we_like_to_party/pdcurses/meson.build', 'subprojects/PDCurses')
   pdcurses = subproject('PDCurses')
   pdcurses = pdcurses.get_variable('pdcurses')
-  add_project_arguments('-DUSE_PDCURSES', language : 'c')
+#  add_project_arguments('-DUSE_PDCURSES', language : 'c')
 endif
 
 ncurses = dependency('ncurses')
@@ -24,6 +24,7 @@ test('basic', exe)
 
 if get_option('use_pdcurses')
   exe_pdcurses = executable('platformer_game_pdcurses', src, link_args: '-lm',
+  c_args : '-DUSE_PDCURSES',
   install : true, dependencies : [sdl2, pdcurses, sdl2_mixer])
   test('basic', exe_pdcurses)
 endif

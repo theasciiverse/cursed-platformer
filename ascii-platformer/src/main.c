@@ -1,5 +1,9 @@
-#include <stdio.h>
+#ifndef USE_PDCURSES
 #include <curses.h>
+#else 
+#include <PDCurses/curses.h>
+#endif
+#include <stdio.h>
 #include <time.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -30,6 +34,8 @@ int debug = 0;
 int quit = 0;
 
 Mix_Music *mus = NULL;
+
+int use_color = 1;
 
 int main(int argc, char **argv) {
     if (SDL_WasInit(SDL_INIT_EVENTS) == 0) {
@@ -85,12 +91,21 @@ int main(int argc, char **argv) {
     //setCurrentLevel(level->name);
 
     initscr();
+    start_color();
     resize_term(25, 80);
     nodelay(stdscr, TRUE);
     noecho();
     cbreak();
     keypad(stdscr, TRUE);
     curs_set(0);
+
+    init_pair(1, COLOR_WHITE, COLOR_BLACK);
+    init_pair(2, COLOR_RED, COLOR_BLACK);
+    init_pair(3, COLOR_GREEN, COLOR_BLACK);
+    init_pair(4, COLOR_BLUE, COLOR_BLACK);
+    init_pair(5, COLOR_CYAN, COLOR_BLACK);
+    init_pair(6, COLOR_MAGENTA, COLOR_BLACK);
+    init_pair(7, COLOR_YELLOW, COLOR_BLACK);
 
     infowin = newwin(1, 80, 0, 0);
     werase(infowin);
@@ -121,17 +136,38 @@ int main(int argc, char **argv) {
 
         struct Map* map = level->map;
 
+        int color = 0;
+
         for (int y = 0; y < map->height; y++) {
             for (int x = 0; x < map->width; x++) {
+                if (use_color) {
+                    if (map->colors[y][x] != color) {
+                        if (color != 0) {
+                            wattroff(mainwin, COLOR_PAIR(color - '0'));
+                        }
+                        color = map->colors[y][x];
+                        if (color != 0) {
+                            wattron(mainwin, COLOR_PAIR(color - '0'));
+                        }
+                    }
+                }
                 mvwaddch(mainwin, y, x, map->data[y][x]);
             }
+        }
+        if (color != 0 && use_color) {
+            wattroff(mainwin, COLOR_PAIR(color - '0'));
+            color = 0;
         }
 
         for (int i = 0; i < MAX_ENTITIES; i++) {
             if (level->enemies[i] != NULL) {
                 if (!level->enemies[i]->disabled && !level->enemies[i]->hidden) {
                     for (int j = 0; j < level->enemies[i]->width; j++) {
+                        if (level->enemies[i]->color != 0)
+                            wattron(mainwin, COLOR_PAIR(level->enemies[i]->color));
                         mvwaddch(mainwin, level->enemies[i]->y, level->enemies[i]->x + j, level->enemies[i]->sprite);
+                        if (level->enemies[i]->color != 0)
+                            wattroff(mainwin, COLOR_PAIR(level->enemies[i]->color));
                     }
                 }
             }
@@ -139,8 +175,11 @@ int main(int argc, char **argv) {
 
         if (player.state != DEAD)
             mvwaddch(mainwin, player.y, player.x, '@');
-        else
+        else {
+            wattron(mainwin, COLOR_PAIR(2));
             mvwaddch(mainwin, player.y, player.x, 'X');
+            wattroff(mainwin, COLOR_PAIR(2));
+        }
 
         time(&sec);
 
@@ -219,6 +258,9 @@ void process(double delta, chtype input, SDL_Event ev) {
             } else {
                 Mix_HaltMusic();
             }
+            break;
+        case 'c':
+            use_color = (use_color == 1) ? 0 : 1;
     }
 
     Uint8 btn;
@@ -234,6 +276,8 @@ void process(double delta, chtype input, SDL_Event ev) {
                 werase(mainwin);
                 player.state = WALKING;
                 break;
+            } else if (btn == SDL_CONTROLLER_BUTTON_BACK) {
+                use_color = (use_color == 1) ? 0 : 1;
             } else if (player.state != DEAD) {
                 if (btn == SDL_CONTROLLER_BUTTON_A) {
                     if (player.state == WALKING) {

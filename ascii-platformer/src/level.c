@@ -48,10 +48,6 @@ struct Level* loadLevel(char* name, struct Entity* player) {
     strcpy(metadata_path, path);
     strcat(metadata_path, "/metadata.txt");
 
-    char map_path[80];
-    strcpy(map_path, path);
-    strcat(map_path, "/map.txt");
-
     level->enemy_count = 0;
     for (int i = 0; i < MAX_ENTITIES; i++) {
         level->enemies[i] = NULL;
@@ -60,7 +56,7 @@ struct Level* loadLevel(char* name, struct Entity* player) {
     struct Metadata* metadata = readMetadata(level, metadata_path);
 
     level->metadata = metadata;
-    level->map = loadMap(metadata, map_path);
+    level->map = loadMap(metadata, path);
     level->player = player;
     level->player->level = level;
 

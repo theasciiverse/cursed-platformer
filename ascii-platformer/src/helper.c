@@ -1,4 +1,8 @@
+#ifndef USE_PDCURSES
 #include <curses.h>
+#else 
+#include <PDCurses/curses.h>
+#endif
 #include <stdlib.h>
 #include <string.h>
 #include <SDL.h>

@@ -78,6 +78,7 @@ struct Entity* createMessage(struct Level* level, double x, double y, char* who,
     message->width = 1;
     message->x_vel = 0;
     message->sprite = '?';
+    message->color = 7;
     message->state = IDLE;
     message->disabled = false;
     message->hidden = false;
