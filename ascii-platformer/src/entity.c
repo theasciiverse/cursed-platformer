@@ -279,7 +279,8 @@ void processPlatform(struct Entity* platform, double delta) {
     platform->y += platform->y_vel * delta;
 
     if (px >= x && px < x + platform->width && py == y - 1) {
-        platform->level->player->state = WALKING;
+        if (platform->level->player->state != DEAD)
+            platform->level->player->state = WALKING;
         platform->level->player->y_vel = 0;
         platform->level->player->y = platform->y - 1;
         platform->level->player->x += platform->x_vel * delta;
