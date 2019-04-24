@@ -2,7 +2,8 @@ project('linux-game-jam-2019-game', 'c',
   version : '0.1',
   default_options : ['warning_level=3'])
 
-src = ['src/main.c', 'src/level.c', 'src/map.c', 'src/enemy.c', 'src/entity.c', 'src/helper.c']
+src = ['src/main.c', 'src/level.c', 'src/map.c', 'src/enemy.c', 'src/entity.c',
+       'src/helper.c', 'src/sound.c']
 
 sdl2 = dependency('sdl2')
 sdl2_mixer = dependency('SDL2_mixer')

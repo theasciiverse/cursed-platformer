@@ -4,6 +4,7 @@
 #include "level.h"
 #include "map.h"
 #include "helper.h"
+#include "sound.h"
 
 void processPhysics(struct Entity* entity, double delta) {
     int old_x = (int) entity->x;
@@ -42,6 +43,7 @@ void processPhysics(struct Entity* entity, double delta) {
 
     char below = map->data[new_y + 1][new_x];
     if (below == '^') {
+        playSound(SND_DEATH);
         entity->state = DEAD;
         entity->x = (float) new_x;
         entity->y = (float) new_y;
@@ -149,6 +151,7 @@ void processButton(struct Entity* button, double delta) {
     struct Button* button_data = (struct Button*) button->internal_data;
 
     if (x == px && y == py) {
+        playSound(SND_PRESSUREPLATE);
         int tx = button_data->tx;
         int ty = button_data->ty;
 
@@ -396,9 +399,10 @@ void processGoal(struct Entity* goal, double delta) {
     int px = (int) goal->level->player->x;
     int py = (int) goal->level->player->y;
 
-    if (px == x && py == y ) {
+    if (px == x && py == y) {
         struct Goal* goal_data = (struct Goal*) goal->internal_data;
-        
+        playSound(SND_GOAL);
+
         FILE* fp = fopen("autosave.sav", "w");
         fprintf(fp, "%s\n", goal_data->next_level);
         fclose(fp);

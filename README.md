@@ -56,8 +56,13 @@ You can then launch the game with the following command:
 * __Ysblokje__ - pdcurses integration etc.
 
 
-#### Music
+#### Music and sound effects:
 
 > __Midnight Tale__ by __Kevin MacLeod__ (incompetech.com)  
 > Licensed under Creative Commons: By Attribution 3.0 License  
 > http://creativecommons.org/licenses/by/3.0/
+
+CC Attribution-licensed sound effects by freesound.org users:
+> jorickhoofd, javapimp
+
+The rest of the included audio was originally released under the CC 0-license.

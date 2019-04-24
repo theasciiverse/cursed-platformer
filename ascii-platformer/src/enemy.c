@@ -5,6 +5,7 @@
 #include "map.h"
 #include "helper.h"
 #include "entity.h"
+#include "sound.h"
 
 struct Muncher {
     double sprite_timer;
@@ -57,12 +58,15 @@ void processMuncher(struct Entity* muncher, double delta) {
     int x = (int) muncher->x;
     int y = (int) muncher->y;
 
-    int px = (int) muncher->level->player->x;
-    int py = (int) muncher->level->player->y;
+    if (muncher->level->player->state != DEAD) {
+        int px = (int) muncher->level->player->x;
+        int py = (int) muncher->level->player->y;
 
-    // Kill player on touch
-    if (x == px && y == py) {
-        muncher->level->player->state = DEAD;
+        // Kill player on touch
+        if (x == px && y == py) {
+            muncher->level->player->state = DEAD;
+            playSound(SND_DEATH);
+        }
     }
 
     struct Map* map = muncher->level->map;
@@ -119,7 +123,8 @@ struct Entity* createSpike(struct Level* level, double x, double y) {
 }
 
 void processSpike(struct Entity* spike, double delta) {
-
+    if (spike->state == GARBAGE)
+        return;
     int x = (int) spike->x;
     int y = (int) spike->y;
 
@@ -136,16 +141,18 @@ void processSpike(struct Entity* spike, double delta) {
                 if (y == py)
                     spike->state = AIRBORNE;
             }
-
         }
-     } else if (spike->state == AIRBORNE) {
-        if (x == px && y == py - 1)
+    } else if (spike->state == AIRBORNE) {
+        if (x == px && y == py - 1 && spike->level->player->state != DEAD) {
             spike->level->player->state = DEAD;
+            playSound(SND_DEATH);
+        }
         processPhysics(spike, delta);
-     } else {
+    } else if (spike->state != GARBAGE) {
+        playSound(SND_RUBBLE);
         spike->sprite = '*';
         spike->state = GARBAGE;
-     }
+    }
 }
 
 struct Bat {
@@ -198,8 +205,9 @@ void processBat(struct Entity* bat, double delta) {
     int py = (int) bat->level->player->y;
 
     // Kill player on touch
-    if (x == px && y == py) {
+    if (x == px && y == py && bat->level->player->state != DEAD) {
         bat->level->player->state = DEAD;
+        playSound(SND_DEATH);
     }
 
     int dx = abs(x - px);

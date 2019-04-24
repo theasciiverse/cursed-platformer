@@ -9,13 +9,13 @@
 #include <unistd.h>
 
 #include <SDL.h>
-#include <SDL_mixer.h>
 
 #include "level.h"
 #include "map.h"
 #include "entity.h"
 #include "enemy.h"
 #include "helper.h"
+#include "sound.h"
 
 #define PROJECT_NAME "linux-game-jam-2019-game"
 #define KEY_SPACEBAR ' '
@@ -32,8 +32,6 @@ SDL_GameController* gamepad = NULL;
 
 int debug = 0;
 int quit = 0;
-
-Mix_Music *mus = NULL;
 
 int use_color = 1;
 
@@ -67,19 +65,6 @@ int main(int argc, char **argv) {
     }
 
     SDL_Event ev;
-
-    if(SDL_Init(SDL_INIT_AUDIO) < 0) {
-        SDL_Log("SDL audio could not initialize! SDL Error: %s\n", SDL_GetError());
-    }
-
-    if(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
-        SDL_Log("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
-    }
-
-    mus = Mix_LoadMUS("data/midnight-tale-by-kevin-macleod.ogg" );
-    if( mus == NULL ) {
-        SDL_Log( "Failed to load music! SDL_mixer Error: %s\n", Mix_GetError());
-    }
 
     initHelp(mainwin);
 
@@ -127,7 +112,7 @@ int main(int argc, char **argv) {
 
     char* debugstr = (char *)malloc(44);
 
-    Mix_PlayMusic(mus, -1);
+    initAudio();
 
     while (!quit) {
         input = getch();
@@ -225,10 +210,6 @@ int main(int argc, char **argv) {
     free(debugstr);
     endwin();
 
-    Mix_FreeMusic(mus);
-    mus = NULL;
-    Mix_Quit();
-
     if (gamepad != NULL)
         SDL_GameControllerClose(gamepad);
 
@@ -253,11 +234,7 @@ void process(double delta, chtype input, SDL_Event ev) {
             werase(infowin);
             break;
         case 'q':
-            if(Mix_PlayingMusic() == 0) {
-                Mix_PlayMusic(mus, -1);
-            } else {
-                Mix_HaltMusic();
-            }
+            toggleMusic();
             break;
         case 'c':
             use_color = (use_color == 1) ? 0 : 1;
@@ -281,6 +258,7 @@ void process(double delta, chtype input, SDL_Event ev) {
             } else if (player.state != DEAD) {
                 if (btn == SDL_CONTROLLER_BUTTON_A) {
                     if (player.state == WALKING) {
+                        playSound(SND_JUMP);
                         player.y_vel = -8;
                         player.state = AIRBORNE;
                     }
@@ -309,6 +287,7 @@ void process(double delta, chtype input, SDL_Event ev) {
         case KEY_SPACEBAR:
         case KEY_UP:
             if (player.state == WALKING) {
+                playSound(SND_JUMP);
                 player.y_vel = -8;
                 player.state = AIRBORNE;
             }
