@@ -72,6 +72,8 @@ int main(int argc, char **argv) {
         setCurrentLevel(loadLevel(argv[1], &player));
     else
         setCurrentLevel(loadLevel("menu", &player));
+
+    initAudio();
     
     //setCurrentLevel(level->name);
 
@@ -111,8 +113,6 @@ int main(int argc, char **argv) {
     double slack = 0;
 
     char* debugstr = (char *)malloc(44);
-
-    initAudio();
 
     while (!quit) {
         input = getch();
