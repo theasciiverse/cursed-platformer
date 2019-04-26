@@ -16,12 +16,16 @@ if get_option('use_pdcurses')
 #  add_project_arguments('-DUSE_PDCURSES', language : 'c')
 endif
 
-ncurses = dependency('ncurses')
+if get_option('use_ncurses')
+  ncurses = dependency('ncurses')
+endif
 
+if get_option('use_ncurses')
 exe = executable('platformer_game_ncurses', src, link_args: '-lm',
   install : true, dependencies : [sdl2, ncurses, sdl2_mixer])
-
 test('basic', exe)
+endif
+
 
 if get_option('use_pdcurses')
   exe_pdcurses = executable('platformer_game_pdcurses', src, link_args: '-lm',

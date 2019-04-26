@@ -1,4 +1,5 @@
 #include <stdbool.h>
+#include <stdint.h>
 
 #include <SDL.h>
 #include <SDL_mixer.h>
@@ -60,7 +61,7 @@ void closeAudio(void) {
         Mix_FreeMusic(mus);
         mus = NULL;
     }
-    for (uint i = 0; i < sizeof(sounds); i++) {
+    for (unsigned int i = 0; i < sizeof(sounds); i++) {
         if (sounds[i] != NULL) {
             Mix_FreeChunk(sounds[i]);
             sounds[i] = NULL;

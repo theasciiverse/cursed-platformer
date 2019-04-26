@@ -11,12 +11,14 @@ struct Map* loadMap(struct Metadata* metadata, char* path) {
     strcpy(map_path, path);
     strcat(map_path, "/map.txt");
 
-    FILE* fp = fopen(map_path, "r");
+    FILE* fp = fopen(map_path, "rb");
     
     struct Map* map = malloc(sizeof(struct Map));
 
     map->width = metadata->width;
     map->height = metadata->height;
+
+
 
     unsigned map_row_ptr_count = map->height * sizeof(char*);
     char** data = malloc(map_row_ptr_count);
@@ -40,7 +42,7 @@ struct Map* loadMap(struct Metadata* metadata, char* path) {
     memset(cdata, 0x0, map_row_ptr_count);
     int use_colors = 0;
     if (access(map_path, F_OK) != -1) {
-        fp = fopen(map_path, "r");
+        fp = fopen(map_path, "rb");
         use_colors = 1;
     }
 
