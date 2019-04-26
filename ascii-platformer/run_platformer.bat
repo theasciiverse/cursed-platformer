@@ -1,1 +1,1 @@
-PDC_FONT=~/.fonts/PxPlus_IBM_VGA8.ttf
+PDC_FONT=data/Px437_AmstradPC1512-2y.ttf
