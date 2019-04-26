@@ -43,6 +43,12 @@ If you want the pdcurses version:
 cd ascii-platformer && meson -Duse_pdcurses=true --buildtype=release build && ninja -C build
 ```
 
+If you want the mingw64 compiled version
+
+```sh
+cd ascii-platformer && meson -Duse_ncurses=false --cross=cross-mingw.txt -Duse_pdcurses=true --buildtype=release build && ninja -C build
+```
+
 You can then launch the game with the following command:
 
 ```
