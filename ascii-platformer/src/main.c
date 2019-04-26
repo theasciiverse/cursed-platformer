@@ -36,6 +36,10 @@ int quit = 0;
 int use_color = 1;
 
 int main(int argc, char **argv) {
+#ifdef USE_PDCURSES
+    setenv("PDC_FONT_SIZE", "22", 1);
+    setenv("PDC_FONT", "data/Px437_AmstradPC1512-2y.ttf", 1);
+#endif
     if (SDL_WasInit(SDL_INIT_EVENTS) == 0) {
         if (SDL_Init(SDL_INIT_EVENTS) != 0) {
             SDL_Log("Unable to initialize SDL events: %s", SDL_GetError());
