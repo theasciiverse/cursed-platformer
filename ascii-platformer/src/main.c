@@ -204,6 +204,8 @@ int main(int argc, char **argv) {
                 if (!level->enemies[i]->disabled) {
                     level->enemies[i]->processFunc(level->enemies[i], delta);
                 }
+            } else {
+                break;
             }
         }
 
