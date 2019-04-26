@@ -1,1 +1,1 @@
-PDC_FONT=data/Px437_AmstradPC1512-2y.ttf
+PDC_FONT=data/Px437_AmstradPC1512-2y.ttf platformer_game_pdcurses.exe
