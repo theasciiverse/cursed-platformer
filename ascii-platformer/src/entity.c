@@ -107,9 +107,10 @@ void processMessage(struct Entity* message, double delta) {
     struct Message* message_data = (struct Message*) message->internal_data;
 
     if (!message_data->read && x == px && y == py) {
-        message->level->player->x_vel = 0;
-        message->level->player->y_vel = 0;
-        showMessage(message_data->who, message_data->msg);
+        if (showMessage(message_data->who, message_data->msg)) {
+            message->level->player->x_vel = 0;
+            message->level->player->y_vel = 0;
+        }
         message_data->read = true;
         message->disabled = true;
         message->sprite = '!';

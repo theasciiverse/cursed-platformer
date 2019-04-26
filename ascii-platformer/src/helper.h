@@ -13,7 +13,7 @@
 #define DEAD 9
 #define GARBAGE 127
 
-void showMessage(char* who, char* text);
+int showMessage(char* who, char* text);
 
 void initHelp(WINDOW* mainwin);
 

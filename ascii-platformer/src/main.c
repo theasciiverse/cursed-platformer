@@ -235,11 +235,14 @@ void process(double delta, chtype input, SDL_Event ev) {
             werase(mainwin);
             player.state = WALKING;
             break;
+        case 'q':
+            quit = 1;
+            break;
         case KEY_F(8):
             debug = !debug;
             werase(infowin);
             break;
-        case 'q':
+        case 'm':
             toggleMusic();
             break;
         case 'c':
@@ -247,38 +250,40 @@ void process(double delta, chtype input, SDL_Event ev) {
     }
 
     Uint8 btn;
+    SDL_Keycode key;
 
-    while (SDL_PollEvent(&ev)) {
-        if (ev.type == SDL_QUIT) {
-            quit = 1;
-            return;
-        } else if (ev.type == SDL_CONTROLLERBUTTONDOWN) {
+    SDL_PumpEvents();
+    while (SDL_PeepEvents(&ev, 1, SDL_GETEVENT, SDL_KEYDOWN, SDL_CONTROLLERBUTTONUP)) {
+        if (ev.type == SDL_CONTROLLERBUTTONDOWN || ev.type == SDL_KEYDOWN) {
             btn = ev.cbutton.button;
-            if (btn == SDL_CONTROLLER_BUTTON_Y) {
+            key = ev.key.keysym.sym;
+            if (key == SDLK_q) {
+                quit = 1;
+            } else if (btn == SDL_CONTROLLER_BUTTON_Y || key == SDLK_r) {
                 switchLevel(level->name, &player);
                 werase(mainwin);
                 player.state = WALKING;
-                break;
-            } else if (btn == SDL_CONTROLLER_BUTTON_BACK) {
+            } else if (btn == SDL_CONTROLLER_BUTTON_BACK || key == SDLK_c) {
                 use_color = (use_color == 1) ? 0 : 1;
             } else if (player.state != DEAD) {
-                if (btn == SDL_CONTROLLER_BUTTON_A) {
+                if (btn == SDL_CONTROLLER_BUTTON_A || key == SDLK_SPACE || key == SDLK_UP) {
                     if (player.state == WALKING) {
                         playSound(SND_JUMP);
                         player.y_vel = -8;
                         player.state = AIRBORNE;
                     }
                 }
-                if (btn == SDL_CONTROLLER_BUTTON_DPAD_LEFT) {
+                if (btn == SDL_CONTROLLER_BUTTON_DPAD_LEFT || key == SDLK_LEFT) {
                     player.x_vel = -8;
-                } else if (btn == SDL_CONTROLLER_BUTTON_DPAD_RIGHT) {
+                } else if (btn == SDL_CONTROLLER_BUTTON_DPAD_RIGHT || key == SDLK_RIGHT) {
                     player.x_vel = 8;
                 }
             }
-        } else if (ev.type == SDL_CONTROLLERBUTTONUP && player.state != DEAD) {
+        } else if ((ev.type == SDL_CONTROLLERBUTTONUP || ev.type == SDL_KEYUP) && player.state != DEAD) {
             btn = ev.cbutton.button;
-            if ((btn == SDL_CONTROLLER_BUTTON_DPAD_LEFT && player.x_vel < 0) ||
-                (btn == SDL_CONTROLLER_BUTTON_DPAD_RIGHT && player.x_vel > 0)) {
+            key = ev.key.keysym.sym;
+            if (((btn == SDL_CONTROLLER_BUTTON_DPAD_LEFT || key == SDLK_LEFT) && player.x_vel < 0) ||
+                ((btn == SDL_CONTROLLER_BUTTON_DPAD_RIGHT || key == SDLK_RIGHT) && player.x_vel > 0)) {
                 player.x_vel = 0;
             }
         }
@@ -288,8 +293,6 @@ void process(double delta, chtype input, SDL_Event ev) {
         return;
 
     switch(input) {
-        case ERR:
-            break;
         case KEY_SPACEBAR:
         case KEY_UP:
             if (player.state == WALKING) {
