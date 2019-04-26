@@ -1,0 +1,17 @@
+[binaries]
+c = ['x86_64-w64-mingw32-cc']
+cpp = ['x86_64-w64-mingw32-c++']
+ar = 'x86_64-w64-mingw32-ar'
+strip = 'x86_64-w64-mingw32-strip'
+#sdl2-config= '/usr/x86_64-w64-mingw32/bin/sdl2-config'
+pkgconfig = '/usr/bin/x86_64-w64-mingw32-pkg-config'
+
+[properties]
+#c_args = [''-nostdlib']
+#cpp_args = ['-DARMR5', '-mcpu=cortex-r5', '-mfloat-abi=softfp', '-mfpu=vfpv3-d16', '-nostdlib']
+
+[host_machine]
+system = 'windows'
+cpu_family = 'x86'
+cpu = 'x86_64'
+endian = 'little'

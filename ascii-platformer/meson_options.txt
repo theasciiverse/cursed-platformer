@@ -1,1 +1,2 @@
 option('use_pdcurses', type : 'boolean', value : false)
+option('use_ncurses', type : 'boolean', value : true)

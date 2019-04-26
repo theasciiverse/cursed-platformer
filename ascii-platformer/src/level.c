@@ -18,14 +18,12 @@ struct Metadata* readMetadata(struct Level* level, char* path) {
     struct Metadata* metadata = malloc(sizeof(struct Metadata));
 
     while (!feof(fp)) {
-        char  *command = NULL;
-        size_t n = 0;
-        getline(&command, &n, fp);
-        if(n) {
-            processMetaDataLine(command, metadata, level);
-        }
-        if(command) {
-            free(command);
+        char command[100];
+        char* res;
+        size_t n = sizeof(command);
+        if((res = fgets(command, n, fp)) != NULL)
+        {
+            processMetaDataLine(res, metadata, level);
         }
     }
 
