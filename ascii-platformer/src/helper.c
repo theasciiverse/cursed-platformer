@@ -40,10 +40,10 @@ int showMessage(char *who, char *text) {
     WINDOW *win;
     char *token;
     int i = 1;
-    char str[400];
-    strncpy(str, text, 400);
+    char str[341];
+    strncpy(str, text, 341);
 
-    win = derwin(mainwin, 12, 60, 5, 7);
+    win = derwin(mainwin, 12, 60, 5, 10);
     werase(win);
 
     if (strlen(who) > 0) {
@@ -53,7 +53,7 @@ int showMessage(char *who, char *text) {
 
     token = strtok(str, "\\");
     while (token != NULL) {
-        mvwaddnstr(win, i, 2, token, 54);
+        mvwaddnstr(win, i, 2, token, 56);
         token = strtok(NULL, "\\");
         i++;
     }

@@ -18,7 +18,7 @@ struct Metadata* readMetadata(struct Level* level, char* path) {
     struct Metadata* metadata = malloc(sizeof(struct Metadata));
 
     while (!feof(fp)) {
-        char command[100];
+        char command[370];
         char* res;
         size_t n = sizeof(command);
         if((res = fgets(command, n, fp)) != NULL)
@@ -170,10 +170,10 @@ void processMetaDataLine(char const * line, struct Metadata* metadata, struct Le
             int x, y;
             int readable;
             char who[40];
-            char msg[250];
+            char msg[341];
             command += 8;
 
-            int bytesread = sscanf(command, "%d %d %d %s %[^\n]\n", &x, &y, &readable, who, msg);
+            int bytesread = sscanf(command, "%d %d %d %s %341[^\n]\n", &x, &y, &readable, who, msg);
 
             struct Entity* message = createMessage(level, x, y, who, msg, readable);
             addEntity(level, message);
