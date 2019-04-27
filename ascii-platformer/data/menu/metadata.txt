@@ -1,4 +1,4 @@
-title 0: Ye Olde Main Menu
+title 0: Ye olde Main Menu               [Q] Quit  [C] Color  [M] Music
 size 80 24
 start 61 19
 
