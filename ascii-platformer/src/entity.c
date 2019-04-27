@@ -43,7 +43,9 @@ void processPhysics(struct Entity* entity, double delta) {
 
     char below = map->data[new_y + 1][new_x];
     if (below == '^') {
-        playSound(SND_DEATH);
+        if (entity->sprite != 'V') {
+            playSound(SND_DEATH);
+        }
         entity->state = DEAD;
         entity->x = (float) new_x;
         entity->y = (float) new_y;
