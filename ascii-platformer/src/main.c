@@ -265,6 +265,8 @@ void process(double delta, chtype input, SDL_Event ev) {
                 player.state = WALKING;
             } else if (key == SDLK_c) {
                 use_color = (use_color == 1) ? 0 : 1;
+            } else if (key == SDLK_m) {
+                toggleMusic();
             } else if (key == SDLK_F8) {
                 debug = !debug;
                 werase(infowin);
