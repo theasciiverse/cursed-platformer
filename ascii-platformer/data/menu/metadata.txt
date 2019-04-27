@@ -4,8 +4,7 @@ start 61 19
 
 muncher 14 22
 muncher 63 22
+continue 60 19
 goal 62 19 level0
-continue 62 19
-goal 60 19 level0
 
 end

@@ -329,44 +329,17 @@ void processTrampoline(struct Entity* trampoline, double delta) {
     }
 }
 
-void processContinue(struct Entity* trampoline, double delta);
-
 struct Entity* createContinue(struct Level* level, double x, double y) {
-    struct Entity* cont = createEntity();
-
-    cont->x = x;
-    cont->y = y;
-    cont->width = 1;
-    cont->x_vel = 0;
-    cont->sprite = 'Z';
-    cont->state = IDLE;
-    cont->disabled = false;
-    cont->hidden = true;
-    cont->internal_data = malloc(sizeof(struct Teleport));
-
-    cont->level = level;
-
-    cont->processFunc = &processContinue;
-    return cont;
-}
-
-void processContinue(struct Entity* cont, double delta) {
-    int x = (int) cont->x;
-    int y = (int) cont->y;
-
-    int px = (int) cont->level->player->x;
-    int py = (int) cont->level->player->y;
-
-    if (px == x && py == y ) {
-        if (access("autosave.sav", F_OK) != -1) {
-            FILE* fp = fopen("autosave.sav", "r");
-            char level_name[80];
-            fscanf(fp, "%s", level_name);
-            fclose(fp);
-
-            switchLevel(level_name, cont->level->player); 
-        }
+    char level_name[80];
+    if (access("autosave.sav", F_OK) != -1) {
+        FILE* fp = fopen("autosave.sav", "r");
+        fscanf(fp, "%s", level_name);
+        fclose(fp);
+    } else {
+        strncpy(level_name, "level0", 7);
     }
+
+    return createGoal(level, x, y, level_name);
 }
 
 void processGoal(struct Entity* goal, double delta);
