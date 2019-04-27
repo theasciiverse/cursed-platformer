@@ -263,8 +263,11 @@ void process(double delta, chtype input, SDL_Event ev) {
                 switchLevel(level->name, &player);
                 werase(mainwin);
                 player.state = WALKING;
-            } else if (btn == SDL_CONTROLLER_BUTTON_BACK || key == SDLK_c) {
+            } else if (key == SDLK_c) {
                 use_color = (use_color == 1) ? 0 : 1;
+            } else if (key == SDLK_F8) {
+                debug = !debug;
+                werase(infowin);
             } else if (player.state != DEAD) {
                 if (btn == SDL_CONTROLLER_BUTTON_A || key == SDLK_SPACE || key == SDLK_UP) {
                     if (player.state == WALKING) {
