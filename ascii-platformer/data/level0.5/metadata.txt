@@ -1,0 +1,11 @@
+title 0.5: The drawbridge of exposition
+size 80 24
+start 1 14
+message 12 14 0 @ Ah. Such a perfect night for an adventure.\ \Pharaoh Tuthanascii might be a madman and a blackguard,\but he sure picked a pleasant evening for it.
+message 37 16 0 @ "Pharaoh Whatanascii?" I hear you ask.\ \Long story short: A well-tanned oaf with delusions of\grandeur and a veritable army of mummies stormed\Queen $'s banquet and disappeared into the night with\young princess &. It falls to me, the resident hero,\to vanquish this horde of hoodlums and bring her home.
+message 57 17 0 Signpost \ \<---- Castle                             Adventure ---->\ \ \Only one way to go.
+goal 78 17 level1
+goal 78 16 level1
+goal 78 15 level1
+goal 78 14 level1
+end

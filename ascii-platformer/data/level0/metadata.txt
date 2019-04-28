@@ -10,5 +10,5 @@ button 53 22 62 14
 message 51 22 0 @ The _ block is a switch.\ \It opens doors or pathways around the level.
 message 61 22 0 @ You can climb up the " blocks by jumping.\ \Did I already mention how much I enjoy jumping?
 message 74 22 0 @ That block to my right is the level exit.\ \That's where you should direct me when you want to\advance to the next level.
-goal 78 22 level1
+goal 78 22 level0.5
 end
