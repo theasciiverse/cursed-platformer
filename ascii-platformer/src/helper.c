@@ -10,8 +10,8 @@
 
 WINDOW* mainwin;
 
-void initHelp(WINDOW* mainwin) {
-    mainwin = mainwin;
+void initHelp(WINDOW* _mainwin) {
+    mainwin = _mainwin;
 }
 
 WINDOW* getMainWin() {
