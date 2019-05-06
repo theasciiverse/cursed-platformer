@@ -29,6 +29,7 @@ bool initAudio(void) {
     sounds[2] = Mix_LoadWAV("data/audio/goal.ogg");
     sounds[3] = Mix_LoadWAV("data/audio/rubble.ogg");
     sounds[4] = Mix_LoadWAV("data/audio/pressureplate.ogg");
+    sounds[5] = Mix_LoadWAV("data/audio/sproing.ogg");
 
     if (mus == NULL || sounds[0] == NULL || sounds[1] == NULL || sounds[2] == NULL) {
         SDL_Log( "Failed to load music or sounds effects!\nSDL_mixer Error: %s\n", Mix_GetError());

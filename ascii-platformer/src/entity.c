@@ -323,8 +323,10 @@ void processTrampoline(struct Entity* trampoline, double delta) {
     double py = trampoline->level->player->y;
 
     if (px >= x && px < x + trampoline->width && py > y - 0.5 && py < y) {
-        if (trampoline->level->player->y_vel > 4)
+        if (trampoline->level->player->y_vel > 4) {
             trampoline->level->player->y_vel *= -0.9;
+            playSound(SND_TRAMPOLINE);
+        }
         trampoline->sprite = 'z';
     } else {
         trampoline->sprite = 'Z';
