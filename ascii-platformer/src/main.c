@@ -165,7 +165,6 @@ int main(int argc, char **argv) {
 #endif
             delta += slack;
         }
-
         last = now;
 
         mvwaddstr(infowin, 0, 0, "LEVEL ");
@@ -177,11 +176,22 @@ int main(int argc, char **argv) {
         }
         wrefresh(infowin);
 
-        for (int i = 0; i < MAX_ENTITIES; i++) {
+        int stop = 0;
+        for (int i = 0; i < MAX_ENTITIES && !stop; i++) {
             if (level->enemies[i] != NULL) {
                 if (!level->enemies[i]->disabled) {
-                    if(level->enemies[i]->processFunc(level->enemies[i], delta))
-                        break;
+                    switch(level->enemies[i]->processFunc(level->enemies[i], delta)) {
+                        case the_level_changed : 
+                            stop = 1;
+                            break;
+                        case pauze_timing:
+                            last = clock();
+                            delta = 0;
+                            break;
+                        case nothing_to_report :
+                        default :
+                            break;
+                    }
                 }
             } else {
                 break;
@@ -341,6 +351,7 @@ int initSDL() {
             }
         }
     }
+    return 0;
 }
 
 void deinitSDL() {
