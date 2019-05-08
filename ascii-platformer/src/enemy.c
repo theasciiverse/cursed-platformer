@@ -9,7 +9,7 @@
 #include "sound.h"
 
 
-int processMuncher(struct Entity* enemy, double delta);
+enum PF_return_type processMuncher(struct Entity* enemy, double delta);
 
 struct Entity* createMuncher(struct Level* level, double x, double y) {
     createObjOf(Muncher, muncher, t_muncher)
@@ -32,7 +32,7 @@ struct Entity* createMuncher(struct Level* level, double x, double y) {
     return EntityCast(muncher);
 }
 
-int processMuncher(struct Entity* _muncher, double delta) {
+enum PF_return_type processMuncher(struct Entity* _muncher, double delta) {
     struct Muncher* muncher = (struct Muncher*) _muncher;
 
     muncher->sprite_timer += delta;
@@ -85,11 +85,11 @@ int processMuncher(struct Entity* _muncher, double delta) {
         BaseOf(muncher).x_vel *= -1;
 
     processPhysics(EntityCast(muncher), delta);
-    return 0;
+    return nothing_to_report;
 }
 
 
-int processSpike(struct Entity* enemy, double delta);
+enum PF_return_type processSpike(struct Entity* enemy, double delta);
 
 struct Entity* createSpike(struct Level* level, double x, double y) {
     createObjOf(Spike ,spike, t_spike);
@@ -111,9 +111,9 @@ struct Entity* createSpike(struct Level* level, double x, double y) {
     return EntityCast(spike);
 }
 
-int processSpike(struct Entity* _spike, double delta) {
+enum PF_return_type processSpike(struct Entity* _spike, double delta) {
     if (_spike->state == GARBAGE)
-        return 0;
+        return nothing_to_report;
     struct Spike* spike = (struct Spike*)_spike;
     int x = (int) BaseOf(spike).x;
     int y = (int) BaseOf(spike).y;
@@ -143,10 +143,10 @@ int processSpike(struct Entity* _spike, double delta) {
         BaseOf(spike).sprite = '*';
         BaseOf(spike).state = GARBAGE;
     }
-    return 0;
+    return nothing_to_report;
 }
 
-int processBat(struct Entity* enemy, double delta);
+enum PF_return_type processBat(struct Entity* enemy, double delta);
 
 struct Entity* createBat(struct Level* level, double x, double y) {
     createObjOf(Bat, bat, t_bat);
@@ -170,7 +170,7 @@ struct Entity* createBat(struct Level* level, double x, double y) {
     return EntityCast(bat);
 }
 
-int processBat(struct Entity* _bat, double delta) {
+enum PF_return_type processBat(struct Entity* _bat, double delta) {
     struct Bat* bat = (struct Bat*) _bat;
 
     bat->sprite_timer += delta;
@@ -219,5 +219,5 @@ int processBat(struct Entity* _bat, double delta) {
 
     processPhysics(EntityCast(bat), delta);
     BaseOf(bat).y_vel = 0.0;
-    return 0;
+    return nothing_to_report;
 }

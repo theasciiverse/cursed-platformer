@@ -18,6 +18,14 @@ enum E_type {
     t_cont = 'C'
 };
 
+enum PF_return_type {
+    nothing_to_report = 0,
+    the_level_changed = 1,
+    pauze_timing = 2
+};
+
+    
+
 struct Entity {
     enum E_type type;
     struct Level* level;
@@ -32,7 +40,7 @@ struct Entity {
      * if return != 0 -> stop further processing of entities!!
      * triggered level changes cause issues otherwise)
      */
-    int (*processFunc)(struct Entity*, double delta);
+    enum PF_return_type (*processFunc)(struct Entity*, double delta);
 };
 #define BaseOf(A) (A->base)
 #define BasePtr(A) (A->base)

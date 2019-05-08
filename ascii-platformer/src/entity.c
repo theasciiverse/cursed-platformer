@@ -71,7 +71,7 @@ void destroyEntity(struct Entity* entity) {
     free(entity);
 }
 
-int processMessage(struct Entity* message, double delta);
+enum PF_return_type processMessage(struct Entity* message, double delta);
 
 struct Entity* createMessage(struct Level* level, double x, double y, char* who, char* msg, int read) {
     createObjOf(Message, message, t_message);
@@ -95,7 +95,7 @@ struct Entity* createMessage(struct Level* level, double x, double y, char* who,
     return EntityCast(message);
 }
 
-int processMessage(struct Entity* _message, double delta) {
+enum PF_return_type processMessage(struct Entity* _message, double delta) {
     struct Message* message = (struct Message*) _message;
     int x = (int) BaseOf(message).x;
     int y = (int) BaseOf(message).y;
@@ -113,11 +113,12 @@ int processMessage(struct Entity* _message, double delta) {
         message_data->read = true;
         BaseOf(message).disabled = true;
         BaseOf(message).sprite = '!';
+        return pauze_timing;
     }
-    return 0;
+    return nothing_to_report;
 }
 
-int processButton(struct Entity* message, double delta);
+enum PF_return_type processButton(struct Entity* message, double delta);
 
 struct Entity* createButton(struct Level* level, double x, double y, double tx, double ty) {
     createObjOf(Button, button, t_button);
@@ -139,7 +140,7 @@ struct Entity* createButton(struct Level* level, double x, double y, double tx, 
     return EntityCast(button);
 }
 
-int processButton(struct Entity* _button, double delta) {
+enum PF_return_type processButton(struct Entity* _button, double delta) {
     struct Button* button = (struct Button*) _button;
     int x = (int) BaseOf(button).x;
     int y = (int) BaseOf(button).y;
@@ -157,10 +158,10 @@ int processButton(struct Entity* _button, double delta) {
         BaseOf(button).level->map->data[ty][tx] = ' ';
         BaseOf(button).disabled = true;
     }
-    return 0;
+    return nothing_to_report;
 }
 
-int processTeleport(struct Entity* message, double delta);
+enum PF_return_type processTeleport(struct Entity* message, double delta);
 
 struct Entity* createTeleport(struct Level* level, double x, double y, double tx, double ty) {
     createObjOf(Teleport, teleport, t_teleport);
@@ -182,7 +183,7 @@ struct Entity* createTeleport(struct Level* level, double x, double y, double tx
     return EntityCast(teleport);
 }
 
-int processTeleport(struct Entity* _teleport, double delta) {
+enum PF_return_type processTeleport(struct Entity* _teleport, double delta) {
     struct Teleport* teleport = (struct Teleport*) _teleport;
     int x = (int) BaseOf(teleport).x;
     int y = (int) BaseOf(teleport).y;
@@ -199,10 +200,10 @@ int processTeleport(struct Entity* _teleport, double delta) {
         BaseOf(teleport).level->player->x = tx;
         BaseOf(teleport).level->player->y = ty;
     }
-    return 0;
+    return nothing_to_report;
 }
 
-int processPlatform(struct Entity* platform, double delta);
+enum PF_return_type processPlatform(struct Entity* platform, double delta);
 
 struct Entity* createPlatform(struct Level* level, int sx, int sy, int tx, int ty, int width) {
     createObjOf(Platform, platform, t_platform);
@@ -234,7 +235,7 @@ struct Entity* createPlatform(struct Level* level, int sx, int sy, int tx, int t
     return EntityCast(platform);
 }
 
-int processPlatform(struct Entity* _platform, double delta) {
+enum PF_return_type processPlatform(struct Entity* _platform, double delta) {
     struct Platform* platform = (struct Platform*) _platform;
     int x = (int) BaseOf(platform).x;
     int y = (int) BaseOf(platform).y;
@@ -286,10 +287,10 @@ int processPlatform(struct Entity* _platform, double delta) {
         BaseOf(platform).level->player->y = BaseOf(platform).y - 1;
         BaseOf(platform).level->player->x += BaseOf(platform).x_vel * delta;
     }
-    return 0;
+    return nothing_to_report;
 }
 
-int processTrampoline(struct Entity* trampoline, double delta);
+enum PF_return_type processTrampoline(struct Entity* trampoline, double delta);
 
 struct Entity* createTrampoline(struct Level* level, double x, double y, int width) {
     createObjOf(Trampoline, trampoline, t_trampoline);
@@ -309,7 +310,7 @@ struct Entity* createTrampoline(struct Level* level, double x, double y, int wid
     return EntityCast(trampoline);
 }
 
-int processTrampoline(struct Entity* _trampoline, double delta) {
+enum PF_return_type processTrampoline(struct Entity* _trampoline, double delta) {
     struct Trampoline* trampoline = (struct Trampoline*) _trampoline;
     int x = (int) BaseOf(trampoline).x;
     double y = BaseOf(trampoline).y;
@@ -324,10 +325,10 @@ int processTrampoline(struct Entity* _trampoline, double delta) {
     } else {
         BaseOf(trampoline).sprite = 'Z';
     }
-    return 0;
+    return nothing_to_report;
 }
 
-int processContinue(struct Entity* trampoline, double delta);
+enum PF_return_type processContinue(struct Entity* trampoline, double delta);
 struct Entity* createContinue(struct Level* level, double x, double y) {
     createObjOf(Continue, cont, t_cont);
 
@@ -345,7 +346,7 @@ struct Entity* createContinue(struct Level* level, double x, double y) {
     return EntityCast(cont);
 }
 
-int processContinue(struct Entity* _cont, double delta) {
+enum PF_return_type processContinue(struct Entity* _cont, double delta) {
     struct Continue* cont = (struct Continue*) _cont;
     int x = (int) BaseOf(cont).x;
     int y = (int) BaseOf(cont).y;
@@ -361,13 +362,13 @@ int processContinue(struct Entity* _cont, double delta) {
             fclose(fp);
 
             switchLevel(level_name, BaseOf(cont).level->player); 
-            return 1;
+            return the_level_changed;
         }
     }
-    return 0;
+    return nothing_to_report;
 }
 
-int processGoal(struct Entity* goal, double delta);
+enum PF_return_type processGoal(struct Entity* goal, double delta);
 
 struct Entity* createGoal(struct Level* level, double x, double y, char* next_level) {
     createObjOf(Goal, goal, t_goal);
@@ -389,7 +390,7 @@ struct Entity* createGoal(struct Level* level, double x, double y, char* next_le
     return EntityCast(goal);
 }
 
-int processGoal(struct Entity* _goal, double delta) {
+enum PF_return_type processGoal(struct Entity* _goal, double delta) {
     struct Goal* goal = (struct Goal*) _goal;
     int x = (int) BaseOf(goal).x;
     int y = (int) BaseOf(goal).y;
@@ -405,7 +406,7 @@ int processGoal(struct Entity* _goal, double delta) {
         fclose(fp);
 
         switchLevel(goal->next_level, BaseOf(goal).level->player); 
-        return 1;
+        return the_level_changed;
     }
-    return 0;
+    return nothing_to_report;
 }
