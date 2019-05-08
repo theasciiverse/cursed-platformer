@@ -59,7 +59,7 @@ lib = static_library('pdcurses',
 
 dependencies : [sdl2, sdl2_ttf])
 
-pdc_includes = include_directories('..')
+pdc_includes = include_directories('.')
 
 pdcurses = declare_dependency(link_with : lib,
   include_directories : pdc_includes)

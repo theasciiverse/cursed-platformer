@@ -3,9 +3,6 @@
 
 #include <stdbool.h>
 
-#include <SDL.h>
-#include <SDL_mixer.h>
-
 #define SND_JUMP 0
 #define SND_DEATH 1
 #define SND_GOAL 2

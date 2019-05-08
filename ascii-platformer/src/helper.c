@@ -1,12 +1,12 @@
-#ifndef USE_PDCURSES
 #include <curses.h>
-#else 
-#include <PDCurses/curses.h>
-#endif
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#ifndef NOSDL
 #include <SDL.h>
+#else
+#include <stddef.h>
+#endif
 
 WINDOW* mainwin;
 
@@ -36,12 +36,15 @@ void setCurrentLevel(struct Level* new_level) {
  * return   int     1 if player should stop moving
  **/
 int showMessage(char *who, char *text) {
+    int stop = 0;
+#ifndef NOSDL
     SDL_Event ev;
+#endif
     WINDOW *win;
     char *token;
     int i = 1;
-    char str[341];
-    strncpy(str, text, 341);
+    char str[400];
+    strncpy(str, text, 400);
 
     win = derwin(mainwin, 12, 60, 5, 10);
     werase(win);
@@ -64,9 +67,9 @@ int showMessage(char *who, char *text) {
     wrefresh(mainwin);
     wrefresh(win);
 
-    int stop = 0;
 
     while (true) {
+#ifndef NOSDL
         SDL_PumpEvents();
         SDL_PeepEvents(&ev, 1, SDL_GETEVENT, SDL_KEYDOWN, SDL_CONTROLLERBUTTONDOWN);
         if (ev.type == SDL_KEYUP) {
@@ -80,6 +83,9 @@ int showMessage(char *who, char *text) {
             }
         }
         SDL_Delay(33);
+#else 
+        if (getch() != ERR) break;
+#endif
     }
     delwin(win);
     return stop;
