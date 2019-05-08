@@ -1,14 +1,12 @@
-#ifndef USE_PDCURSES
 #include <curses.h>
-#else 
-#include <PDCurses/curses.h>
-#endif
 #include <stdio.h>
 #include <time.h>
 #include <stdlib.h>
 #include <unistd.h>
 
+#ifndef NOSDL
 #include <SDL.h>
+#endif
 
 #include "level.h"
 #include "map.h"
@@ -26,9 +24,14 @@ struct Entity player;
 WINDOW *infowin;
 WINDOW *mainwin;
 
+#ifndef NOSDL
 void process(double delta, chtype input, SDL_Event ev);
-
+int initSDL();
+void deinitSDL();
 SDL_GameController* gamepad = NULL;
+#else 
+void process(double delta, chtype input);
+#endif 
 
 int debug = 0;
 int quit = 0;
@@ -40,46 +43,10 @@ int main(int argc, char **argv) {
     SDL_setenv("PDC_FONT_SIZE", "22", 1);
     SDL_setenv("PDC_FONT", "data/Px437_AmstradPC1512-2y.ttf", 1);
 #endif
-    if (SDL_WasInit(SDL_INIT_EVENTS) == 0) {
-        if (SDL_Init(SDL_INIT_EVENTS) != 0) {
-            SDL_Log("Unable to initialize SDL events: %s", SDL_GetError());
-            return 1;
-        }
-    }
-
-    if (SDL_WasInit(SDL_INIT_GAMECONTROLLER) == 0) {
-        if (SDL_InitSubSystem(SDL_INIT_GAMECONTROLLER) != 0) {
-            SDL_Log("Unable to initialize SDL game controller: %s", SDL_GetError());
-            return 1;
-        }
-    }
-
-    SDL_GameController *gamepad = NULL;
-
-    for (int i = 0; i < SDL_NumJoysticks(); ++i) {
-        if (SDL_IsGameController(i)) {
-            gamepad = SDL_GameControllerOpen(i);
-            if (gamepad != NULL) {
-                SDL_Log("Gamepad Found: %s\n", SDL_GameControllerNameForIndex(i));
-                break;
-            } else {
-                SDL_Log("Could not open gamepad %i: %s\n", i, SDL_GetError());
-            }
-        }
-    }
-
+#ifndef NOSDL
+    initSDL();
     SDL_Event ev;
-
-    initHelp(mainwin);
-
-    if (argc > 1)
-        setCurrentLevel(loadLevel(argv[1], &player));
-    else
-        setCurrentLevel(loadLevel("menu", &player));
-
-    initAudio();
-    
-    //setCurrentLevel(level->name);
+#endif
 
     initscr();
     start_color();
@@ -101,8 +68,15 @@ int main(int argc, char **argv) {
     infowin = newwin(1, 80, 0, 0);
     werase(infowin);
     mainwin = newwin(24, 80, 1, 0);
+    initHelp(mainwin);
     werase(mainwin);
 
+    if (argc > 1) {
+        setCurrentLevel(loadLevel(argv[1], &player));
+    } else {
+        setCurrentLevel(loadLevel("menu", &player));
+    }
+    initAudio();
     chtype input;
 
     clock_t now = 0;
@@ -112,9 +86,9 @@ int main(int argc, char **argv) {
     time_t lastsec = sec;
     int fps = 0;
     int frames = 0;
-
-    double delta = 0;
     double slack = 0;
+    double delta = 0;
+
 
     char* debugstr = (char *)malloc(44);
 
@@ -184,7 +158,11 @@ int main(int argc, char **argv) {
         delta = ((double) (now - last) / CLOCKS_PER_SEC);
         slack = (1.0 / 60) - delta;
         if (slack > 0) {
+#ifndef NOSDL
             SDL_Delay((long) (slack * 1000));
+#else
+            usleep(slack * 1000000);
+#endif
             delta += slack;
         }
 
@@ -202,29 +180,38 @@ int main(int argc, char **argv) {
         for (int i = 0; i < MAX_ENTITIES; i++) {
             if (level->enemies[i] != NULL) {
                 if (!level->enemies[i]->disabled) {
-                    level->enemies[i]->processFunc(level->enemies[i], delta);
+                    if(level->enemies[i]->processFunc(level->enemies[i], delta))
+                        break;
                 }
             } else {
                 break;
             }
         }
-
+#ifndef NOSDL
         process(delta, input, ev);
+#else 
+        process(delta, input);
+#endif
         wrefresh(mainwin);
     }
 
+    delwin(mainwin);
+    delwin(infowin);
     free(debugstr);
     endwin();
 
-    if (gamepad != NULL)
-        SDL_GameControllerClose(gamepad);
-
-    SDL_Quit();
+#ifndef NOSDL
+    deinitSDL();
+#endif
 
     return 0;
 }
-
-void process(double delta, chtype input, SDL_Event ev) {
+#ifndef NOSDL
+void process(double delta, chtype input, SDL_Event ev) 
+#else
+void process(double delta, chtype input) 
+#endif
+{
     struct Level* level = getCurrentLevel();
 
     switch(input) {
@@ -249,6 +236,7 @@ void process(double delta, chtype input, SDL_Event ev) {
             use_color = (use_color == 1) ? 0 : 1;
     }
 
+#ifndef NOSDL
     Uint8 btn;
     SDL_Keycode key;
 
@@ -293,11 +281,14 @@ void process(double delta, chtype input, SDL_Event ev) {
             }
         }
     }
+#endif
 
     if (player.state == DEAD)
         return;
 
     switch(input) {
+        case ERR:
+            break;
         case KEY_SPACEBAR:
         case KEY_UP:
             if (player.state == WALKING) {
@@ -321,3 +312,40 @@ void process(double delta, chtype input, SDL_Event ev) {
 
     processPhysics(&player, delta);
 }
+#ifndef NOSDL
+int initSDL() {
+    if (SDL_WasInit(SDL_INIT_EVENTS) == 0) {
+        if (SDL_Init(SDL_INIT_EVENTS) != 0) {
+            SDL_Log("Unable to initialize SDL events: %s", SDL_GetError());
+            return 1;
+        }
+    }
+
+    if (SDL_WasInit(SDL_INIT_GAMECONTROLLER) == 0) {
+        if (SDL_InitSubSystem(SDL_INIT_GAMECONTROLLER) != 0) {
+            SDL_Log("Unable to initialize SDL game controller: %s", SDL_GetError());
+            return 1;
+        }
+    }
+
+    SDL_GameController *gamepad = NULL;
+
+    for (int i = 0; i < SDL_NumJoysticks(); ++i) {
+        if (SDL_IsGameController(i)) {
+            gamepad = SDL_GameControllerOpen(i);
+            if (gamepad != NULL) {
+                SDL_Log("Gamepad Found: %s\n", SDL_GameControllerNameForIndex(i));
+                break;
+            } else {
+                SDL_Log("Could not open gamepad %i: %s\n", i, SDL_GetError());
+            }
+        }
+    }
+}
+
+void deinitSDL() {
+    if (gamepad != NULL)
+        SDL_GameControllerClose(gamepad);
+    SDL_Quit();
+}
+#endif

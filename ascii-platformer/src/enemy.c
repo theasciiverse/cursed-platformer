@@ -1,212 +1,197 @@
 #include <stdlib.h>
 #include <math.h>
+#include <curses.h>
 
 #include "level.h"
 #include "map.h"
 #include "helper.h"
-#include "entity.h"
+#include "enemy.h"
 #include "sound.h"
 
-struct Muncher {
-    double sprite_timer;
-};
 
-void processMuncher(struct Entity* enemy, double delta);
+int processMuncher(struct Entity* enemy, double delta);
 
 struct Entity* createMuncher(struct Level* level, double x, double y) {
-    struct Entity* muncher = createEntity();
+    createObjOf(Muncher, muncher, t_muncher)
 
-    muncher->x = x;
-    muncher->y = y;
-    muncher->width = 1;
-    muncher->x_vel = -4;
-    muncher->sprite = '<';
-    muncher->color = 2;
-    muncher->state = WALKING;
-    muncher->disabled = false;
-    muncher->hidden = false;
-    muncher->internal_data = malloc(sizeof(struct Muncher));
+    BaseOf(muncher).type = t_muncher;
+    BaseOf(muncher).x = x;
+    BaseOf(muncher).y = y;
+    BaseOf(muncher).width = 1;
+    BaseOf(muncher).x_vel = -4;
+    BaseOf(muncher).sprite = '<';
+    BaseOf(muncher).color = 2;
+    BaseOf(muncher).state = WALKING;
+    BaseOf(muncher).disabled = false;
+    BaseOf(muncher).hidden = false;
+    BaseOf(muncher).level = level;
 
-    muncher->level = level;
+    muncher->sprite_timer = 0.0;
 
-    struct Muncher* muncher_data = (struct Muncher*) muncher->internal_data;
-
-    muncher_data->sprite_timer = 0.0;
-
-    muncher->processFunc = &processMuncher;
-    return muncher;
+    BaseOf(muncher).processFunc = &processMuncher;
+    return EntityCast(muncher);
 }
 
-void processMuncher(struct Entity* muncher, double delta) {
-    struct Muncher* muncher_data = (struct Muncher*) muncher->internal_data;
+int processMuncher(struct Entity* _muncher, double delta) {
+    struct Muncher* muncher = (struct Muncher*) _muncher;
 
-    muncher_data->sprite_timer += delta;
+    muncher->sprite_timer += delta;
 
-    if (muncher_data->sprite_timer > 0.5) {
-        if (muncher->sprite == '-')
-            muncher->sprite = '<';
+    if (muncher->sprite_timer > 0.5) {
+        if (BaseOf(muncher).sprite == '-')
+            BaseOf(muncher).sprite = '<';
         else
-            muncher->sprite = '-';
-        muncher_data->sprite_timer = 0.0;
+            BaseOf(muncher).sprite = '-';
+        muncher->sprite_timer = 0.0;
     }
 
-    if (muncher->x_vel < 0 && muncher->sprite != '-')
-        muncher->sprite = '>';
-    else if (muncher->sprite != '-')
-        muncher->sprite = '<';
+    if (BaseOf(muncher).x_vel < 0 && BaseOf(muncher).sprite != '-')
+        BaseOf(muncher).sprite = '>';
+    else if (BaseOf(muncher).sprite != '-')
+        BaseOf(muncher).sprite = '<';
 
-    int x = (int) muncher->x;
-    int y = (int) muncher->y;
+    int x = (int) BaseOf(muncher).x;
+    int y = (int) BaseOf(muncher).y;
 
-    if (muncher->level->player->state != DEAD) {
-        int px = (int) muncher->level->player->x;
-        int py = (int) muncher->level->player->y;
+    if (BaseOf(muncher).level->player->state != DEAD) {
+        int px = (int) BaseOf(muncher).level->player->x;
+        int py = (int) BaseOf(muncher).level->player->y;
 
         // Kill player on touch
         if (x == px && y == py) {
-            muncher->level->player->state = DEAD;
+            BaseOf(muncher).level->player->state = DEAD;
             playSound(SND_DEATH);
         }
     }
 
-    struct Map* map = muncher->level->map;
+    struct Map* map = BaseOf(muncher).level->map;
 
     char block_ahead;
 
-    if (muncher->x_vel < 0)
+    if (BaseOf(muncher).x_vel < 0)
         block_ahead = map->data[y][x - 1];
     else
         block_ahead = map->data[y][x + 1];
 
     if (block_ahead == '#' || block_ahead == '^')
-        muncher->x_vel *= -1;
+        BaseOf(muncher).x_vel *= -1;
 
-     if (muncher->x_vel < 0)
+     if (BaseOf(muncher).x_vel < 0)
         block_ahead = map->data[y + 1][x - 1];
     else
         block_ahead = map->data[y + 1][x + 1];
 
     if (block_ahead == ' ' || block_ahead == '^')
-        muncher->x_vel *= -1;
+        BaseOf(muncher).x_vel *= -1;
 
-    processPhysics(muncher, delta);
+    processPhysics(EntityCast(muncher), delta);
+    return 0;
 }
 
-struct Spike {
 
-};
-
-void processSpike(struct Entity* enemy, double delta);
+int processSpike(struct Entity* enemy, double delta);
 
 struct Entity* createSpike(struct Level* level, double x, double y) {
-    struct Entity* spike = createEntity();
+    createObjOf(Spike ,spike, t_spike);
 
-    spike->x = x;
-    spike->y = y;
-    spike->width = 1;
-    spike->x_vel = 0;
-    spike->y_vel = 0;
-    spike->sprite = 'V';
-    spike->color = 7;
-    spike->state = IDLE;
-    spike->disabled = false;
-    spike->hidden = false;
-    spike->internal_data = malloc(sizeof(struct Spike));
+    BaseOf(spike).type = t_spike;
+    BaseOf(spike).x = x;
+    BaseOf(spike).y = y;
+    BaseOf(spike).width = 1;
+    BaseOf(spike).x_vel = 0;
+    BaseOf(spike).y_vel = 0;
+    BaseOf(spike).sprite = 'V';
+    BaseOf(spike).color = 7;
+    BaseOf(spike).state = IDLE;
+    BaseOf(spike).disabled = false;
+    BaseOf(spike).hidden = false;
+    BaseOf(spike).level = level;
 
-    spike->level = level;
-
-    struct Spike* spike_data = (struct Spike*) spike->internal_data;
-
-
-    spike->processFunc = &processSpike;
-    return spike;
+    BaseOf(spike).processFunc = &processSpike;
+    return EntityCast(spike);
 }
 
-void processSpike(struct Entity* spike, double delta) {
-    if (spike->state == GARBAGE)
-        return;
-    int x = (int) spike->x;
-    int y = (int) spike->y;
+int processSpike(struct Entity* _spike, double delta) {
+    if (_spike->state == GARBAGE)
+        return 0;
+    struct Spike* spike = (struct Spike*)_spike;
+    int x = (int) BaseOf(spike).x;
+    int y = (int) BaseOf(spike).y;
 
-    int px = (int) spike->level->player->x;
-    int py = (int) spike->level->player->y;
+    int px = (int) BaseOf(spike).level->player->x;
+    int py = (int) BaseOf(spike).level->player->y;
 
-    if (spike->state == IDLE) {
+    if (BaseOf(spike).state == IDLE) {
         if (x == px && y < py) {
             while (y < py) {
-                if (!isPassable(spike->level->map->data[y][x]))
+                if (!isPassable(BaseOf(spike).level->map->data[y][x]))
                     break;
                 y++;
 
                 if (y == py)
-                    spike->state = AIRBORNE;
+                    BaseOf(spike).state = AIRBORNE;
             }
         }
-    } else if (spike->state == AIRBORNE) {
-        if (x == px && y == py - 1 && spike->level->player->state != DEAD) {
-            spike->level->player->state = DEAD;
+    } else if (BaseOf(spike).state == AIRBORNE) {
+        if (x == px && y == py - 1 && BaseOf(spike).level->player->state != DEAD) {
+            BaseOf(spike).level->player->state = DEAD;
             playSound(SND_DEATH);
         }
-        processPhysics(spike, delta);
-    } else if (spike->state != GARBAGE) {
+        processPhysics(EntityCast(spike), delta);
+    } else if (BaseOf(spike).state != GARBAGE) {
         playSound(SND_RUBBLE);
-        spike->sprite = '*';
-        spike->state = GARBAGE;
+        BaseOf(spike).sprite = '*';
+        BaseOf(spike).state = GARBAGE;
     }
+    return 0;
 }
 
-struct Bat {
-    double sprite_timer;
-};
-
-void processBat(struct Entity* enemy, double delta);
+int processBat(struct Entity* enemy, double delta);
 
 struct Entity* createBat(struct Level* level, double x, double y) {
-    struct Entity* bat = createEntity();
+    createObjOf(Bat, bat, t_bat);
 
-    bat->x = x;
-    bat->y = y;
-    bat->width = 1;
-    bat->x_vel = -4;
-    bat->sprite = '^';
-    bat->color = 5;
-    bat->state = WALKING;
-    bat->disabled = false;
-    bat->hidden = false;
-    bat->internal_data = malloc(sizeof(struct Bat));
+    BaseOf(bat).type = t_bat;
+    BaseOf(bat).x = x;
+    BaseOf(bat).y = y;
+    BaseOf(bat).width = 1;
+    BaseOf(bat).x_vel = -4;
+    BaseOf(bat).sprite = '^';
+    BaseOf(bat).color = 5;
+    BaseOf(bat).state = WALKING;
+    BaseOf(bat).disabled = false;
+    BaseOf(bat).hidden = false;
 
-    bat->level = level;
+    BaseOf(bat).level = level;
 
-    struct Bat* bat_data = (struct Bat*) bat->internal_data;
+    bat->sprite_timer = 0.0;
 
-    bat_data->sprite_timer = 0.0;
-
-    bat->processFunc = &processBat;
-    return bat;
+    BaseOf(bat).processFunc = &processBat;
+    return EntityCast(bat);
 }
 
-void processBat(struct Entity* bat, double delta) {
-    struct Bat* bat_data = (struct Bat*) bat->internal_data;
+int processBat(struct Entity* _bat, double delta) {
+    struct Bat* bat = (struct Bat*) _bat;
 
-    bat_data->sprite_timer += delta;
+    bat->sprite_timer += delta;
 
-    if (bat_data->sprite_timer > 0.2) {
-        if (bat->sprite == '^')
-            bat->sprite = 'v';
+    if (bat->sprite_timer > 0.2) {
+        if (BaseOf(bat).sprite == '^')
+            BaseOf(bat).sprite = 'v';
         else
-            bat->sprite = '^';
-        bat_data->sprite_timer = 0.0;
+            BaseOf(bat).sprite = '^';
+        bat->sprite_timer = 0.0;
     }
 
-    int x = (int) bat->x;
-    int y = (int) bat->y;
+    int x = (int) BaseOf(bat).x;
+    int y = (int) BaseOf(bat).y;
 
-    int px = (int) bat->level->player->x;
-    int py = (int) bat->level->player->y;
+    int px = (int) BaseOf(bat).level->player->x;
+    int py = (int) BaseOf(bat).level->player->y;
 
     // Kill player on touch
-    if (x == px && y == py && bat->level->player->state != DEAD) {
-        bat->level->player->state = DEAD;
+    if (x == px && y == py && BaseOf(bat).level->player->state != DEAD) {
+        BaseOf(bat).level->player->state = DEAD;
         playSound(SND_DEATH);
     }
 
@@ -216,22 +201,23 @@ void processBat(struct Entity* bat, double delta) {
     double dist = sqrt(pow((double) dx, 2) + pow((double) dy, 2));
 
     if (dist < 5) {
-        bat->x_vel = px - x;
-        bat->y_vel = py - y;
+        BaseOf(bat).x_vel = px - x;
+        BaseOf(bat).y_vel = py - y;
     }
 
-    struct Map* map = bat->level->map;
+    struct Map* map = BaseOf(bat).level->map;
 
     char block_ahead;
 
-    if (bat->x_vel < 0)
+    if (BaseOf(bat).x_vel < 0)
         block_ahead = map->data[y][x - 1];
     else
         block_ahead = map->data[y][x + 1];
 
     if (block_ahead == '#' || block_ahead == '^')
-        bat->x_vel *= -1;
+        BaseOf(bat).x_vel *= -1;
 
-    processPhysics(bat, delta);
-    bat->y_vel = 0.0;
+    processPhysics(EntityCast(bat), delta);
+    BaseOf(bat).y_vel = 0.0;
+    return 0;
 }

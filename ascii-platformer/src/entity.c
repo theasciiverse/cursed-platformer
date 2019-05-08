@@ -68,206 +68,200 @@ struct Entity* createEntity() {
 }
 
 void destroyEntity(struct Entity* entity) {
-    free(entity->internal_data);
     free(entity);
 }
 
-void processMessage(struct Entity* message, double delta);
+int processMessage(struct Entity* message, double delta);
 
 struct Entity* createMessage(struct Level* level, double x, double y, char* who, char* msg, int read) {
-    struct Entity* message = createEntity();
+    createObjOf(Message, message, t_message);
 
-    message->x = x;
-    message->y = y;
-    message->width = 1;
-    message->x_vel = 0;
-    message->sprite = '?';
-    message->color = 7;
-    message->state = IDLE;
-    message->disabled = false;
-    message->hidden = false;
-    message->internal_data = malloc(sizeof(struct Message));
+    BaseOf(message).x = x;
+    BaseOf(message).y = y;
+    BaseOf(message).width = 1;
+    BaseOf(message).x_vel = 0;
+    BaseOf(message).sprite = '?';
+    BaseOf(message).color = 7;
+    BaseOf(message).state = IDLE;
+    BaseOf(message).disabled = false;
+    BaseOf(message).hidden = false;
 
-    struct Message* message_data = (struct Message*) message->internal_data;
+    BaseOf(message).level = level;
+    strncpy(message->who, who, sizeof(message->who)-1);
+    strncpy(message->msg, msg, sizeof(message->msg)-1);
+    message->read = read;
 
-    message->level = level;
-    strcpy(message_data->who, who);
-    strcpy(message_data->msg, msg);
-    message_data->read = read;
-
-    message->processFunc = &processMessage;
-    return message;
+    BaseOf(message).processFunc = &processMessage;
+    return EntityCast(message);
 }
 
-void processMessage(struct Entity* message, double delta) {
-    int x = (int) message->x;
-    int y = (int) message->y;
+int processMessage(struct Entity* _message, double delta) {
+    struct Message* message = (struct Message*) _message;
+    int x = (int) BaseOf(message).x;
+    int y = (int) BaseOf(message).y;
 
-    int px = (int) message->level->player->x;
-    int py = (int) message->level->player->y;
+    int px = (int) BaseOf(message).level->player->x;
+    int py = (int) BaseOf(message).level->player->y;
 
-    struct Message* message_data = (struct Message*) message->internal_data;
+    struct Message* message_data = (struct Message*)message;
 
     if (!message_data->read && x == px && y == py) {
         if (showMessage(message_data->who, message_data->msg)) {
-            message->level->player->x_vel = 0;
-            message->level->player->y_vel = 0;
+            BaseOf(message).level->player->x_vel = 0;
+            BaseOf(message).level->player->y_vel = 0;
         }
         message_data->read = true;
-        message->disabled = true;
-        message->sprite = '!';
+        BaseOf(message).disabled = true;
+        BaseOf(message).sprite = '!';
     }
+    return 0;
 }
 
-void processButton(struct Entity* message, double delta);
+int processButton(struct Entity* message, double delta);
 
 struct Entity* createButton(struct Level* level, double x, double y, double tx, double ty) {
-    struct Entity* button = createEntity();
+    createObjOf(Button, button, t_button);
 
-    button->x = x;
-    button->y = y;
-    button->width = 1;
-    button->x_vel = 0;
-    button->sprite = '_';
-    button->state = IDLE;
-    button->disabled = false;
-    button->hidden = false;
-    button->internal_data = malloc(sizeof(struct Button));
+    BaseOf(button).x = x;
+    BaseOf(button).y = y;
+    BaseOf(button).width = 1;
+    BaseOf(button).x_vel = 0;
+    BaseOf(button).sprite = '_';
+    BaseOf(button).state = IDLE;
+    BaseOf(button).disabled = false;
+    BaseOf(button).hidden = false;
 
-    struct Button* button_data = (struct Button*) button->internal_data;
+    BaseOf(button).level = level;
+    button->tx = tx;
+    button->ty = ty;
 
-    button->level = level;
-    button_data->tx = tx;
-    button_data->ty = ty;
-
-    button->processFunc = &processButton;
-    return button;
+    BaseOf(button).processFunc = &processButton;
+    return EntityCast(button);
 }
 
-void processButton(struct Entity* button, double delta) {
-    int x = (int) button->x;
-    int y = (int) button->y;
+int processButton(struct Entity* _button, double delta) {
+    struct Button* button = (struct Button*) _button;
+    int x = (int) BaseOf(button).x;
+    int y = (int) BaseOf(button).y;
 
-    int px = (int) button->level->player->x;
-    int py = (int) button->level->player->y;
+    int px = (int) BaseOf(button).level->player->x;
+    int py = (int) BaseOf(button).level->player->y;
 
-    struct Button* button_data = (struct Button*) button->internal_data;
+    struct Button* button_data = (struct Button*) button;
 
     if (x == px && y == py) {
         playSound(SND_PRESSUREPLATE);
         int tx = button_data->tx;
         int ty = button_data->ty;
 
-        button->level->map->data[ty][tx] = ' ';
-        button->disabled = true;
+        BaseOf(button).level->map->data[ty][tx] = ' ';
+        BaseOf(button).disabled = true;
     }
+    return 0;
 }
 
-void processTeleport(struct Entity* message, double delta);
+int processTeleport(struct Entity* message, double delta);
 
 struct Entity* createTeleport(struct Level* level, double x, double y, double tx, double ty) {
-    struct Entity* teleport = createEntity();
+    createObjOf(Teleport, teleport, t_teleport);
 
-    teleport->x = x;
-    teleport->y = y;
-    teleport->width = 1;
-    teleport->x_vel = 0;
-    teleport->sprite = '|';
-    teleport->state = IDLE;
-    teleport->disabled = false;
-    teleport->hidden = false;
-    teleport->internal_data = malloc(sizeof(struct Teleport));
+    BaseOf(teleport).x = x;
+    BaseOf(teleport).y = y;
+    BaseOf(teleport).width = 1;
+    BaseOf(teleport).x_vel = 0;
+    BaseOf(teleport).sprite = '|';
+    BaseOf(teleport).state = IDLE;
+    BaseOf(teleport).disabled = false;
+    BaseOf(teleport).hidden = false;
 
-    struct Teleport* teleport_data = (struct Teleport*) teleport->internal_data;
+    BaseOf(teleport).level = level;
+    teleport->tx = tx;
+    teleport->ty = ty;
 
-    teleport->level = level;
-    teleport_data->tx = tx;
-    teleport_data->ty = ty;
-
-    teleport->processFunc = &processTeleport;
-    return teleport;
+    BaseOf(teleport).processFunc = &processTeleport;
+    return EntityCast(teleport);
 }
 
-void processTeleport(struct Entity* teleport, double delta) {
-    int x = (int) teleport->x;
-    int y = (int) teleport->y;
+int processTeleport(struct Entity* _teleport, double delta) {
+    struct Teleport* teleport = (struct Teleport*) _teleport;
+    int x = (int) BaseOf(teleport).x;
+    int y = (int) BaseOf(teleport).y;
 
-    int px = (int) teleport->level->player->x;
-    int py = (int) teleport->level->player->y;
+    int px = (int) BaseOf(teleport).level->player->x;
+    int py = (int) BaseOf(teleport).level->player->y;
 
-    struct Teleport* teleport_data = (struct Teleport*) teleport->internal_data;
+    struct Teleport* teleport_data = (struct Teleport*) teleport;
 
     if (x == px && y == py) {
         int tx = teleport_data->tx;
         int ty = teleport_data->ty;
 
-        teleport->level->player->x = tx;
-        teleport->level->player->y = ty;
+        BaseOf(teleport).level->player->x = tx;
+        BaseOf(teleport).level->player->y = ty;
     }
+    return 0;
 }
 
-void processPlatform(struct Entity* platform, double delta);
+int processPlatform(struct Entity* platform, double delta);
 
 struct Entity* createPlatform(struct Level* level, int sx, int sy, int tx, int ty, int width) {
-    struct Entity* platform = createEntity();
+    createObjOf(Platform, platform, t_platform);
 
-    platform->x = sx;
-    platform->y = sy;
-    platform->width = width;
+    BaseOf(platform).x = sx;
+    BaseOf(platform).y = sy;
+    BaseOf(platform).width = width;
 
-    platform->x_vel = 0;
-    platform->y_vel = 0;
-    platform->sprite = 'T';
-    platform->state = IDLE;
-    platform->disabled = false;
-    platform->hidden = false;
-    platform->internal_data = malloc(sizeof(struct Platform));
+    BaseOf(platform).x_vel = 0;
+    BaseOf(platform).y_vel = 0;
+    BaseOf(platform).sprite = 'T';
+    BaseOf(platform).state = IDLE;
+    BaseOf(platform).disabled = false;
+    BaseOf(platform).hidden = false;
 
-    struct Platform* platform_data = (struct Platform*) platform->internal_data;
+    BaseOf(platform).level = level;
+    platform->sx = (double) sx;
+    platform->sy = (double) sy;
+    platform->tx = (double) tx;
+    platform->ty = (double) ty;
 
-    platform->level = level;
-    platform_data->sx = (double) sx;
-    platform_data->sy = (double) sy;
-    platform_data->tx = (double) tx;
-    platform_data->ty = (double) ty;
-
-    if (platform_data->sx == platform_data->tx) {
-        platform_data->dir = 'V';
+    if (platform->sx == platform->tx) {
+        platform->dir = 'V';
     } else {
-        platform_data->dir = 'H';
+        platform->dir = 'H';
     }
 
-    platform->processFunc = &processPlatform;
-    return platform;
+    BaseOf(platform).processFunc = &processPlatform;
+    return EntityCast(platform);
 }
 
-void processPlatform(struct Entity* platform, double delta) {
-    int x = (int) platform->x;
-    int y = (int) platform->y;
+int processPlatform(struct Entity* _platform, double delta) {
+    struct Platform* platform = (struct Platform*) _platform;
+    int x = (int) BaseOf(platform).x;
+    int y = (int) BaseOf(platform).y;
 
-    int px = (int) platform->level->player->x;
-    int py = (int) platform->level->player->y;
+    int px = (int) BaseOf(platform).level->player->x;
+    int py = (int) BaseOf(platform).level->player->y;
 
-    struct Platform* platform_data = (struct Platform*) platform->internal_data;
+    struct Platform* platform_data = (struct Platform*) platform;
 
-    platform->y_vel = 0;
-    platform->x_vel = 0;
+    BaseOf(platform).y_vel = 0;
+    BaseOf(platform).x_vel = 0;
 
     if (platform_data->dir == 'V') {
         int dir = platform_data->ty - y;
 
         if (dir < 0) {
-            platform->y_vel = -3;
+            BaseOf(platform).y_vel = -3;
         } else {
-            platform->y_vel = 3;
+            BaseOf(platform).y_vel = 3;
         }
     } else {
         int dir = platform_data->tx - x;
 
         if (dir < 0) {
-            platform->x_vel = -3;
+            BaseOf(platform).x_vel = -3;
         } else {
-            platform->x_vel = 3;
+            BaseOf(platform).x_vel = 3;
         }
     }
 
@@ -278,116 +272,140 @@ void processPlatform(struct Entity* platform, double delta) {
         platform_data->sx = x;
         platform_data->sy = y;
 
-        platform->x = platform_data->sx;
-        platform->y = platform_data->sy;
+        BaseOf(platform).x = platform_data->sx;
+        BaseOf(platform).y = platform_data->sy;
     }
 
-    platform->x += platform->x_vel * delta;
-    platform->y += platform->y_vel * delta;
+    BaseOf(platform).x += BaseOf(platform).x_vel * delta;
+    BaseOf(platform).y += BaseOf(platform).y_vel * delta;
 
-    if (px >= x && px < x + platform->width && py == y - 1) {
-        if (platform->level->player->state != DEAD)
-            platform->level->player->state = WALKING;
-        platform->level->player->y_vel = 0;
-        platform->level->player->y = platform->y - 1;
-        platform->level->player->x += platform->x_vel * delta;
+    if (px >= x && px < x + BaseOf(platform).width && py == y - 1) {
+        if (BaseOf(platform).level->player->state != DEAD)
+            BaseOf(platform).level->player->state = WALKING;
+        BaseOf(platform).level->player->y_vel = 0;
+        BaseOf(platform).level->player->y = BaseOf(platform).y - 1;
+        BaseOf(platform).level->player->x += BaseOf(platform).x_vel * delta;
     }
+    return 0;
 }
 
-void processTrampoline(struct Entity* trampoline, double delta);
+int processTrampoline(struct Entity* trampoline, double delta);
 
 struct Entity* createTrampoline(struct Level* level, double x, double y, int width) {
-    struct Entity* trampoline = createEntity();
+    createObjOf(Trampoline, trampoline, t_trampoline);
 
-    trampoline->x = x;
-    trampoline->y = y;
-    trampoline->width = width;
-    trampoline->x_vel = 0;
-    trampoline->sprite = 'Z';
-    trampoline->state = IDLE;
-    trampoline->disabled = false;
-    trampoline->hidden = false;
-    trampoline->internal_data = malloc(sizeof(struct Teleport));
+    BaseOf(trampoline).x = x;
+    BaseOf(trampoline).y = y;
+    BaseOf(trampoline).width = width;
+    BaseOf(trampoline).x_vel = 0;
+    BaseOf(trampoline).sprite = 'Z';
+    BaseOf(trampoline).state = IDLE;
+    BaseOf(trampoline).disabled = false;
+    BaseOf(trampoline).hidden = false;
 
-    trampoline->level = level;
+    BaseOf(trampoline).level = level;
 
-    trampoline->processFunc = &processTrampoline;
-    return trampoline;
+    BaseOf(trampoline).processFunc = &processTrampoline;
+    return EntityCast(trampoline);
 }
 
-void processTrampoline(struct Entity* trampoline, double delta) {
-    int x = (int) trampoline->x;
-    double y = trampoline->y;
+int processTrampoline(struct Entity* _trampoline, double delta) {
+    struct Trampoline* trampoline = (struct Trampoline*) _trampoline;
+    int x = (int) BaseOf(trampoline).x;
+    double y = BaseOf(trampoline).y;
 
-    int px = (int) trampoline->level->player->x;
-    double py = trampoline->level->player->y;
+    int px = (int) BaseOf(trampoline).level->player->x;
+    double py = BaseOf(trampoline).level->player->y;
 
-    if (px >= x && px < x + trampoline->width && py > y - 0.5 && py < y) {
-        if (trampoline->level->player->y_vel > 4) {
-            trampoline->level->player->y_vel *= -0.9;
-            playSound(SND_TRAMPOLINE);
-        }
-        trampoline->sprite = 'z';
+    if (px >= x && px < x + BaseOf(trampoline).width && py > y - 0.5 && py < y) {
+        if (BaseOf(trampoline).level->player->y_vel > 4)
+            BaseOf(trampoline).level->player->y_vel *= -0.9;
+        BaseOf(trampoline).sprite = 'z';
     } else {
-        trampoline->sprite = 'Z';
+        BaseOf(trampoline).sprite = 'Z';
     }
+    return 0;
 }
 
+int processContinue(struct Entity* trampoline, double delta);
 struct Entity* createContinue(struct Level* level, double x, double y) {
-    char level_name[80];
-    if (access("autosave.sav", F_OK) != -1) {
-        FILE* fp = fopen("autosave.sav", "r");
-        fscanf(fp, "%s", level_name);
-        fclose(fp);
-    } else {
-        strncpy(level_name, "level0", 7);
-    }
+    createObjOf(Continue, cont, t_cont);
 
-    return createGoal(level, x, y, level_name);
+    BaseOf(cont).x = x;
+    BaseOf(cont).y = y;
+    BaseOf(cont).width = 1;
+    BaseOf(cont).x_vel = 0;
+    BaseOf(cont).sprite = 'Z';
+    BaseOf(cont).state = IDLE;
+    BaseOf(cont).disabled = false;
+    BaseOf(cont).hidden = true;
+    BaseOf(cont).level = level;
+
+    BaseOf(cont).processFunc = &processContinue;
+    return EntityCast(cont);
 }
 
-void processGoal(struct Entity* goal, double delta);
+int processContinue(struct Entity* _cont, double delta) {
+    struct Continue* cont = (struct Continue*) _cont;
+    int x = (int) BaseOf(cont).x;
+    int y = (int) BaseOf(cont).y;
+
+    int px = (int) BaseOf(cont).level->player->x;
+    int py = (int) BaseOf(cont).level->player->y;
+
+    if (px == x && py == y ) {
+        if (access("autosave.sav", F_OK) != -1) {
+            FILE* fp = fopen("autosave.sav", "r");
+            char level_name[80];
+            fscanf(fp, "%s", level_name);
+            fclose(fp);
+
+            switchLevel(level_name, BaseOf(cont).level->player); 
+            return 1;
+        }
+    }
+    return 0;
+}
+
+int processGoal(struct Entity* goal, double delta);
 
 struct Entity* createGoal(struct Level* level, double x, double y, char* next_level) {
-    struct Entity* goal = createEntity();
+    createObjOf(Goal, goal, t_goal);
 
-    goal->x = x;
-    goal->y = y;
-    goal->width = 1;
-    goal->x_vel = 0;
-    goal->sprite = 'Z';
-    goal->state = IDLE;
-    goal->disabled = false;
-    goal->hidden = true;
-    goal->internal_data = malloc(sizeof(struct Goal));
+    BaseOf(goal).x = x;
+    BaseOf(goal).y = y;
+    BaseOf(goal).width = 1;
+    BaseOf(goal).x_vel = 0;
+    BaseOf(goal).sprite = 'Z';
+    BaseOf(goal).state = IDLE;
+    BaseOf(goal).disabled = false;
+    BaseOf(goal).hidden = true;
     
-    struct Goal* goal_data = (struct Goal*) goal->internal_data;
-    strcpy(goal_data->next_level, next_level);
+    strcpy(goal->next_level, next_level);
 
-    goal->level = level;
+    BaseOf(goal).level = level;
 
-    goal->processFunc = &processGoal;
-    return goal;
+    BaseOf(goal).processFunc = &processGoal;
+    return EntityCast(goal);
 }
 
-void processGoal(struct Entity* goal, double delta) {
-    int x = (int) goal->x;
-    int y = (int) goal->y;
+int processGoal(struct Entity* _goal, double delta) {
+    struct Goal* goal = (struct Goal*) _goal;
+    int x = (int) BaseOf(goal).x;
+    int y = (int) BaseOf(goal).y;
 
-    int px = (int) goal->level->player->x;
-    int py = (int) goal->level->player->y;
+    int px = (int) BaseOf(goal).level->player->x;
+    int py = (int) BaseOf(goal).level->player->y;
 
     if (px == x && py == y) {
-        struct Goal* goal_data = (struct Goal*) goal->internal_data;
         playSound(SND_GOAL);
 
         FILE* fp = fopen("autosave.sav", "w");
-        fprintf(fp, "%s\n", goal_data->next_level);
+        fprintf(fp, "%s\n", goal->next_level);
         fclose(fp);
-        
-        //setCurrentLevel(goal_data->next_level);
-        
-        switchLevel(goal_data->next_level, goal->level->player); 
-        werase(getMainWin());
+
+        switchLevel(goal->next_level, BaseOf(goal).level->player); 
+        return 1;
     }
+    return 0;
 }

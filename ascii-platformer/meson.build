@@ -26,6 +26,15 @@ exe = executable('platformer_game_ncurses', src, link_args: '-lm',
 test('basic', exe)
 endif
 
+if get_option('use_ncurses')
+exe_hardcore = executable('platformer_game_ncurses_hardcore', src, link_args: '-lm',
+  install : true, dependencies : [ncurses],
+  c_args : '-DNOSDL',
+)
+test('basic', exe_hardcore)
+endif
+
+
 
 if get_option('use_pdcurses')
   exe_pdcurses = executable('platformer_game_pdcurses', src, link_args: '-lm',

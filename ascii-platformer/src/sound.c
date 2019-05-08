@@ -1,15 +1,18 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+#ifndef NOSDL
 #include <SDL.h>
 #include <SDL_mixer.h>
 
 Mix_Music *mus = NULL;
 Mix_Chunk *sounds[5];
+#endif
 
 bool sound_enabled = true;
 
 bool initAudio(void) {
+#ifndef NOSDL
     if(SDL_Init(SDL_INIT_AUDIO) < 0) {
         SDL_Log("SDL audio could not initialize! SDL Error: %s\n", SDL_GetError());
         sound_enabled = false;
@@ -38,10 +41,12 @@ bool initAudio(void) {
     } else {
         Mix_PlayMusic(mus, -1);
     }
+#endif
     return true;
 }
 
 void toggleMusic(void) {
+#ifndef NOSDL
     if (!sound_enabled)
         return;
     if(Mix_PlayingMusic() == 0) {
@@ -49,15 +54,19 @@ void toggleMusic(void) {
     } else {
         Mix_HaltMusic();
     }
+#endif
 }
 
 void playSound(int snd) {
+#ifndef NOSDL
     if (!sound_enabled)
         return;
     Mix_PlayChannel(-1, sounds[snd], 0);
+#endif
 }
 
 void closeAudio(void) {
+#ifndef NOSDL
     if (mus != NULL) {
         Mix_FreeMusic(mus);
         mus = NULL;
@@ -70,4 +79,5 @@ void closeAudio(void) {
     }
 
     Mix_Quit();
+#endif
 }
