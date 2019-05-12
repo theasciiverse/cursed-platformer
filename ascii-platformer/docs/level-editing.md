@@ -6,7 +6,8 @@ Levels in the game are represented as a folder in the data directory. To create 
 create a folder in the data directory, for example, `data/my-level`. The directory's name will be used
 to identify the level in the game and may not have spaces or special characters.
 
-Within the folder you need to make two files: `map.txt` and `metadata.txt`.
+Within the folder you need to add two files: `map.txt` and `metadata.txt`. You can optionally define
+a colormap for the level by adding a `colormap.txt`. The format of these files is described below.
 
 ## map.txt: Level Geometry
 
@@ -20,8 +21,17 @@ role.
 * `]` and `[` are "doors" but act essentially like wall tiles
 
 You can then "draw" the map using your favourite text editor into the map.txt file. What you write into
-the file will look the same in game. Note that the game cannot display maps larger than 80x24 but your
-levels can be smaller than that.
+the file will look the same in game.
+
+## colormap.txt: Level Colors
+
+The colormap is an optional text file with the same dimensions as the level map, where every character is a
+number representing one of the eight predefined colors for the corresponding character in map.txt:
+
+`1` = white, `2` = red, `3` = green, `4` = blue, `5` = cyan, `6` = magenta, `7` = yellow
+
+To ensure a consistent look across terminals and curses implementations, you should not leave any whitespace.
+Make sure to define a color for every tile in the map, even if the tile is empty.
 
 ## metadata.txt: Level Pre-Processor
 
@@ -66,6 +76,10 @@ Adds a bat creature to the specified `x,y` coordinate
 Adds a message entity to the level in the specified coordinates. The `read` argument indicates if the message
 has been read, <who> is a string of who is saying the message (for story-telling reasons) and `message` is the 
 actual message content. When player steps on the message and `read` is 0 the message will be shown on screen.
+
+The text will be wrapped and fitted into the message boxes, paged if necessary, but you can
+force an endline with a single backslash. If you want to force an empty line between paragraphs, add two
+backslashes separated by whitespace: "\ \".
 
 ### button x y tx ty
 
