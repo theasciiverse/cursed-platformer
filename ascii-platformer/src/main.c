@@ -50,8 +50,6 @@ int main(int argc, char **argv) {
     SDL_Event ev;
 #endif
 
-    initHelp(mainwin);
-
     if (argc > 1)
         setCurrentLevel(loadLevel(argv[1], &player));
     else
