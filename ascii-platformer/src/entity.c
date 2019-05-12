@@ -161,7 +161,7 @@ enum PF_return_type processButton(struct Entity* _button, double delta) {
     return nothing_to_report;
 }
 
-enum PF_return_type processTeleport(struct Entity* message, double delta);
+enum PF_return_type processTeleport(struct Entity* teleport, double delta);
 
 struct Entity* createTeleport(struct Level* level, double x, double y, double tx, double ty) {
     createObjOf(Teleport, teleport, t_teleport);
