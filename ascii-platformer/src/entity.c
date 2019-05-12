@@ -322,7 +322,11 @@ enum PF_return_type processTrampoline(struct Entity* _trampoline, double delta) 
         if (BaseOf(trampoline).level->player->y_vel > 4)
             BaseOf(trampoline).level->player->y_vel *= -0.9;
         BaseOf(trampoline).sprite = 'z';
-        playSound(SND_TRAMPOLINE);
+        float vel = BaseOf(trampoline).level->player->y_vel * -1;
+        if (vel > 6) {
+            setSoundVolume(SND_TRAMPOLINE, (int) (((vel - 6) / 6) * 128) );
+            playSound(SND_TRAMPOLINE);
+        }
     } else {
         BaseOf(trampoline).sprite = 'Z';
     }
