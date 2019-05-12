@@ -2,7 +2,7 @@ title 10: Congratulations! You won!
 size 80 24
 
 start 14 16
-message 14 16 0 @ Here's princess & in person!\ \She seems fine, if not just slightly singed. It seems\my quest is at an end.
-message 9 16 0 & Oh there you are @.\ \I already took care of the creepy pharaoh character\and his bandaged minions. It turns out mummies are\_very_ flammable.\
+message 14 16 0 @ Here's princess & in person!\ \She seems fine, if not just slightly singed. It seems my quest is at an end.
+message 9 16 0 & Oh there you are @.\ \I already took care of the creepy pharaoh character and his bandaged minions. It turns out mummies are _very_ flammable.
 goal 78 22 level0
 end
