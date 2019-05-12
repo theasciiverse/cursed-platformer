@@ -80,7 +80,7 @@ int main(int argc, char **argv) {
     
     infowin = newwin(1, width, 0, 0);
     werase(infowin);
-    mainwin = newwin(height, width, 1, 0);
+    mainwin = newwin(height - 1, width, 1, 0);
     initHelp(mainwin);
     
     werase(mainwin);
