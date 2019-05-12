@@ -252,15 +252,25 @@ void process(double delta, chtype input)
 
     SDL_PumpEvents();
     while (SDL_PeepEvents(&ev, 1, SDL_GETEVENT, SDL_KEYDOWN, SDL_CONTROLLERBUTTONUP)) {
-        if (ev.type == SDL_CONTROLLERBUTTONDOWN || ev.type == SDL_KEYDOWN) {
+        if (ev.type == SDL_CONTROLLERBUTTONDOWN || ev.type == SDL_CONTROLLERBUTTONUP) {
             btn = ev.cbutton.button;
+        } else {
+            btn = -1;
+        }
+        if (ev.type == SDL_KEYDOWN || ev.type == SDL_KEYUP) {
             key = ev.key.keysym.sym;
+        } else {
+            key = -1;
+        }
+        if (ev.type == SDL_CONTROLLERBUTTONDOWN || ev.type == SDL_KEYDOWN) {
             if (key == SDLK_q) {
                 quit = 1;
+                return;
             } else if (btn == SDL_CONTROLLER_BUTTON_Y || key == SDLK_r) {
                 switchLevel(level->name, &player);
                 werase(mainwin);
                 player.state = WALKING;
+                return;
             } else if (key == SDLK_c) {
                 use_color = (use_color == 1) ? 0 : 1;
             } else if (key == SDLK_m) {
@@ -283,8 +293,6 @@ void process(double delta, chtype input)
                 }
             }
         } else if ((ev.type == SDL_CONTROLLERBUTTONUP || ev.type == SDL_KEYUP) && player.state != DEAD) {
-            btn = ev.cbutton.button;
-            key = ev.key.keysym.sym;
             if (((btn == SDL_CONTROLLER_BUTTON_DPAD_LEFT || key == SDLK_LEFT) && player.x_vel < 0) ||
                 ((btn == SDL_CONTROLLER_BUTTON_DPAD_RIGHT || key == SDLK_RIGHT) && player.x_vel > 0)) {
                 player.x_vel = 0;
