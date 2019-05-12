@@ -142,8 +142,8 @@ int pauseForAction() {
              ev.cbutton.button == SDL_CONTROLLER_BUTTON_DPAD_RIGHT)) {
             stop = 1;
         }
-        if (ev.cbutton.button == SDL_CONTROLLER_BUTTON_A ||
-            ev.key.keysym.sym == SDLK_SPACE) {
+        if ((ev.type == SDL_CONTROLLERBUTTONDOWN && ev.cbutton.button == SDL_CONTROLLER_BUTTON_A) ||
+            (ev.type == SDL_KEYDOWN && ev.key.keysym.sym == SDLK_SPACE)) {
             break;
         }
 #endif
