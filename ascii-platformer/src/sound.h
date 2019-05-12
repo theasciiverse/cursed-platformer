@@ -12,6 +12,7 @@
 
 bool initAudio(void);
 void playSound(int snd);
+void setSoundVolume(int snd, int volume);
 void toggleMusic(void);
 void closeAudio(void);
 

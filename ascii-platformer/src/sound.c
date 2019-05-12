@@ -65,6 +65,16 @@ void playSound(int snd) {
 #endif
 }
 
+void setSoundVolume(int snd, int volume) {
+#ifndef NOSDL
+    if (!sound_enabled)
+        return;
+    if (volume > MIX_MAX_VOLUME)
+        volume = MIX_MAX_VOLUME;
+    Mix_VolumeChunk(sounds[snd], volume);
+#endif
+}
+
 void closeAudio(void) {
 #ifndef NOSDL
     if (mus != NULL) {
