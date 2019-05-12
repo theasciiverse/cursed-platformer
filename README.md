@@ -1,7 +1,11 @@
-# Linux Game Jam 2019 entry
+# Cursed Pl@tformer 
 
-This is an entry for the Linux Game Jam 2019. Further details will be added as the project reaches
-completion.
+Cursed Pl@tformer is a simple platformer game written using Curses and SDL2. It can be compiled as a terminal
+application using ncurses or as a graphical application with pdcurses. Cursed Pl@tformer was originally
+written as an entry in the Linux Game Jam 2019 and is licensed under GPLv3, except for the third-party assets 
+which are detailed further in this document.
+
+More information and pre-compiled binaries can be found on the Itch page: [https://samsai.itch.io/cursed-platformer](https://samsai.itch.io/cursed-platformer)  
 
 ## Dependencies
 
@@ -54,6 +58,18 @@ You can then launch the game with the following command:
 ```
 ./build/platformer_game_pdcurses
 ```
+
+If you want to create a tar.gz package which bundles the data and binaries (along with reasonable dependencies)
+you can run the package.sh script:
+
+```
+./package.sh
+```
+
+This will copy the necessary binaries from the build folder, copy dependencies like SDL2 and create
+run scripts for both the ncurses and pdcurses versions of the game in a folder called "platformer_package"
+and create a tar.gz archive of that package. You can use this to make portable, distributable packages
+of the game.
 
 ## Credits
 
