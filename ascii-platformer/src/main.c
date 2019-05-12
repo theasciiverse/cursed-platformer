@@ -18,8 +18,10 @@
 #define PROJECT_NAME "linux-game-jam-2019-game"
 #define KEY_SPACEBAR ' '
 
-struct Entity player;
+#define MIN(X, Y) (((X) < (Y)) ? (X) : (Y))
+#define MAX(X, Y) (((X) < (Y)) ? (Y) : (X))
 
+struct Entity player;
 
 WINDOW *infowin;
 WINDOW *mainwin;
@@ -48,9 +50,20 @@ int main(int argc, char **argv) {
     SDL_Event ev;
 #endif
 
+    initHelp(mainwin);
+
+    if (argc > 1)
+        setCurrentLevel(loadLevel(argv[1], &player));
+    else
+        setCurrentLevel(loadLevel("menu", &player));
+
+    initAudio();
+    
+    int width = 80;
+    int height = 25;
+
     initscr();
     start_color();
-    resize_term(25, 80);
     nodelay(stdscr, TRUE);
     noecho();
     cbreak();
@@ -64,12 +77,15 @@ int main(int argc, char **argv) {
     init_pair(5, COLOR_CYAN, COLOR_BLACK);
     init_pair(6, COLOR_MAGENTA, COLOR_BLACK);
     init_pair(7, COLOR_YELLOW, COLOR_BLACK);
-
-    infowin = newwin(1, 80, 0, 0);
+    
+    infowin = newwin(1, width, 0, 0);
     werase(infowin);
-    mainwin = newwin(24, 80, 1, 0);
+    mainwin = newwin(height, width, 1, 0);
     initHelp(mainwin);
+    
     werase(mainwin);
+    
+    touchwin(mainwin);
 
     if (argc > 1) {
         setCurrentLevel(loadLevel(argv[1], &player));
@@ -89,6 +105,8 @@ int main(int argc, char **argv) {
     double slack = 0;
     double delta = 0;
 
+    int x_offset = 0;
+    int y_offset = 0;
 
     char* debugstr = (char *)malloc(44);
 
@@ -100,35 +118,44 @@ int main(int argc, char **argv) {
         struct Map* map = level->map;
 
         int color = 0;
+        
+        x_offset = MIN(player.x - (width / 2), map->width - width);
+        x_offset = MAX(x_offset, 0);
 
-        for (int y = 0; y < map->height; y++) {
-            for (int x = 0; x < map->width; x++) {
+        y_offset = MIN(player.y - (height / 2), map->height - height);
+        y_offset = MAX(y_offset, 0);
+        
+        int x_max = MIN(width, map->width);
+        int y_max = MIN(height, map->height);
+
+        for (int y = 0; y < y_max; y++) {
+            for (int x = 0; x < x_max; x++) {
                 if (use_color) {
-                    if (map->colors[y][x] != color) {
+                    if (map->colors[y + y_offset][x + x_offset] != color) {
                         if (color != 0) {
                             wattroff(mainwin, COLOR_PAIR(color - '0'));
                         }
-                        color = map->colors[y][x];
+                        color = map->colors[y + y_offset][x + x_offset];
                         if (color != 0) {
                             wattron(mainwin, COLOR_PAIR(color - '0'));
                         }
                     }
                 }
-                mvwaddch(mainwin, y, x, map->data[y][x]);
+                mvwaddch(mainwin, y, x, map->data[y + y_offset][x + x_offset]);
             }
         }
         if (color != 0 && use_color) {
             wattroff(mainwin, COLOR_PAIR(color - '0'));
             color = 0;
         }
-
+        
         for (int i = 0; i < MAX_ENTITIES; i++) {
             if (level->enemies[i] != NULL) {
                 if (!level->enemies[i]->disabled && !level->enemies[i]->hidden) {
                     for (int j = 0; j < level->enemies[i]->width; j++) {
                         if (level->enemies[i]->color != 0)
                             wattron(mainwin, COLOR_PAIR(level->enemies[i]->color));
-                        mvwaddch(mainwin, level->enemies[i]->y, level->enemies[i]->x + j, level->enemies[i]->sprite);
+                        mvwaddch(mainwin, level->enemies[i]->y - y_offset, level->enemies[i]->x + j - x_offset, level->enemies[i]->sprite);
                         if (level->enemies[i]->color != 0)
                             wattroff(mainwin, COLOR_PAIR(level->enemies[i]->color));
                     }
@@ -137,10 +164,10 @@ int main(int argc, char **argv) {
         }
 
         if (player.state != DEAD)
-            mvwaddch(mainwin, player.y, player.x, '@');
+            mvwaddch(mainwin, player.y - y_offset, player.x - x_offset, '@');
         else {
             wattron(mainwin, COLOR_PAIR(2));
-            mvwaddch(mainwin, player.y, player.x, 'X');
+            mvwaddch(mainwin, player.y - y_offset, player.x - x_offset, 'X');
             wattroff(mainwin, COLOR_PAIR(2));
         }
 

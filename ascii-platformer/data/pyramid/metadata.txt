@@ -2,7 +2,7 @@ title 9: Pyramid of Tuthanascii
 size 80 24
 
 start 1 19 
-message 24 22 0 @ Looks like the trail leads into this pyramid.\But I don't see anyone.\ \Maybe at the top?
+message 24 22 0 @ Looks like the trail leads into this pyramid. But I do not see anyone.\ \Maybe at the top?
 goal 46 3 thatsallfolks
 goal 47 3 thatsallfolks
 platform 46 22 46 4 2  
