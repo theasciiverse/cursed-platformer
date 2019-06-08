@@ -77,6 +77,8 @@ int main(int argc, char **argv) {
     init_pair(5, COLOR_CYAN, COLOR_BLACK);
     init_pair(6, COLOR_MAGENTA, COLOR_BLACK);
     init_pair(7, COLOR_YELLOW, COLOR_BLACK);
+    init_pair(8, COLOR_BLACK, COLOR_BLACK);
+    init_pair(9, COLOR_BLACK, COLOR_BLUE);
     
     /* Asciiverse: the 80x25 game in the middle of a bigger terminal */
     int oy = MAX((LINES - height) / 2, 0), ox = MAX((COLS - width) / 2, 0);

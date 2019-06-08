@@ -15,7 +15,8 @@ enum E_type {
     t_bat = '^', 
     t_spike = 'V',
     t_muncher = '<',
-    t_cont = 'C'
+    t_cont = 'C',
+    t_bridge = '#'
 };
 
 enum PF_return_type {
@@ -106,5 +107,12 @@ struct Continue {
     struct Entity base;
 };
 struct Entity* createContinue(struct Level* level, double x, double y);
+
+struct Bridge {
+    struct Entity base;
+    int xdir; // Assuming this is normalised
+    double timer_acc, timer_delta;
+};
+struct Entity* createBridge(struct Level* level, double x, double y, int xdir);
 
 #endif

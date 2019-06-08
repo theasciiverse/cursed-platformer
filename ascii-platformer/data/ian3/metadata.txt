@@ -1,0 +1,12 @@
+title 1: An empty throne tucked away from danger
+size 80 24
+start 1 13
+muncher 12 5
+muncher 21 6
+muncher 47 3
+message 76 11 0 @ Both the lonely king and the busy peasant wondered - where does life go - while they pointed at each other and wished they were like the other or were glad they weren't.
+button 78 8 73 14
+button 37 15 40 16
+bridge 39 16 1
+goal 76 14 level0
+end

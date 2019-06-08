@@ -419,3 +419,52 @@ enum PF_return_type processGoal(struct Entity* _goal, double delta) {
     }
     return nothing_to_report;
 }
+
+enum PF_return_type processBridge(struct Entity* _bridge, double delta);
+
+struct Entity* createBridge(struct Level* level, double x, double y, int xdir) {
+    createObjOf(Bridge, bridge, t_bridge);
+    
+    BaseOf(bridge).x = x;
+    BaseOf(bridge).y = y;
+    BaseOf(bridge).width = 1;
+    BaseOf(bridge).x_vel = 0;
+    BaseOf(bridge).sprite = '#';
+    BaseOf(bridge).color = '7';
+    BaseOf(bridge).state = IDLE;
+    BaseOf(bridge).disabled = false;
+    BaseOf(bridge).hidden = false;
+    BaseOf(bridge).level = level;
+    BaseOf(bridge).processFunc = &processBridge;
+    
+    bridge->xdir = xdir;
+    bridge->timer_acc = 0;
+    bridge->timer_delta = 0.07f;
+    
+    return EntityCast(bridge);
+}
+
+enum PF_return_type processBridge(struct Entity* _bridge, double delta) {
+    struct Bridge* bridge = (struct Bridge*) _bridge;
+    
+    int x = (int) BaseOf(bridge).x;
+    int y = (int) BaseOf(bridge).y;
+    
+    int next_x = x + bridge->xdir;
+    
+    struct Map *map = BaseOf(bridge).level->map;
+    
+    if (isPassable(map->data[y][next_x])) {
+        if (bridge->timer_acc + delta >= bridge->timer_delta) {
+            bridge->timer_acc = 0;
+            map->data[y][next_x] = BaseOf(bridge).sprite;
+            map->colors[y][next_x] = BaseOf(bridge).color;
+            BaseOf(bridge).x = next_x;
+            BaseOf(bridge).y = y;
+        } else {
+            bridge->timer_acc += delta;
+        }
+    }
+    
+    return nothing_to_report;
+}

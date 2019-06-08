@@ -1,0 +1,5 @@
+title 1: Am I welcome or trespassing
+size 80 24
+start 1 17
+goal 78 13 ian3
+end

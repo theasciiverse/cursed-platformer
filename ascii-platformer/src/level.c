@@ -186,6 +186,15 @@ void processMetaDataLine(char const * line, struct Metadata* metadata, struct Le
 
             struct Entity* button = createButton(level, x, y, tx, ty);
             addEntity(level, button);
+        } else if (memcmp(command, "bridge", 6) == 0) {
+            int x, y;
+            int xdir;
+            command += 7;
+
+            sscanf(command, "%d %d %d", &x, &y, &xdir);
+
+            struct Entity* bridge = createBridge(level, x, y, xdir);
+            addEntity(level, bridge);
         } else if (memcmp(command, "teleport", 8) == 0) {
             int x, y;
             int tx, ty;
