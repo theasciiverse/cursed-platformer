@@ -1,0 +1,11 @@
+title 13: The Sacred Cenote
+size 80 24
+start 3 5
+message 8 5 0 @ A cenote: a deep well in the rock, sacred to the Maya.\ \That stone door over there will not budge. Maybe something down below opens it.
+button 36 20 70 5
+muncher 42 20
+muncher 48 20
+spike 30 7
+spike 41 7
+goal 78 5 ballcourt
+end

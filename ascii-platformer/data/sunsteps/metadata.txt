@@ -1,0 +1,11 @@
+title 15: Steps of the Sun
+size 80 24
+start 3 20
+message 5 20 0 @ A stepped pyramid. Every step is just my height. How very thoughtful.
+muncher 17 16
+muncher 62 16
+muncher 29 12
+muncher 50 12
+goal 39 10 temple
+goal 40 10 temple
+end

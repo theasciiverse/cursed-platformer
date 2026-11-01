@@ -7,8 +7,9 @@ at its `1.5` tag, packaged for the Asciiverse in its terminal version:
 ncurses, with SDL for the sound and the gamepad. Branch `asciiverse`;
 upstream is the `upstream` remote.
 
-The changes are small and meant to be offered upstream. The levels, the
-music and the sounds are all upstream's.
+The changes are small and meant to be offered upstream. The music and the
+sounds are all upstream's, and so are levels 0 to 10; the extra levels are
+listed below.
 
 ## Fixes
 
@@ -47,6 +48,26 @@ music and the sounds are all upstream's.
   crashes the game.
 - **Centred.** The 80x25 game is drawn in the middle of a bigger terminal,
   and centred again when the terminal is resized.
+
+## More levels
+
+- **EXTENDED**, on the title screen: jump from where you start. It plays
+  four levels by Ian T. Jacobsen, from his fork
+  ([Smilex1/linux-game-jam-2019-game](https://gitlab.com/Smilex1/linux-game-jam-2019-game)),
+  numbered -4 to -1, into level 1. They come as he made them, with the
+  bridge his last level uses (`bridge x y dir`: a wall that grows across a
+  gap once a button opens the way, in `src/entity.c` and `src/level.c`)
+  and colour pairs 8 and 9 for his colour maps; in his name, from his
+  commit. Only the titles' numbers are ours.
+- **The jungle**: nine levels of ours (`jungle`, `canopy`, `cenote`,
+  `ballcourt`, `sunsteps`, `temple`, `glyphs`, `serpent`, `newdawn`),
+  numbered 11 to 19. The pharaoh's map leads across the sea to a jungle
+  and up a Maya stepped pyramid. The first ending's exit leads in, where it
+  used to go back to level 1; the jungle's ending leads to the title screen.
+- `asciiverse/levelcheck.py` (with `levelcheck.c`) searches every way of
+  playing a level with the game's physics and says which exits can be
+  reached; `asciiverse/playtest.py` plays routes of levels in the real
+  game. Every level here passes both.
 
 ## Packaging (new files)
 

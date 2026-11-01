@@ -1,0 +1,8 @@
+title 12: The Canopy Road
+size 80 24
+start 3 20
+message 44 13 0 @ A road in the treetops! Built by people who did not like thorns, I suppose.
+bat 40 8
+bat 61 10
+goal 78 14 cenote
+end

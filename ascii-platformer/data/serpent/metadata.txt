@@ -1,0 +1,10 @@
+title 18: The Feathered Serpent
+size 80 24
+start 3 20
+message 6 20 0 @ The serpent's stair. At the equinox the sun draws a snake of shadow down these steps.
+platform 53 21 53 6 3
+bat 66 14
+spike 30 1
+spike 40 1
+goal 78 5 newdawn
+end

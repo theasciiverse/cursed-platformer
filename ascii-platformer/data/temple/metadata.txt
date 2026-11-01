@@ -1,0 +1,14 @@
+title 16: Inside the Temple
+size 80 24
+start 2 5
+message 4 5 0 @ Dark in here. There are pictures cut into every wall: glyphs, pictures that are words.
+button 62 5 40 10
+spike 22 1
+spike 36 1
+spike 50 1
+muncher 30 5
+muncher 66 15
+bat 30 13
+button 70 20 20 20
+goal 1 20 glyphs
+end

@@ -1,0 +1,10 @@
+title 11: Where the Map Ends
+size 80 24
+start 4 20
+message 6 20 0 @ The pharaoh's map led me across the sea to this jungle.\ \Princess & went on ahead. Of course she did.
+message 57 13 0 @ Carved stone under the vines. People built big things here, a long time ago.
+muncher 40 18
+spike 69 6
+spike 50 4
+goal 78 20 canopy
+end

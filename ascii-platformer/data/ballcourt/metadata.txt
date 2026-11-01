@@ -1,0 +1,9 @@
+title 14: The Ball Court
+size 80 24
+start 3 20
+message 6 20 0 @ A ball court. Players kept a heavy rubber ball in the air with their hips, and sent it through the stone rings.\ \I will just jump through them myself.
+button 24 11 70 20
+button 63 11 74 20
+muncher 32 20
+goal 78 20 sunsteps
+end

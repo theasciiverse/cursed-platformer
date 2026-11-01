@@ -1,0 +1,7 @@
+title 19: A New Dawn
+size 80 24
+start 4 20
+message 12 20 0 & Oh, there you are @.\ \The serpent god just wanted somebody to talk to. We had hot cocoa. It was a Maya favourite.
+message 6 20 0 @ Princess & got here first. Again.
+goal 78 20 menu
+end

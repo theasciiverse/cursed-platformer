@@ -100,6 +100,12 @@ coordinates should match. Platforms cannot move diagonally.
 
 Adds a trampoline to the level at the specified coordinates. The trampoline will be `width` tiles wide.
 
+### bridge x y dir
+
+Adds a bridge at the specified coordinates (by Ian T. Jacobsen). Put it on a wall tile: whenever the tile next to
+it in direction `dir` (1 for right, -1 for left) is open, the bridge grows into it, one tile at a time, and keeps
+growing until it meets something solid. Pair it with a button that opens the first tile.
+
 ### // comment
 
 Ignores the rest of the line. Can be used to add comments to the metadata for reminders or to organize

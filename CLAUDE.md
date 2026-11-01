@@ -31,6 +31,17 @@ small, list every one in PATCHES.md, and prefer patches upstream could take.
   TERM=screen-256color, as pyte cannot read xterm's repeat-character
   escape. 24 s.
 - Testing: `SDL_AUDIODRIVER=dummy` keeps the music off the speakers.
-- Levels are plain text (`ascii-platformer/docs/level-editing.md`). A fork
-  by Ian T. Jacobsen (gitlab.com/Smilex1/linux-game-jam-2019-game) adds four
-  levels of his own, `ian` to `ian3`; not taken in so far.
+- Levels are plain text (`ascii-platformer/docs/level-editing.md`).
+  Ian T. Jacobsen's four (`ian` to `ian3`, remote `ian`, his fork) are
+  behind EXTENDED on the title screen (jump at the start). Our jungle
+  episode (`jungle` ... `newdawn`, levels 11 to 19, Maya theme) follows the
+  first ending; its end leads to the title screen.
+- Check a level: `python3 asciiverse/levelcheck.py LEVEL` (every way of
+  playing it, with the game's physics; needs cc). A jump rises just over 2
+  cells, so a 2-high wall is easy and a 3-high one only works at the very
+  top of a jump: keep new levels to 2. A jump from a moving platform is
+  cancelled by the platform (upstream's behaviour), so platforms have to
+  be walked off at their stops.
+- Play a route in the real game: `python3 asciiverse/playtest.py ROUTE`
+  (pyte; routes and their plans are in the script; it reads the game's F8
+  debug line for exact positions). `episode` plays the jungle through.

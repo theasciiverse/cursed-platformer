@@ -1,0 +1,15 @@
+title 17: Hall of Glyphs
+size 80 24
+start 3 20
+message 5 20 0 @ Four doors and four glyphs. Something is written above the hall:\ \'Only the serpent knows the way up.'
+teleport 14 20 3 20
+teleport 30 20 3 10
+teleport 46 20 3 20
+teleport 62 20 3 20
+message 5 10 0 @ Up! The serpent did know the way.
+spike 24 1
+spike 40 1
+button 56 10 70 10
+bat 50 6
+goal 78 10 serpent
+end
