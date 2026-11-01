@@ -14,7 +14,7 @@
 #define MIN(X, Y) (((X) < (Y)) ? (X) : (Y))
 #define MAX(X, Y) (((X) < (Y)) ? (Y) : (X))
 
-WINDOW* mainwin;
+extern WINDOW* mainwin; /* defined in main.c */
 
 void initHelp(WINDOW* _mainwin) {
     mainwin = _mainwin;
