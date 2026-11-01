@@ -78,9 +78,12 @@ int main(int argc, char **argv) {
     init_pair(6, COLOR_MAGENTA, COLOR_BLACK);
     init_pair(7, COLOR_YELLOW, COLOR_BLACK);
     
-    infowin = newwin(1, width, 0, 0);
+    /* Asciiverse: the 80x25 game in the middle of a bigger terminal */
+    int oy = MAX((LINES - height) / 2, 0), ox = MAX((COLS - width) / 2, 0);
+    int screen_h = LINES, screen_w = COLS;
+    infowin = newwin(1, width, oy, ox);
     werase(infowin);
-    mainwin = newwin(height - 1, width, 1, 0);
+    mainwin = newwin(height - 1, width, oy + 1, ox);
     initHelp(mainwin);
     
     werase(mainwin);
@@ -112,6 +115,20 @@ int main(int argc, char **argv) {
 
     while (!quit) {
         input = av_getkey();
+
+        /* Asciiverse: centred again when the terminal is resized */
+        if (LINES != screen_h || COLS != screen_w) {
+            screen_h = LINES;
+            screen_w = COLS;
+            oy = MAX((LINES - height) / 2, 0);
+            ox = MAX((COLS - width) / 2, 0);
+            mvwin(infowin, oy, ox);
+            mvwin(mainwin, oy + 1, ox);
+            clear();
+            refresh();
+            touchwin(infowin);
+            touchwin(mainwin);
+        }
         
         struct Level* level = getCurrentLevel();
 

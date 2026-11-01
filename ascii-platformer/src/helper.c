@@ -63,7 +63,7 @@ int showMessage(char *who, char *text) {
     int ww = MIN((float)maxx * 0.8, 56);
     int sh, sw;
 
-    frame = subwin(mainwin, wh, ww, (float) (maxy - wh) / 2, (float) (maxx - ww) / 2);
+    frame = derwin(mainwin, wh, ww, (maxy - wh) / 2, (maxx - ww) / 2);
     werase(frame);
 
     sh = wh - 2;
