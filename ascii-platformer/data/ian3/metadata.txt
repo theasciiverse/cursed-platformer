@@ -1,4 +1,4 @@
-title 1: An empty throne tucked away from danger
+title -1: An empty throne tucked away from danger
 size 80 24
 start 1 13
 muncher 12 5

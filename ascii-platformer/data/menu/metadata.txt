@@ -6,5 +6,6 @@ muncher 14 22
 muncher 63 22
 continue 60 19
 goal 62 19 level0
+goal 61 17 ian
 
 end

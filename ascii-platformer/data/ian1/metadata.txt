@@ -1,4 +1,4 @@
-title 1: As a stranger in the dark
+title -3: As a stranger in the dark
 size 80 24
 start 1 17
 goal 16 17 ian2
