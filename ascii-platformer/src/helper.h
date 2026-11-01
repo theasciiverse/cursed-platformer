@@ -21,4 +21,6 @@ void setCurrentLevel(struct Level* new_level);
 
 int isPassable(chtype tile);
 
+const char* savePath(void); /* Asciiverse: where progress is saved */
+
 #endif

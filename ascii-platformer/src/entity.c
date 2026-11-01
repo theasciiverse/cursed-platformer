@@ -360,14 +360,16 @@ enum PF_return_type processContinue(struct Entity* _cont, double delta) {
     int py = (int) BaseOf(cont).level->player->y;
 
     if (px == x && py == y ) {
-        if (access("autosave.sav", F_OK) != -1) {
-            FILE* fp = fopen("autosave.sav", "r");
+        FILE* fp = fopen(savePath(), "r");
+        if (fp != NULL) {
             char level_name[80];
-            fscanf(fp, "%s", level_name);
+            int ok = fscanf(fp, "%79s", level_name) == 1;
             fclose(fp);
 
-            switchLevel(level_name, BaseOf(cont).level->player); 
-            return the_level_changed;
+            if (ok) {
+                switchLevel(level_name, BaseOf(cont).level->player); 
+                return the_level_changed;
+            }
         }
     }
     return nothing_to_report;
@@ -406,9 +408,11 @@ enum PF_return_type processGoal(struct Entity* _goal, double delta) {
     if (px == x && py == y) {
         playSound(SND_GOAL);
 
-        FILE* fp = fopen("autosave.sav", "w");
-        fprintf(fp, "%s\n", goal->next_level);
-        fclose(fp);
+        FILE* fp = fopen(savePath(), "w");
+        if (fp != NULL) {
+            fprintf(fp, "%s\n", goal->next_level);
+            fclose(fp);
+        }
 
         switchLevel(goal->next_level, BaseOf(goal).level->player); 
         return the_level_changed;

@@ -14,6 +14,7 @@
 #include "enemy.h"
 #include "helper.h"
 #include "sound.h"
+#include "av_input.h"
 
 #define PROJECT_NAME "linux-game-jam-2019-game"
 #define KEY_SPACEBAR ' '
@@ -67,6 +68,7 @@ int main(int argc, char **argv) {
     cbreak();
     keypad(stdscr, TRUE);
     curs_set(0);
+    av_input_init(); /* Asciiverse: key releases where the terminal reports them */
 
     init_pair(1, COLOR_WHITE, COLOR_BLACK);
     init_pair(2, COLOR_RED, COLOR_BLACK);
@@ -109,7 +111,7 @@ int main(int argc, char **argv) {
     char* debugstr = (char *)malloc(44);
 
     while (!quit) {
-        input = getch();
+        input = av_getkey();
         
         struct Level* level = getCurrentLevel();
 
@@ -233,6 +235,7 @@ int main(int argc, char **argv) {
     delwin(mainwin);
     delwin(infowin);
     free(debugstr);
+    av_input_end();
     endwin();
 
 #ifndef NOSDL
@@ -276,7 +279,22 @@ void process(double delta, chtype input)
     SDL_Keycode key;
 
     SDL_PumpEvents();
-    while (SDL_PeepEvents(&ev, 1, SDL_GETEVENT, SDL_KEYDOWN, SDL_CONTROLLERBUTTONUP)) {
+    while (SDL_PeepEvents(&ev, 1, SDL_GETEVENT, SDL_KEYDOWN, SDL_CONTROLLERDEVICEREMOVED)) {
+        /* Asciiverse: a pad plugged in later, and the left stick */
+        if (ev.type == SDL_CONTROLLERDEVICEADDED) {
+            if (gamepad == NULL)
+                gamepad = SDL_GameControllerOpen(ev.cdevice.which);
+            continue;
+        }
+        if (ev.type == SDL_CONTROLLERDEVICEREMOVED) {
+            if (gamepad != NULL && SDL_JoystickInstanceID(SDL_GameControllerGetJoystick(gamepad)) == ev.cdevice.which) {
+                SDL_GameControllerClose(gamepad);
+                gamepad = NULL;
+            }
+            continue;
+        }
+        if (ev.type == SDL_CONTROLLERAXISMOTION)
+            continue; /* the stick is read below, as it is now */
         if (ev.type == SDL_CONTROLLERBUTTONDOWN || ev.type == SDL_CONTROLLERBUTTONUP) {
             btn = ev.cbutton.button;
         } else {
@@ -288,7 +306,7 @@ void process(double delta, chtype input)
             key = -1;
         }
         if (ev.type == SDL_CONTROLLERBUTTONDOWN || ev.type == SDL_KEYDOWN) {
-            if (key == SDLK_q) {
+            if (key == SDLK_q || btn == SDL_CONTROLLER_BUTTON_BACK) {
                 quit = 1;
                 return;
             } else if (btn == SDL_CONTROLLER_BUTTON_Y || key == SDLK_r) {
@@ -304,7 +322,7 @@ void process(double delta, chtype input)
                 debug = !debug;
                 werase(infowin);
             } else if (player.state != DEAD) {
-                if (btn == SDL_CONTROLLER_BUTTON_A || key == SDLK_SPACE || key == SDLK_UP) {
+                if (btn == SDL_CONTROLLER_BUTTON_A || btn == SDL_CONTROLLER_BUTTON_DPAD_UP || key == SDLK_SPACE || key == SDLK_UP) {
                     if (player.state == WALKING) {
                         playSound(SND_JUMP);
                         player.y_vel = -8;
@@ -326,6 +344,29 @@ void process(double delta, chtype input)
     }
 #endif
 
+#ifndef NOSDL
+    /* Asciiverse: the left stick walks like the d-pad. Read as it is now,
+       not from its events, which a message box may have taken */
+    if (gamepad != NULL) {
+        static int stick = 0;
+        int v = SDL_GameControllerGetAxis(gamepad, SDL_CONTROLLER_AXIS_LEFTX);
+        int dir = v < -16000 ? -1 : v > 16000 ? 1 : 0;
+        if (dir != stick && player.state != DEAD) {
+            if (dir != 0)
+                player.x_vel = 8 * dir;
+            else if ((stick < 0 && player.x_vel < 0) || (stick > 0 && player.x_vel > 0))
+                player.x_vel = 0;
+        }
+        stick = dir;
+    }
+#endif
+
+    /* Asciiverse: an arrow let go stops the walk it started */
+    for (int k; (k = av_getrelease()) != ERR; ) {
+        if ((k == KEY_LEFT && player.x_vel < 0) || (k == KEY_RIGHT && player.x_vel > 0))
+            player.x_vel = 0;
+    }
+
     if (player.state == DEAD)
         return;
 
@@ -341,13 +382,13 @@ void process(double delta, chtype input)
             }
             break;
         case KEY_LEFT:
-            if (player.x_vel < 0)
+            if (player.x_vel < 0 && !av_input_releases())
                 player.x_vel = 0;
             else
                 player.x_vel = -8;
             break;
         case KEY_RIGHT:
-            if (player.x_vel > 0)
+            if (player.x_vel > 0 && !av_input_releases())
                 player.x_vel = 0;
             else
                 player.x_vel = 8;
@@ -371,7 +412,9 @@ int initSDL() {
         }
     }
 
-    SDL_GameController *gamepad = NULL;
+    /* Asciiverse: SDL's messages would land on the game's screen */
+    if (isatty(STDERR_FILENO))
+        SDL_LogSetAllPriority(SDL_LOG_PRIORITY_CRITICAL);
 
     for (int i = 0; i < SDL_NumJoysticks(); ++i) {
         if (SDL_IsGameController(i)) {

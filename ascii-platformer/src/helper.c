@@ -2,12 +2,16 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include <stdio.h>
+#include <sys/stat.h>
 #ifndef NOSDL
 #include <SDL.h>
 #else
 #include <unistd.h>
 #include <stddef.h>
 #endif
+
+#include "av_input.h"
 
 #define KEY_SPACEBAR ' '
 
@@ -148,7 +152,7 @@ int pauseForAction() {
             break;
         }
 #endif
-        input = getch();
+        input = av_getkey();
         if (input == KEY_LEFT || input == KEY_RIGHT) stop = 1;
         if (input == KEY_SPACEBAR) break;
 #ifndef NOSDL
@@ -158,6 +162,33 @@ int pauseForAction() {
 #endif
     }
     return stop;
+}
+
+/* Asciiverse: the saved progress lives in $XDG_DATA_HOME/cursed-platformer
+   (~/.local/share/cursed-platformer), not in the folder the game runs in */
+const char* savePath(void) {
+    static char path[4096];
+    if (path[0])
+        return path;
+    const char* xdg = getenv("XDG_DATA_HOME");
+    const char* home = getenv("HOME");
+    char dir[4000];
+    if (xdg && xdg[0])
+        snprintf(dir, sizeof dir, "%s/cursed-platformer", xdg);
+    else if (home && home[0])
+        snprintf(dir, sizeof dir, "%s/.local/share/cursed-platformer", home);
+    else
+        return strcpy(path, "autosave.sav");
+    for (char* p = dir + 1; *p; p++) {
+        if (*p == '/') {
+            *p = 0;
+            mkdir(dir, 0755);
+            *p = '/';
+        }
+    }
+    mkdir(dir, 0755);
+    snprintf(path, sizeof path, "%s/autosave.sav", dir);
+    return path;
 }
 
 int isPassable(chtype tile) {
