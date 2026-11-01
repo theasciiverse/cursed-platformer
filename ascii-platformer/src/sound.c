@@ -6,13 +6,17 @@
 #include <SDL_mixer.h>
 
 Mix_Music *mus = NULL;
-Mix_Chunk *sounds[5];
+Mix_Chunk *sounds[6];
 #endif
 
 bool sound_enabled = true;
 
 bool initAudio(void) {
 #ifndef NOSDL
+    static bool opened = false;
+    if (opened)
+        return sound_enabled; /* main() asks twice */
+    opened = true;
     if(SDL_Init(SDL_INIT_AUDIO) < 0) {
         SDL_Log("SDL audio could not initialize! SDL Error: %s\n", SDL_GetError());
         sound_enabled = false;
@@ -81,7 +85,7 @@ void closeAudio(void) {
         Mix_FreeMusic(mus);
         mus = NULL;
     }
-    for (unsigned int i = 0; i < sizeof(sounds); i++) {
+    for (unsigned int i = 0; i < sizeof(sounds) / sizeof(sounds[0]); i++) {
         if (sounds[i] != NULL) {
             Mix_FreeChunk(sounds[i]);
             sounds[i] = NULL;

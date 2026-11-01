@@ -132,7 +132,8 @@ int pauseForAction() {
     while (true) {
 #ifndef NOSDL
         SDL_PumpEvents();
-        SDL_PeepEvents(&ev, 1, SDL_GETEVENT, SDL_KEYDOWN, SDL_CONTROLLERBUTTONUP);
+        if (SDL_PeepEvents(&ev, 1, SDL_GETEVENT, SDL_KEYDOWN, SDL_CONTROLLERBUTTONUP) <= 0)
+            ev.type = 0; /* nothing waiting: ev holds no event */
         if (ev.type == SDL_KEYUP &&
             (ev.key.keysym.sym == SDLK_LEFT || ev.key.keysym.sym == SDLK_RIGHT)) {
             stop = 1;
@@ -151,9 +152,9 @@ int pauseForAction() {
         if (input == KEY_LEFT || input == KEY_RIGHT) stop = 1;
         if (input == KEY_SPACEBAR) break;
 #ifndef NOSDL
-        SDL_Delay((long) (1.0 / 60) * 1000);
+        SDL_Delay(1000 / 60);
 #else
-        usleep((long) (1.0 / 60) * 1000000);
+        usleep(1000000 / 60);
 #endif
     }
     return stop;
