@@ -20,11 +20,17 @@ small, list every one in PATCHES.md, and prefer patches upstream could take.
   works for quick tests.
 - The game reads `data/` in the folder it runs in (the start script runs it
   from `lib/`) and saves progress to ~/.local/share/cursed-platformer.
-- Testing: run with `SDL_AUDIODRIVER=dummy`, or the music plays on the
-  machine's speakers. tmux has no key releases, so it tests the tap
-  fallback; a pty that answers `CSI ? u` like kitty tests holding.
-- Preview: `python3 asciiverse/record-preview.py` (tmux, asciinema 3): a
-  bot walks level 1 up to the climb to its switch.
+- tmux has no key releases, so it tests the tap fallback; a pty that
+  answers `CSI ? u` like kitty tests holding.
+- Preview: `python3 asciiverse/record-preview.py` (asciinema 3 and pyte;
+  `--dry --trace` to watch the bot think): the title screen, then Continue
+  into Muncher Meadows, played to its exit by a bot in a pty that answers
+  like kitty (real holds and releases). It waits for a muncher walking
+  away to turn, then jumps it head-on (a jump is ~8 cells and 1 s; a
+  muncher walks 4 cells/s; `>` walks left). Recorded with
+  TERM=screen-256color, as pyte cannot read xterm's repeat-character
+  escape. 24 s.
+- Testing: `SDL_AUDIODRIVER=dummy` keeps the music off the speakers.
 - Levels are plain text (`ascii-platformer/docs/level-editing.md`). A fork
   by Ian T. Jacobsen (gitlab.com/Smilex1/linux-game-jam-2019-game) adds four
   levels of his own, `ian` to `ian3`; not taken in so far.

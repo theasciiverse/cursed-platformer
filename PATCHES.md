@@ -59,7 +59,8 @@ music and the sounds are all upstream's.
   from the folder holding `data/`.
 - `asciiverse/stage.sh`, `asciiverse/nfpm.yaml`: the av archive and the
   .deb, .rpm and Arch packages.
-- `asciiverse/record-preview.py`: records the catalog preview.
+- `asciiverse/record-preview.py`: records the catalog preview (a bot
+  plays Muncher Meadows).
 - `.github/workflows/release.yml`: builds and releases it all on a tag.
 
 ## Licences
