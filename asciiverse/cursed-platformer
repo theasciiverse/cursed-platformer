@@ -1,0 +1,16 @@
+#!/bin/sh
+# Starts Cursed Pl@tformer. The game reads its levels and sounds from data/
+# in the folder it runs in, so it runs from the folder holding them: lib/
+# beside this script in an av install, /usr/lib/cursed-platformer in a
+# system package. Progress is saved in
+# ${XDG_DATA_HOME:-~/.local/share}/cursed-platformer.
+# av links ~/.local/bin/cursed-platformer to this file, so follow that
+# link first.
+self=$(readlink "$0" 2>/dev/null || printf '%s' "$0")
+dir=$(cd "$(dirname "$self")" && pwd)
+if [ -x "$dir/lib/cursed-platformer" ]; then
+	lib="$dir/lib"
+else
+	lib=/usr/lib/cursed-platformer
+fi
+cd "$lib" && exec ./cursed-platformer "$@"
